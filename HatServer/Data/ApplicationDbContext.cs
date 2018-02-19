@@ -22,5 +22,7 @@ namespace HatServer.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<HatServer.Models.PhraseItem> PhraseItem { get; set; }
     }
 }
