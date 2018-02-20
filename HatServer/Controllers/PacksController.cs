@@ -10,22 +10,22 @@ using HatServer.Models;
 
 namespace HatServer.Controllers
 {
-    public class PhraseItemsController : Controller
+    public class PacksController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PhraseItemsController(ApplicationDbContext context)
+        public PacksController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: PhraseItems
+        // GET: Packs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PhraseItem.ToListAsync());
+            return View(await _context.Pack.ToListAsync());
         }
 
-        // GET: PhraseItems/Details/5
+        // GET: Packs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,38 +33,39 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var phraseItem = await _context.PhraseItem.SingleOrDefaultAsync(m => m.Id == id);
-            if (phraseItem == null)
+            var pack = await _context.Pack
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (pack == null)
             {
                 return NotFound();
             }
 
-            return View(phraseItem);
+            return View(pack);
         }
 
-        // GET: PhraseItems/Create
+        // GET: Packs/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PhraseItems/Create
+        // POST: Packs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Phrase,Complexity,Description")] PhraseItem phraseItem)
+        public async Task<IActionResult> Create([Bind("Id,Language,Name,Description")] Pack pack)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(phraseItem);
+                _context.Add(pack);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(phraseItem);
+            return View(pack);
         }
 
-        // GET: PhraseItems/Edit/5
+        // GET: Packs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +73,22 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var phraseItem = await _context.PhraseItem.SingleOrDefaultAsync(m => m.Id == id);
-            if (phraseItem == null)
+            var pack = await _context.Pack.SingleOrDefaultAsync(m => m.Id == id);
+            if (pack == null)
             {
                 return NotFound();
             }
-            return View(phraseItem);
+            return View(pack);
         }
 
-        // POST: PhraseItems/Edit/5
+        // POST: Packs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Phrase,Complexity,Description")] PhraseItem phraseItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Language,Name,Description")] Pack pack)
         {
-            if (id != phraseItem.Id)
+            if (id != pack.Id)
             {
                 return NotFound();
             }
@@ -96,12 +97,12 @@ namespace HatServer.Controllers
             {
                 try
                 {
-                    _context.Update(phraseItem);
+                    _context.Update(pack);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PhraseItemExists(phraseItem.Id))
+                    if (!PackExists(pack.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +113,10 @@ namespace HatServer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(phraseItem);
+            return View(pack);
         }
 
-        // GET: PhraseItems/Delete/5
+        // GET: Packs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,30 +124,30 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var phraseItem = await _context.PhraseItem
+            var pack = await _context.Pack
                 .SingleOrDefaultAsync(m => m.Id == id);
-            if (phraseItem == null)
+            if (pack == null)
             {
                 return NotFound();
             }
 
-            return View(phraseItem);
+            return View(pack);
         }
 
-        // POST: PhraseItems/Delete/5
+        // POST: Packs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var phraseItem = await _context.PhraseItem.SingleOrDefaultAsync(m => m.Id == id);
-            _context.PhraseItem.Remove(phraseItem);
+            var pack = await _context.Pack.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Pack.Remove(pack);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PhraseItemExists(int id)
+        private bool PackExists(int id)
         {
-            return _context.PhraseItem.Any(e => e.Id == id);
+            return _context.Pack.Any(e => e.Id == id);
         }
     }
 }

@@ -24,5 +24,7 @@ namespace HatServer.Data
         }
 
         public DbSet<HatServer.Models.PhraseItem> PhraseItem { get; set; }
+
+        public DbSet<HatServer.Models.Pack> Pack { get; set; }
     }
 }

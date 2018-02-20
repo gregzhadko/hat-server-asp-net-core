@@ -11,9 +11,10 @@ using System;
 namespace HatServer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180220222016_AddPack")]
+    partial class AddPack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,7 +219,7 @@ namespace HatServer.Data.Migrations
 
             modelBuilder.Entity("HatServer.Models.PhraseItem", b =>
                 {
-                    b.HasOne("HatServer.Models.Pack", "Pack")
+                    b.HasOne("HatServer.Models.Pack")
                         .WithMany("Phrases")
                         .HasForeignKey("PackId");
                 });
