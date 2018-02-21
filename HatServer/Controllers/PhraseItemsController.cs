@@ -22,7 +22,8 @@ namespace HatServer.Controllers
         // GET: PhraseItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PhraseItem.ToListAsync());
+            var applicationDbContext = _context.PhraseItem.Include(p => p.Pack);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: PhraseItems/Details/5
@@ -33,7 +34,9 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var phraseItem = await _context.PhraseItem.SingleOrDefaultAsync(m => m.Id == id);
+            var phraseItem = await _context.PhraseItem
+                .Include(p => p.Pack)
+                .SingleOrDefaultAsync(m => m.Id == id);
             if (phraseItem == null)
             {
                 return NotFound();
@@ -45,6 +48,7 @@ namespace HatServer.Controllers
         // GET: PhraseItems/Create
         public IActionResult Create()
         {
+            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id");
             return View();
         }
 
@@ -53,7 +57,7 @@ namespace HatServer.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Phrase,Complexity,Description")] PhraseItem phraseItem)
+        public async Task<IActionResult> Create([Bind("Id,Phrase,Complexity,Description,PackId")] PhraseItem phraseItem)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +65,7 @@ namespace HatServer.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id", phraseItem.PackId);
             return View(phraseItem);
         }
 
@@ -77,6 +82,7 @@ namespace HatServer.Controllers
             {
                 return NotFound();
             }
+            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id", phraseItem.PackId);
             return View(phraseItem);
         }
 
@@ -85,7 +91,7 @@ namespace HatServer.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Phrase,Complexity,Description")] PhraseItem phraseItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Phrase,Complexity,Description,PackId")] PhraseItem phraseItem)
         {
             if (id != phraseItem.Id)
             {
@@ -112,6 +118,7 @@ namespace HatServer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id", phraseItem.PackId);
             return View(phraseItem);
         }
 
@@ -124,6 +131,7 @@ namespace HatServer.Controllers
             }
 
             var phraseItem = await _context.PhraseItem
+                .Include(p => p.Pack)
                 .SingleOrDefaultAsync(m => m.Id == id);
             if (phraseItem == null)
             {
