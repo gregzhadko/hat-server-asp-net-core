@@ -7,22 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HatServer.Data;
 using HatServer.Models;
+using HatServer.DAL;
 
 namespace HatServer.Controllers
 {
     public class PacksController : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public PacksController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private IUnitOfWork _unitOfWork = new UnitOfWork();
 
         // GET: Packs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pack.ToListAsync());
+            return View(_unitOfWork.PackRepository.Get());
         }
 
         // GET: Packs/Details/5
@@ -33,8 +29,7 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var pack = await _context.Pack
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var pack = await _unitOfWork.PackRepository.GetByIDAsync(id);
             if (pack == null)
             {
                 return NotFound();
@@ -58,7 +53,7 @@ namespace HatServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pack);
+                await _unitOfWork.PackRepository.InsertAsync(pack);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
