@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using HatServer.Models;
 using HatServer.Models.ManageViewModels;
-using HatServer.Services;
 
 namespace HatServer.Controllers
 {
@@ -22,7 +21,6 @@ namespace HatServer.Controllers
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
-          IEmailSender emailSender,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder)
         {
