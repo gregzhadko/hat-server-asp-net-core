@@ -1,84 +1,59 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
+using HatServer.Data;
 
 namespace HatServer.DAL
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<T> : IRepository<T> where T : class
     {
-        internal DbContext _context;
-        internal DbSet<TEntity> _dbSet;
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<T> _entities;
 
-        public Repository(DbContext context)
+        public Repository(ApplicationDbContext context)
         {
             _context = context;
-            _dbSet = context.Set<TEntity>();
+            _entities = context.Set<T>();
         }
+        public IEnumerable<T> GetAll() => _entities.AsEnumerable();
 
-        public virtual IQueryable<TEntity> GetWithRawSql(string query, params object[] parameters)
+        public async Task<T> GetAsync(int id) => await _entities.FindAsync(id);
+
+        public async Task InsertAsync(T entity)
         {
-            return _dbSet.FromSql(query, parameters);
-        }
-
-        public virtual IQueryable<TEntity> Get(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "")
-        {
-            IQueryable<TEntity> query = _dbSet;
-
-            if (filter != null)
+            if (entity == null)
             {
-                query = query.Where(filter);
+                throw new ArgumentNullException(nameof(entity));
             }
+            await _entities.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        public async Task UpdateAsync(T entity)
+        {
+            if (entity == null)
             {
-                query = query.Include(includeProperty);
+                throw new ArgumentNullException(nameof(entity));
             }
+            await _context.SaveChangesAsync();
+        }
 
-            if (orderBy != null)
+        public async Task DeleteAsync(T entity)
+        {
+            if (entity == null)
             {
-                return orderBy(query);
+                throw new ArgumentNullException(nameof(entity));
             }
-            else
-            {
-                return query;
-            }
+            _entities.Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public virtual async Task<TEntity> GetByIDAsync(object id)
+        public async Task DeleteAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
-        }
-
-        public virtual async void InsertAsync(TEntity item)
-        {
-            await _dbSet.AddAsync(item);
-        }
-
-        public virtual async void DeleteAsync(object id)
-        {
-            TEntity entityToDelete = await _dbSet.FindAsync(id);
-            Delete(entityToDelete);
-        }
-
-        public virtual void Delete(TEntity item)
-        {
-            if (_context.Entry(item).State == EntityState.Detached)
-            {
-                _dbSet.Attach(item);
-            }
-            _dbSet.Remove(item);
-        }
-
-        public virtual void Update(TEntity item)
-        {
-            _dbSet.Attach(item);
-            _context.Entry(item).State = EntityState.Modified;
+            var entity = await _entities.FindAsync(id);
+            await DeleteAsync(entity);
         }
     }
 }

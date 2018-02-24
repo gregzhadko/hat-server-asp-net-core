@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using HatServer.Data;
+using HatServer.DAL;
 using HatServer.Models;
-using HatServer.Services;
 
 namespace HatServer
 {
@@ -33,8 +33,7 @@ namespace HatServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped (typeof(IRepository<>), typeof(Repository<>));
 
             services.AddMvc();
         }

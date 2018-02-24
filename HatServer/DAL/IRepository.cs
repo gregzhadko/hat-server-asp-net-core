@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace HatServer.DAL
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<T> where T : class
     {
-        void InsertAsync(TEntity item);
-        Task<TEntity> GetByIDAsync(object id);
-        IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "");
-        void DeleteAsync(object id);
-        void Delete(TEntity item);
-        void Update(TEntity item);
-        IQueryable<TEntity> GetWithRawSql(string query, params object[] parameters);
+        IEnumerable<T> GetAll();
+        Task<T> GetAsync(int id);
+        Task InsertAsync(T entity);        
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
+        Task DeleteAsync(int id);
     }
 }

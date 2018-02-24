@@ -13,12 +13,17 @@ namespace HatServer.Controllers
 {
     public class PacksController : Controller
     {
-        private IUnitOfWork _unitOfWork = new UnitOfWork();
+        private IRepository<Pack> _packRepository;
+
+        public PacksController(IRepository<Pack> packRepository)
+        {
+            _packRepository = packRepository;
+        }
 
         // GET: Packs
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(_unitOfWork.PackRepository.Get());
+            return View(_packRepository.GetAll());
         }
 
         // GET: Packs/Details/5
@@ -29,7 +34,7 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var pack = await _unitOfWork.PackRepository.GetByIDAsync(id);
+            var pack = await _packRepository.GetAsync(id.Value);
             if (pack == null)
             {
                 return NotFound();
@@ -53,8 +58,7 @@ namespace HatServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _unitOfWork.PackRepository.InsertAsync(pack);
-                await _context.SaveChangesAsync();
+                await _packRepository.InsertAsync(pack);
                 return RedirectToAction(nameof(Index));
             }
             return View(pack);
@@ -68,7 +72,7 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var pack = await _context.Pack.SingleOrDefaultAsync(m => m.Id == id);
+            var pack = await _packRepository.GetAsync(id.Value);
             if (pack == null)
             {
                 return NotFound();
@@ -92,8 +96,7 @@ namespace HatServer.Controllers
             {
                 try
                 {
-                    _context.Update(pack);
-                    await _context.SaveChangesAsync();
+                    await _packRepository.UpdateAsync(pack);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -101,10 +104,8 @@ namespace HatServer.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -119,8 +120,7 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var pack = await _context.Pack
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var pack = await _packRepository.GetAsync(id.Value);
             if (pack == null)
             {
                 return NotFound();
@@ -134,15 +134,10 @@ namespace HatServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pack = await _context.Pack.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Pack.Remove(pack);
-            await _context.SaveChangesAsync();
+            await _packRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PackExists(int id)
-        {
-            return _context.Pack.Any(e => e.Id == id);
-        }
+        private bool PackExists(int id) => _packRepository.GetAsync(id).Result != null;
     }
 }
