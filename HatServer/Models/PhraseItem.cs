@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HatServer.Models
 {
@@ -18,8 +15,12 @@ namespace HatServer.Models
 
         public string Description { get; set; }
 
+        [Required]
         public Pack Pack { get; set; }
 
+        [Required]
         public int PackId { get; set; }
+
+        public List<PhraseState> PhraseStates { get; set; }
     }
 }
