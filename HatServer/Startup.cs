@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
@@ -36,10 +32,13 @@ namespace HatServer
             services.AddScoped (typeof(IRepository<>), typeof(Repository<>));
 
             services.AddMvc();
+
+            // Add Database Initializer
+            services.AddScoped<IDbInitializer, DbInitializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -55,6 +54,9 @@ namespace HatServer
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            //Generate EF Core Seed Data
+            dbInitializer.Initialize();
 
             app.UseMvc(routes =>
             {
