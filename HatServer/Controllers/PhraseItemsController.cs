@@ -6,25 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HatServer.Data;
+using HatServer.DAL;
 using HatServer.Models;
 
 namespace HatServer.Controllers
 {
     public class PhraseItemsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private IRepository<PhraseItem> _phraseItemRepository;
+        private IRepository<Pack> _packRepository;
 
-        public PhraseItemsController(ApplicationDbContext context)
+        public PhraseItemsController(IRepository<PhraseItem> phraseItemRepository, IRepository<Pack> packRepository)
         {
-            _context = context;
+            _phraseItemRepository = phraseItemRepository;
+            _packRepository = packRepository;
         }
 
         // GET: PhraseItems
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.PhraseItem.Include(p => p.Pack);
-            return View(await applicationDbContext.ToListAsync());
-        }
+        public IActionResult Index() => View(_phraseItemRepository.GetAll());
 
         // GET: PhraseItems/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,9 +33,7 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var phraseItem = await _context.PhraseItem
-                .Include(p => p.Pack)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var phraseItem = await _phraseItemRepository.GetAsync(id.Value);
             if (phraseItem == null)
             {
                 return NotFound();
@@ -48,7 +45,7 @@ namespace HatServer.Controllers
         // GET: PhraseItems/Create
         public IActionResult Create()
         {
-            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id");
+            ViewData["PackId"] = new SelectList(_packRepository.GetAll(), "Id", "Id");
             return View();
         }
 
@@ -61,11 +58,10 @@ namespace HatServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(phraseItem);
-                await _context.SaveChangesAsync();
+                await _phraseItemRepository.InsertAsync(phraseItem);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id", phraseItem.PackId);
+            ViewData["PackId"] = new SelectList(_packRepository.GetAll(), "Id", "Id", phraseItem.PackId);
             return View(phraseItem);
         }
 
@@ -77,12 +73,12 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var phraseItem = await _context.PhraseItem.SingleOrDefaultAsync(m => m.Id == id);
+            var phraseItem = await _phraseItemRepository.GetAsync(id.Value);
             if (phraseItem == null)
             {
                 return NotFound();
             }
-            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id", phraseItem.PackId);
+            ViewData["PackId"] = new SelectList(_packRepository.GetAll(), "Id", "Id", phraseItem.PackId);
             return View(phraseItem);
         }
 
@@ -102,8 +98,7 @@ namespace HatServer.Controllers
             {
                 try
                 {
-                    _context.Update(phraseItem);
-                    await _context.SaveChangesAsync();
+                    await _phraseItemRepository.UpdateAsync(phraseItem);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,7 +113,7 @@ namespace HatServer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PackId"] = new SelectList(_context.Pack, "Id", "Id", phraseItem.PackId);
+            ViewData["PackId"] = new SelectList(_packRepository.GetAll(), "Id", "Id", phraseItem.PackId);
             return View(phraseItem);
         }
 
@@ -130,9 +125,7 @@ namespace HatServer.Controllers
                 return NotFound();
             }
 
-            var phraseItem = await _context.PhraseItem
-                .Include(p => p.Pack)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var phraseItem = await _phraseItemRepository.GetAsync(id.Value);
             if (phraseItem == null)
             {
                 return NotFound();
@@ -146,15 +139,10 @@ namespace HatServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var phraseItem = await _context.PhraseItem.SingleOrDefaultAsync(m => m.Id == id);
-            _context.PhraseItem.Remove(phraseItem);
-            await _context.SaveChangesAsync();
+             await _phraseItemRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PhraseItemExists(int id)
-        {
-            return _context.PhraseItem.Any(e => e.Id == id);
-        }
+        private bool PhraseItemExists(int id) => _phraseItemRepository.GetAsync(id).Result != null;
     }
 }

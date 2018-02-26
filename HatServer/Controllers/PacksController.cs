@@ -21,10 +21,7 @@ namespace HatServer.Controllers
         }
 
         // GET: Packs
-        public IActionResult Index()
-        {
-            return View(_packRepository.GetAll());
-        }
+        public IActionResult Index() => View(_packRepository.GetAll());
 
         // GET: Packs/Details/5
         public async Task<IActionResult> Details(int? id)

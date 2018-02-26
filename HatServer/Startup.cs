@@ -30,6 +30,7 @@ namespace HatServer
                 .AddDefaultTokenProviders();
 
             services.AddScoped (typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped (typeof(IRepository<PhraseItem>), typeof(PhraseItemRepository));
 
             services.AddMvc();
 

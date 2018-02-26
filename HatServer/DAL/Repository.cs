@@ -9,50 +9,50 @@ namespace HatServer.DAL
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly ApplicationDbContext _context;
-        private readonly DbSet<T> _entities;
+        protected readonly ApplicationDbContext Context;
+        protected readonly DbSet<T> Entities;
 
         public Repository(ApplicationDbContext context)
         {
-            _context = context;
-            _entities = context.Set<T>();
+            Context = context;
+            Entities = context.Set<T>();
         }
-        public IEnumerable<T> GetAll() => _entities.AsEnumerable();
+        public virtual IEnumerable<T> GetAll() => Entities.AsEnumerable();
 
-        public async Task<T> GetAsync(int id) => await _entities.FindAsync(id);
+        public virtual async Task<T> GetAsync(int id) => await Entities.FindAsync(id);
 
-        public async Task InsertAsync(T entity)
+        public virtual async Task InsertAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-            await _entities.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await Entities.AddAsync(entity);
+            await Context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-            _entities.Remove(entity);
-            await _context.SaveChangesAsync();
+            Entities.Remove(entity);
+            await Context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public virtual async Task DeleteAsync(int id)
         {
-            var entity = await _entities.FindAsync(id);
+            var entity = await Entities.FindAsync(id);
             await DeleteAsync(entity);
         }
     }

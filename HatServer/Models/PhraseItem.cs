@@ -15,7 +15,6 @@ namespace HatServer.Models
 
         public string Description { get; set; }
 
-        [Required]
         public Pack Pack { get; set; }
 
         [Required]
