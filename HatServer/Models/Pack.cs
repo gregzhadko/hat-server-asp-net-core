@@ -14,6 +14,11 @@ namespace HatServer.Models
 
         public string Description { get; set; }
 
-        public IList<PhraseItem> Phrases { get; set; }
+        public IList<PhraseItem> Phrases { get; set; } = new List<PhraseItem>();
+
+        public override string ToString()
+        {
+            return $"{Id}. {Name}\t{Description}";
+        }
     }
 }

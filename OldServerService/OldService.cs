@@ -4,24 +4,39 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using HatServer.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace OldServerService
 {
     public class OldService
     {
-        public static IEnumerable<Pack> GetAllPacksInfo()
+        public IEnumerable<Pack> GetAllPacksInfo()
         {
-            var packsInfo = GetPacksInfo(8081);
-            return packsInfo.Select(p => new Pack { Id = Convert.ToInt32(p["id"]), Name = p["name"].ToString() });
+            var response = GetResponse("getPacks", 8081);
+            var jObjectPacks = JObject.Parse(response)["packs"].Children().ToList();
+            foreach (var jToken in jObjectPacks)
+            {
+                yield return jToken["pack"].ToObject<Pack>();
+            }
         }
 
-        private static IEnumerable<JToken> GetPacksInfo(int port)
+        public Pack GetPackById(int id)
         {
-            var response = GetResponse("getPacks", port);
-            var jObject = JObject.Parse(response)["packs"];
-            var packs = jObject.Select(i => i["pack"]);
-            return packs;
+            if (id == 0)
+            {
+                return null;
+            }
+
+            var response = GetResponse($"getPack?id={id}", 8081);
+
+            var pack = JsonConvert.DeserializeObject<Pack>(response);
+            if (pack.Phrases == null)
+            {
+                pack.Phrases = new List<PhraseItem>();
+            }
+            pack.Phrases = pack.Phrases.OrderBy(p => p.Phrase).ToList();
+            return pack;
         }
 
         private static string GetResponse(string requestUriString, int port)
