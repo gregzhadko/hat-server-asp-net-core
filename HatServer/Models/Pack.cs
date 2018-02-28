@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace HatServer.Models
 {
+    [DebuggerDisplay("{Id}, {Name}, {Description}")]
     public class Pack
     {
         public int Id { get; set; }

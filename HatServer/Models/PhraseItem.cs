@@ -25,7 +25,7 @@ namespace HatServer.Models
 
         public virtual Pack Pack { get; set; }
 
-        public List<PhraseState> PhraseStates { get; set; }
+        public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 
         [NotMapped]
         public Dictionary<string, int> Reviews
