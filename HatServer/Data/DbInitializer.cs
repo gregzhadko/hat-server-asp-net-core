@@ -24,7 +24,7 @@ namespace HatServer.Data
         }
 
         //This example just creates an Administrator role and one Admin users
-        public async void Initialize()
+        public void Initialize()
         {
             //create database schema if none exists
             _context.Database.EnsureCreated();

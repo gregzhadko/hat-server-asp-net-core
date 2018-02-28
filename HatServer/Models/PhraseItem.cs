@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using Newtonsoft.Json;
 
 namespace HatServer.Models
 {
+    [DebuggerDisplay("{Phrase}, {Complexity}, {Description}")]
     public class PhraseItem
     {
         public int Id { get; set; }
@@ -18,10 +20,10 @@ namespace HatServer.Models
 
         public string Description { get; set; }
 
-        public Pack Pack { get; set; }
-
         [Required]
         public int PackId { get; set; }
+
+        public virtual Pack Pack { get; set; }
 
         public List<PhraseState> PhraseStates { get; set; }
 
@@ -37,7 +39,7 @@ namespace HatServer.Models
 
                 foreach (var authorState in value)
                 {
-                    new PhraseState() { PhraseItemId = Id, State = (State)authorState.Value, }
+                    new PhraseState() { PhraseItemId = Id, State = (State)authorState.Value };
                 }
             }
         }
