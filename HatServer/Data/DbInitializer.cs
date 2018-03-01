@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HatServer.Models;
 using HatServer.Old;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace HatServer.Data
@@ -28,10 +29,21 @@ namespace HatServer.Data
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
-            SeedUsers();
-            SeedPacks();
+            _context.Database.OpenConnection();
 
-            _context.SaveChanges();
+            try
+            {
+                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Pack ON");
+                SeedUsers();
+                SeedPacks();
+                _context.SaveChanges();
+                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Pack OFF");
+            }
+            finally
+            {
+                _context.Database.CloseConnection();
+            }
+
         }
 
         private void SeedUsers()
