@@ -12,6 +12,9 @@ namespace HatServer.Models
     {
         public int Id { get; set; }
 
+        [ConcurrencyCheck]
+        public int Version { get; set; }
+
         [Required]
         public string Phrase { get; set; }
 

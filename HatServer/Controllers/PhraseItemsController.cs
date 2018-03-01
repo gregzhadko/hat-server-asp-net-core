@@ -108,7 +108,7 @@ namespace HatServer.Controllers
                     }
                     else
                     {
-                        throw;
+                        ViewBag.Message = "The phrase was edited by someone else already";
                     }
                 }
                 return RedirectToAction(nameof(Index));
