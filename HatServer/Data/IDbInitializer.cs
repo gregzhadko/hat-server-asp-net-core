@@ -1,7 +1,9 @@
-﻿namespace HatServer.Data
+﻿using System.Threading.Tasks;
+
+namespace HatServer.Data
 {
     public interface IDbInitializer
     {
-        void Initialize();
+        Task Initialize();
     }
 }

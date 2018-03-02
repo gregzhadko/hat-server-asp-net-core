@@ -58,7 +58,7 @@ namespace HatServer
             app.UseAuthentication();
 
             //Generate EF Core Seed Data
-            dbInitializer.Initialize();
+            dbInitializer.Initialize().Wait();
 
             app.UseMvc(routes =>
             {

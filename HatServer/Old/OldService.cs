@@ -12,24 +12,28 @@ namespace HatServer.Old
 {
     public class OldService
     {
-        public IEnumerable<Pack> GetAllPacksInfo()
+        public async Task<List<Pack>> GetAllPacksInfoAsync()
         {
-            var response = GetResponse("getPacks", 8081);
+            var response = await GetResponse("getPacks", 8081);
             var jObjectPacks = JObject.Parse(response)["packs"].Children().ToList();
+            var packs = new List<Pack>();
             foreach (var jToken in jObjectPacks)
             {
-                yield return jToken["pack"].ToObject<Pack>();
+                var pack = jToken["pack"].ToObject<Pack>();
+                packs.Add(pack);
             }
+
+            return packs;
         }
 
-        public Pack GetPackById(int id)
+        public async Task<Pack> GetPackByIdAsync(int id)
         {
             if (id == 0)
             {
                 return null;
             }
 
-            var response = GetResponse($"getPack?id={id}", 8081);
+            var response = await GetResponse($"getPack?id={id}", 8081);
 
             var pack = JsonConvert.DeserializeObject<Pack>(response);
             if (pack.Phrases == null)
@@ -41,7 +45,7 @@ namespace HatServer.Old
             return pack;
         }
 
-        public string GetResponse(string requestUriString, int port)
+        public Task<string> GetResponse(string requestUriString, int port)
         {
             var request = WebRequest.Create($"http://pigowl.com:{port}/{requestUriString}");
 
@@ -54,7 +58,7 @@ namespace HatServer.Old
                 }
 
                 var reader = new StreamReader(dataStream);
-                return reader.ReadToEnd();
+                return reader.ReadToEndAsync();
             }
         }
     }

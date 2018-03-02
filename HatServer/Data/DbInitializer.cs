@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using HatServer.Models;
+﻿using HatServer.Models;
 using HatServer.Old;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HatServer.Data
 {
@@ -24,7 +25,7 @@ namespace HatServer.Data
         }
 
         //This example just creates an Administrator role and one Admin users
-        public void Initialize()
+        public async Task Initialize()
         {
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
@@ -33,9 +34,9 @@ namespace HatServer.Data
 
             try
             {
-                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Pack ON");
                 SeedUsers();
-                SeedPacks();
+                await SeedPacks();
+                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Pack ON");
                 _context.SaveChanges();
                 _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Pack OFF");
             }
@@ -58,17 +59,18 @@ namespace HatServer.Data
             _userManager.CreateAsync(tatarintsev, "Qq6t^hJSkr1p").Wait();
         }
 
-        private void SeedPacks()
+        private async Task SeedPacks()
         {
             var users = _userManager.Users.ToList();
             var service = new OldService();
-            var packs = service.GetAllPacksInfo().ToList();
+            var packs = await service.GetAllPacksInfoAsync();
             
             var result = new List<Pack>();
+
             foreach (var packInfo in packs)
             {
                 Console.WriteLine(packInfo);
-                var response = service.GetResponse($"getPack?id={packInfo.Id}", 8081);
+                var response = await service.GetResponse($"getPack?id={packInfo.Id}", 8081);
                 var pack = JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
                 result.Add(pack);
             }
