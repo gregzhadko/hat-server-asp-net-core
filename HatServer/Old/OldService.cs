@@ -1,12 +1,12 @@
-﻿using System;
+﻿using HatServer.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using HatServer.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace HatServer.Old
 {
@@ -49,7 +49,7 @@ namespace HatServer.Old
         {
             var request = WebRequest.Create($"http://pigowl.com:{port}/{requestUriString}");
 
-            using (var response = (HttpWebResponse) request.GetResponse())
+            using (var response = (HttpWebResponse)request.GetResponse())
             using (var dataStream = response.GetResponseStream())
             {
                 if (dataStream == null || dataStream == Stream.Null)

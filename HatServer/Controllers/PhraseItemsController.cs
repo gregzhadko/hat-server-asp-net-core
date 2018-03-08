@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HatServer.DAL;
+using HatServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using HatServer.Data;
-using HatServer.DAL;
-using HatServer.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HatServer.Controllers
 {
@@ -139,7 +137,7 @@ namespace HatServer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-             await _phraseItemRepository.DeleteAsync(id);
+            await _phraseItemRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 

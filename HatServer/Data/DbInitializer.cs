@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,10 +48,10 @@ namespace HatServer.Data
 
         private void SeedUsers()
         {
-            var zhadko = new ApplicationUser {UserName = "zhadko"};
-            var fomin = new ApplicationUser {UserName = "fomin"};
-            var sivykh = new ApplicationUser {UserName = "sivykh"};
-            var tatarintsev = new ApplicationUser {UserName = "tatarintsev"};
+            var zhadko = new ApplicationUser { UserName = "zhadko" };
+            var fomin = new ApplicationUser { UserName = "fomin" };
+            var sivykh = new ApplicationUser { UserName = "sivykh" };
+            var tatarintsev = new ApplicationUser { UserName = "tatarintsev" };
             _userManager.CreateAsync(zhadko, "8yyyy1C4^xx@").Wait();
             _userManager.CreateAsync(fomin, "PCd0c%74gNI2").Wait();
             _userManager.CreateAsync(sivykh, "R22ueOf%#v*!").Wait();
@@ -64,7 +63,7 @@ namespace HatServer.Data
             var users = _userManager.Users.ToList();
             var service = new OldService();
             var packs = await service.GetAllPacksInfoAsync();
-            
+
             var result = new List<Pack>();
 
             foreach (var packInfo in packs)
@@ -74,7 +73,7 @@ namespace HatServer.Data
                 var pack = JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
                 result.Add(pack);
             }
-            
+
             _context.Pack.AddRange(result);
 
         }

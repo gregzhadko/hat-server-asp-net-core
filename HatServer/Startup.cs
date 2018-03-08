@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using HatServer.DAL;
+using HatServer.Data;
+using HatServer.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using HatServer.Data;
-using HatServer.DAL;
-using HatServer.Models;
 
 namespace HatServer
 {
@@ -29,9 +29,9 @@ namespace HatServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped (typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped (typeof(IRepository<PhraseItem>), typeof(PhraseItemRepository));
-            services.AddScoped (typeof(IRepository<ApplicationUser>), typeof(AccountsRepository));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IRepository<PhraseItem>), typeof(PhraseItemRepository));
+            services.AddScoped(typeof(IRepository<ApplicationUser>), typeof(AccountsRepository));
 
             services.AddMvc();
 

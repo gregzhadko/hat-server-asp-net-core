@@ -1,10 +1,10 @@
-﻿using System;
+﻿using HatServer.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using HatServer.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace HatServer.Data
 {
@@ -80,7 +80,7 @@ namespace HatServer.Data
                 {
                     ApplicationUser = user,
                     PhraseItem = phrase,
-                    State = (State) reviewState.Value<int>()
+                    State = (State)reviewState.Value<int>()
                 };
                 phrase.PhraseStates.Add(phraseState);
             }

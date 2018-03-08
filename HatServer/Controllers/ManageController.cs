@@ -1,12 +1,12 @@
-﻿using System;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+﻿using HatServer.Models;
+using HatServer.Models.ManageViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using HatServer.Models;
-using HatServer.Models.ManageViewModels;
+using System;
+using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 
 namespace HatServer.Controllers
 {
