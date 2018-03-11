@@ -21,9 +21,9 @@ namespace Utilities
                         StrokeColor = ConsoleColor.DarkGray,
                         Columns =
                         {
+                            new Column {Width = GridLength.Auto, MinWidth = 10},
                             new Column {Width = GridLength.Auto, MinWidth = 12},
-                            new Column {Width = GridLength.Auto, MinWidth = 25},
-                            phrases.Select(p => new Column {Width = GridLength.Star(1)})
+                            phrases.Select(p => new Column {Width = GridLength.Auto})
                         },
                         Children =
                         {
@@ -40,8 +40,7 @@ namespace Utilities
                             },
                             phrases.Select(phrase => new[]
                             {
-
-                                new Cell {Children = {phrase}, Stroke = new LineThickness(0, 0)}
+                                new Cell {Children = {$" {phrase}"}, Stroke = new LineThickness(0, 0)}
                             })
                         }
                     }
