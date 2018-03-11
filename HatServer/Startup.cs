@@ -36,11 +36,11 @@ namespace HatServer
             services.AddMvc();
 
             // Add Database Initializer
-            services.AddScoped<IDbInitializer, DbInitializer>();
+            //services.AddScoped<IDbInitializer, DbInitializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbInitializer dbInitializer)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -58,7 +58,7 @@ namespace HatServer
             app.UseAuthentication();
 
             //Generate EF Core Seed Data
-            dbInitializer.InitializeAsync().Wait();
+            //dbInitializer.InitializeAsync().Wait();
 
             app.UseMvc(routes =>
             {
