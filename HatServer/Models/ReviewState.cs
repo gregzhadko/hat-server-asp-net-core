@@ -1,6 +1,6 @@
 ﻿namespace HatServer.Models
 {
-    public enum State
+    public enum ReviewState
     {
         Unknown = -1,
         Delete = 0,

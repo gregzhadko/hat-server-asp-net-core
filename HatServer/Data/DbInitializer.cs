@@ -32,9 +32,9 @@ namespace HatServer.Data
             {
                 SeedUsers();
                 await SeedPacksAsync().ConfigureAwait(false);
-                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Pack ON").ConfigureAwait(false);
+                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Packs ON").ConfigureAwait(false);
                 _context.SaveChanges();
-                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Pack OFF").ConfigureAwait(false);
+                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Packs OFF").ConfigureAwait(false);
             }
             finally
             {
@@ -60,7 +60,7 @@ namespace HatServer.Data
             var service = new OldService();
             var result = await OldService.GetAllPacksAsync(users).ConfigureAwait(false);
 
-            _context.Pack.AddRange(result);
+            _context.Packs.AddRange(result);
         }
     }
 }

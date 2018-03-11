@@ -23,7 +23,7 @@ namespace Utilities
                         {
                             new Column {Width = GridLength.Auto, MinWidth = 10},
                             new Column {Width = GridLength.Auto, MinWidth = 12},
-                            phrases.Select(p => new Column {Width = GridLength.Auto})
+                            phrases.Select(p => new Column {Width = GridLength.Star(1)})
                         },
                         Children =
                         {

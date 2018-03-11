@@ -16,12 +16,12 @@ namespace HatServer.DAL
 
         public override IEnumerable<PhraseItem> GetAll()
         {
-            return Context.PhraseItem.Include(p => p.Pack);
+            return Context.PhraseItems.Include(p => p.Pack);
         }
 
         public override Task<PhraseItem> GetAsync(int id)
         {
-            return Context.PhraseItem.Include(p => p.Pack).SingleOrDefaultAsync(p => p.Id == id);
+            return Context.PhraseItems.Include(p => p.Pack).SingleOrDefaultAsync(p => p.Id == id);
         }
     }
 }

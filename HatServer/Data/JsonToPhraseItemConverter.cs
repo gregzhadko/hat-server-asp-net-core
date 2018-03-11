@@ -80,7 +80,7 @@ namespace HatServer.Data
                 {
                     ApplicationUser = user,
                     PhraseItem = phrase,
-                    State = (State)reviewState.Value<int>()
+                    ReviewState = (ReviewState)reviewState.Value<int>()
                 };
                 phrase.PhraseStates.Add(phraseState);
             }

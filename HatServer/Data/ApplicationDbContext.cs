@@ -23,8 +23,26 @@ namespace HatServer.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<HatServer.Models.PhraseItem> PhraseItem { get; set; }
+        public DbSet<HatServer.Models.PhraseItem> PhraseItems { get; set; }
 
-        public DbSet<HatServer.Models.Pack> Pack { get; set; }
+        public DbSet<HatServer.Models.Pack> Packs { get; set; }
+
+        public DbSet<PhraseState> PhraseStates { get; set; }
+
+        public DbSet<Game> Games { get; set; }
+
+        public DbSet<Player> Players { get; set; }
+
+        public DbSet<Round> Rounds { get; set; }
+
+        public DbSet<RoundPhrase> RoundPhrases { get; set; }
+
+        public DbSet<RoundPhraseState> RoundPhraseStates { get; set; }
+
+        public DbSet<Settings> Settings { get; set; }
+
+        public DbSet<Team> Teams { get; set; }
+
+        public DbSet<User> GameUsers { get; set; }
     }
 }
