@@ -63,7 +63,7 @@ namespace HatServer.Data
 
         private void ReadReviewers(JToken phraseItem, PhraseItem phrase)
         {
-            if (phraseItem["reviews"] == null)
+            if (phraseItem["reviews"] == null || _users == null)
             {
                 return;
             }

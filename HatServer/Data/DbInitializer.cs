@@ -24,7 +24,7 @@ namespace HatServer.Data
         }
 
         //This example just creates an Administrator role and one Admin users
-        public async Task Initialize()
+        public async Task InitializeAsync()
         {
             _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
@@ -34,10 +34,10 @@ namespace HatServer.Data
             try
             {
                 SeedUsers();
-                await SeedPacks();
-                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Pack ON");
+                await SeedPacksAsync().ConfigureAwait(false);
+                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Pack ON").ConfigureAwait(false);
                 _context.SaveChanges();
-                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Pack OFF");
+                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Pack OFF").ConfigureAwait(false);
             }
             finally
             {
@@ -58,21 +58,11 @@ namespace HatServer.Data
             _userManager.CreateAsync(tatarintsev, "Qq6t^hJSkr1p").Wait();
         }
 
-        private async Task SeedPacks()
+        private async Task SeedPacksAsync()
         {
             var users = _userManager.Users.ToList();
             var service = new OldService();
-            var packs = await service.GetAllPacksInfoAsync();
-
-            var result = new List<Pack>();
-
-            foreach (var packInfo in packs)
-            {
-                Console.WriteLine(packInfo);
-                var response = await service.GetResponse($"getPack?id={packInfo.Id}", 8081);
-                var pack = JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
-                result.Add(pack);
-            }
+            var result = await OldService.GetAllPacksAsync(users).ConfigureAwait(false);
 
             _context.Pack.AddRange(result);
 

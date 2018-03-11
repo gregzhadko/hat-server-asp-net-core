@@ -4,6 +4,6 @@ namespace HatServer.Data
 {
     public interface IDbInitializer
     {
-        Task Initialize();
+        Task InitializeAsync();
     }
 }

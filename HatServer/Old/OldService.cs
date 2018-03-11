@@ -6,15 +6,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using HatServer.Data;
+using Utilities;
 
 namespace HatServer.Old
 {
     public class OldService
     {
-        public async Task<List<Pack>> GetAllPacksInfoAsync()
+        public static async Task<List<Pack>> GetAllPacksInfoAsync()
         {
-            var response = await GetResponse("getPacks", 8081);
+            var response = await GetResponseAsync("getPacks", 8081);
             var jObjectPacks = JObject.Parse(response)["packs"].Children().ToList();
             var packs = new List<Pack>();
             foreach (var jToken in jObjectPacks)
@@ -26,39 +29,53 @@ namespace HatServer.Old
             return packs;
         }
 
-        public async Task<Pack> GetPackByIdAsync(int id)
+        public static async Task<string> GetResponseAsync(string requestUriString, int port)
         {
-            if (id == 0)
+            var url = $"http://pigowl.com:{port}/{requestUriString}";
+            using (var client = new HttpClient())
             {
-                return null;
+                return await client.GetStringAsync(url).ConfigureAwait(false);
             }
-
-            var response = await GetResponse($"getPack?id={id}", 8081);
-
-            var pack = JsonConvert.DeserializeObject<Pack>(response);
-            if (pack.Phrases == null)
-            {
-                pack.Phrases = new List<PhraseItem>();
-            }
-
-            pack.Phrases = pack.Phrases.OrderBy(p => p.Phrase).ToList();
-            return pack;
+            
+            
+//            var request = WebRequest.Create(url);
+//
+//            using (var response = (HttpWebResponse)await request.GetResponseAsync())
+//            using (var dataStream = response.GetResponseStream())
+//            {
+//                if (dataStream == null || dataStream == Stream.Null)
+//                {
+//                    throw new WebException("Stream is null");
+//                }
+//
+//                var reader = new StreamReader(dataStream);
+//                return await reader.ReadToEndAsync();
+//            }
         }
 
-        public Task<string> GetResponse(string requestUriString, int port)
+        public static async Task<List<Pack>> GetAllPacksAsync(List<ApplicationUser> users)
         {
-            var request = WebRequest.Create($"http://pigowl.com:{port}/{requestUriString}");
-
-            using (var response = (HttpWebResponse)request.GetResponse())
-            using (var dataStream = response.GetResponseStream())
+            try
             {
-                if (dataStream == null || dataStream == Stream.Null)
+                var packs = await GetAllPacksInfoAsync().ConfigureAwait(false);
+
+                var result = new List<Pack>();
+
+                //TODO: remove OrderBy (it was done for testing purposes)
+                foreach (var packInfo in packs.OrderBy(p => p.Id))
                 {
-                    throw new WebException("Stream is null");
+                    var response = await GetResponseAsync($"getPack?id={packInfo.Id}", 8081);
+                    var pack = JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
+                    ConsoleUtilities.WriteInfo("Downloaded", pack.Id.ToString(), pack.Name, pack.Description, $"Words: {pack.Phrases.Count}");
+                    result.Add(pack);
                 }
 
-                var reader = new StreamReader(dataStream);
-                return reader.ReadToEndAsync();
+                return result;
+            }
+            catch (Exception e)
+            {
+                ConsoleUtilities.WriteException(e);
+                return null;
             }
         }
     }
