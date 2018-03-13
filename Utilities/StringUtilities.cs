@@ -92,7 +92,7 @@ namespace Utilities
             return s;
         }
 
-        public static string FormatDescription(string description)
+        public static string FormatDescription(this string description)
         {
             if (String.IsNullOrEmpty(description))
             {
@@ -109,6 +109,6 @@ namespace Utilities
                 .AddDot();
         }
 
-        public static string FormatPhrase(string newPhrase) => newPhrase?.Trim().ToLowerInvariant();
+        public static string FormatPhrase(this string phrase) => phrase?.Trim().ToLowerInvariant();
     }
 }

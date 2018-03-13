@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Linq;
+using Utilities;
 
 namespace HatServer.Models
 {
@@ -27,6 +30,14 @@ namespace HatServer.Models
         public virtual Pack Pack { get; set; }
 
         public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
+
+        public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.ApplicationUser?.NormalizedUserName;
+        
+        public void FormatPhrase()
+        {
+            Phrase = Phrase.FormatPhrase();
+            Description = Description.FormatDescription();
+        }
     }
 
 }

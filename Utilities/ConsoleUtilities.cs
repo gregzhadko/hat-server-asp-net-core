@@ -54,5 +54,15 @@ namespace Utilities
         {
             Console.WriteLine($"{message}\n{exception}".Red());
         }
+        
+        public static void WriteValid(string message)
+        {
+            Console.WriteLine($"{message}".Green());
+        }
+
+        public static void WriteError(string message)
+        {
+            Console.WriteLine($"{message}".Red());
+        }
     }
 }
