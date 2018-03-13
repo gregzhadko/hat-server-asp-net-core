@@ -14,6 +14,17 @@ namespace HatServer.Old
 {
     public class OldService
     {
+        public static async Task AddPhraseAsync(int packId, PhraseItem phrase)
+        {
+            await GetResponseAsync(
+                $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={phrase.Description}&level={phrase.Complexity}&author={phrase.Author}", 8091);
+        }
+
+        public  static async Task AddPhraseAsync(int packId, string phrase)
+        {
+            await GetResponseAsync($"addPackWord?id={packId}&word={phrase}&author=zhadko", 8091);
+        }
+        
         public static async Task<List<Pack>> GetAllPacksInfoAsync()
         {
             var response = await GetResponseAsync("getPacks", 8081).ConfigureAwait(false);
@@ -28,7 +39,7 @@ namespace HatServer.Old
             return packs;
         }
 
-        public static async Task<string> GetResponseAsync(string requestUriString, int port)
+        private static async Task<string> GetResponseAsync(string requestUriString, int port)
         {
             var url = File.ReadLines("Settings.txt").First();
             var finalUrl = $"{url}:{port}/{requestUriString}";
