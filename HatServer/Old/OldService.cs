@@ -49,8 +49,7 @@ namespace HatServer.Old
                 //TODO: remove OrderBy (it was done for testing purposes)
                 foreach (var packInfo in packs.OrderBy(p => p.Id))
                 {
-                    var response = await GetResponseAsync($"getPack?id={packInfo.Id}", 8081).ConfigureAwait(false);
-                    var pack = JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
+                    Pack pack = await GetPack(packInfo.Id, users);
                     ConsoleUtilities.WriteInfo("Downloaded", pack.Id.ToString(), pack.Name, $"Words: {pack.Phrases.Count}", pack.Description);
                     result.Add(pack);
                 }
@@ -62,6 +61,12 @@ namespace HatServer.Old
                 ConsoleUtilities.WriteException(e);
                 return null;
             }
+        }
+
+        public static async Task<Pack> GetPack(int id, List<ApplicationUser> users = null)
+        {
+            var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
+            return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
         }
     }
 }
