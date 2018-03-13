@@ -269,5 +269,10 @@ namespace HatServer.Controllers
         }
 
         #endregion
+
+        public IActionResult ForgotPassword()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
