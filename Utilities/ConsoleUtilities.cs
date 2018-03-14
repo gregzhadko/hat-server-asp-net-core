@@ -57,12 +57,18 @@ namespace Utilities
         
         public static void WriteValid(string message)
         {
-            Console.WriteLine($"{message}".Green());
+            var temp = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{message}");
+            Console.ForegroundColor = temp;
         }
 
         public static void WriteError(string message)
         {
-            Console.WriteLine($"{message}".Red());
+            var temp = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{message}");
+            Console.ForegroundColor = temp;
         }
     }
 }

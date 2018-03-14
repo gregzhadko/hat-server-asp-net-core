@@ -22,28 +22,40 @@ namespace ConsoleMigration
             //SetupTranslator();
 
 
-            LoadPhrases(23);
+            LoadPhrases(23, @"C:\Users\Grigory_Zhadko\Downloads\Telegram Desktop\Simple Words.txt");
+            var count = OldService.GetPack(23).Result.Phrases.Count;
+            Console.WriteLine(count);
             
             //Run();
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
 
-        private static void LoadPhrases(int packId)
+        /// <summary>
+        /// Loads phrases to the pack from file
+        /// </summary>
+        /// <param name="packId">Pack id</param>
+        /// <param name="path">Path to the file with a list of phrases</param>
+        private static void LoadPhrases(int packId, string path)
         {
-            var lines = File.ReadAllLines(@"C:\Users\Grigory_Zhadko\Downloads\Telegram Desktop\Simple Words.txt");
+            var lines = File.ReadAllLines(path);
             foreach(var line in lines)
             {
-                var spaceIndex = line.IndexOf(' ');
-                var phrase = line.Substring(spaceIndex, line.Length-spaceIndex).FormatPhrase();
+                //var spaceIndex = line.IndexOf(' ');
+                //var phrase = line.Substring(spaceIndex, line.Length-spaceIndex).FormatPhrase();
+                var phrase = line.FormatPhrase();
+                if (String.IsNullOrWhiteSpace(phrase))
+                {
+                    continue;
+                }
                 try
                 {
                     OldService.AddPhraseAsync(packId, phrase).GetAwaiter().GetResult();
-                    ConsoleUtilities.WriteValid(phrase);
+                    ConsoleUtilities.WriteValid($"Phrase was added {phrase}");
                 }
                 catch
                 {
-                    ConsoleUtilities.WriteError(phrase);
+                    ConsoleUtilities.WriteError($"Phrase wasn't added {phrase}");
                 }
             }
         }
