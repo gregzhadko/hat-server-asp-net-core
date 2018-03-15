@@ -22,7 +22,24 @@ namespace HatServer.Old
 
         public  static async Task AddPhraseAsync(int packId, string phrase)
         {
-            await GetResponseAsync($"addPackWord?id={packId}&word={phrase}&author=zhadko", 8091);
+            await AddPhraseAsync(packId,
+                new PhraseItem
+                {
+                    Phrase = phrase,
+                    Complexity = 1,
+                    Description = "",
+                    Version = 0,
+                    PackId = packId,
+                    PhraseStates = new List<PhraseState>
+                    {
+                        new PhraseState
+                        {
+                            ReviewState = ReviewState.Accept,
+                            ApplicationUser = new ApplicationUser {UserName = "zhadko"}
+                        }
+                    }
+                });
+            //await GetResponseAsync($"addPackWord?id={packId}&word={phrase}&author=zhadko", 8091);
         }
         
         public static async Task<List<Pack>> GetAllPacksInfoAsync()
