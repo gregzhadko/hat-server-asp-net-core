@@ -15,18 +15,18 @@ namespace ConsoleMigration
     {
         static YandexTranslateSdk _translatorWrapper;
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             
-            //SetupTranslator();
+            SetupTranslator();
 
+            await TranslatePackAsync(1);
 
-            LoadPhrases(23, @"C:\Users\Grigory_Zhadko\Downloads\Telegram Desktop\Simple Words.txt");
-            var count = OldService.GetPack(23).Result.Phrases.Count;
-            Console.WriteLine(count);
+//            LoadPhrases(23, @"C:\Users\Grigory_Zhadko\Downloads\Telegram Desktop\Simple Words.txt");
+//            var count = OldService.GetPack(23).Result.Phrases.Count;
+//            Console.WriteLine(count);
             
-            //Run();
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
@@ -66,24 +66,24 @@ namespace ConsoleMigration
             _translatorWrapper.ApiKey = File.ReadLines("Settings.txt").ToArray()[1];
         }
 
-        private static void Run()
+        private static async Task TranslatePackAsync(int packId)
         {
-            var pack = OldService.GetPack(13).Result;
-            var finalList = new ConcurrentBag<(string, string)>();
+            var pack = await OldService.GetPack(packId);
+            var finalList = new List<(string, string)>();
 
-            Parallel.ForEach(pack.Phrases, async phrase =>
+            foreach (var phrase in pack.Phrases)
             {
                 var translated = await Translate(phrase.Phrase);
                 finalList.Add((phrase.Phrase, translated));
-                ConsoleUtilities.WriteInfo("Translated", phrase.Phrase, translated);
-            });
+                ConsoleUtilities.WriteValid($"{phrase.Phrase}\t\t{translated}");
+            }
 
-            finalList.ToList().ForEach(i => Console.WriteLine("{0,-30}{1,15}", i.Item1, i.Item2));
+            finalList.ToList().ForEach(i => Console.WriteLine("{0,-30}{1,30}", i.Item1, i.Item2));
         }
 
-        private static Task<string> Translate(string text)
+        private static async Task<string> Translate(string text)
         {
-            return _translatorWrapper.TranslateText(text, "ru-en");
+            return await _translatorWrapper.TranslateText(text, "ru-en");
         }
     }
 }
