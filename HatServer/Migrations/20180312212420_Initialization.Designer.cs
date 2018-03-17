@@ -22,7 +22,7 @@ namespace HatServer.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("HatServer.Models.ApplicationUser", b =>
+            modelBuilder.Entity("HatServer.Models.ServerUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -437,7 +437,7 @@ namespace HatServer.Migrations
 
             modelBuilder.Entity("HatServer.Models.PhraseState", b =>
                 {
-                    b.HasOne("HatServer.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("HatServer.Models.ServerUser", "ServerUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId1");
 
@@ -515,7 +515,7 @@ namespace HatServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("HatServer.Models.ApplicationUser")
+                    b.HasOne("HatServer.Models.ServerUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -523,7 +523,7 @@ namespace HatServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("HatServer.Models.ApplicationUser")
+                    b.HasOne("HatServer.Models.ServerUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -536,7 +536,7 @@ namespace HatServer.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("HatServer.Models.ApplicationUser")
+                    b.HasOne("HatServer.Models.ServerUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -544,7 +544,7 @@ namespace HatServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("HatServer.Models.ApplicationUser")
+                    b.HasOne("HatServer.Models.ServerUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

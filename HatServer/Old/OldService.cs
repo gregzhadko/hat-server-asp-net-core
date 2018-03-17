@@ -49,7 +49,7 @@ namespace HatServer.Old
             }
         }
 
-        public static async Task<List<Pack>> GetAllPacksAsync(List<ApplicationUser> users)
+        public static async Task<List<Pack>> GetAllPacksAsync(List<ServerUser> users)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace HatServer.Old
             }
         }
 
-        public static async Task<Pack> GetPack(int id, List<ApplicationUser> users = null)
+        public static async Task<Pack> GetPack(int id, List<ServerUser> users = null)
         {
             var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));

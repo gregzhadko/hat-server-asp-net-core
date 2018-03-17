@@ -25,13 +25,13 @@ namespace HatServer
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ServerUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IRepository<PhraseItem>), typeof(PhraseItemRepository));
-            services.AddScoped(typeof(IRepository<ApplicationUser>), typeof(AccountsRepository));
+            services.AddScoped(typeof(IRepository<ServerUser>), typeof(AccountsRepository));
 
             services.AddMvc();
 

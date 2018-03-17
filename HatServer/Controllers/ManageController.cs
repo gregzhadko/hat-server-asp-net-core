@@ -14,13 +14,13 @@ namespace HatServer.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ServerUser> _userManager;
+        private readonly SignInManager<ServerUser> _signInManager;
         private readonly ILogger _logger;
 
         public ManageController(
-          UserManager<ApplicationUser> userManager,
-          SignInManager<ApplicationUser> signInManager,
+          UserManager<ServerUser> userManager,
+          SignInManager<ServerUser> signInManager,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder)
         {

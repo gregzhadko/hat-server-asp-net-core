@@ -11,9 +11,10 @@ namespace HatServer.Models
         public int Number { get; set; }
         public int Time { get; set; }
 
-        public List<Round> Rounds { get; set; }
-        
+
         public int GameId { get; set; }
         public Game Game { get; set; }
+
+        public List<Round> Rounds { get; set; }
     }
 }

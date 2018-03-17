@@ -10,11 +10,11 @@ namespace HatServer.Data
     public class DbInitializer : IDbInitializer
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ServerUser> _userManager;
 
         public DbInitializer(
             ApplicationDbContext context,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ServerUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -44,10 +44,10 @@ namespace HatServer.Data
 
         private void SeedUsers()
         {
-            var zhadko = new ApplicationUser {UserName = "zhadko"};
-            var fomin = new ApplicationUser {UserName = "fomin"};
-            var sivykh = new ApplicationUser {UserName = "sivykh"};
-            var tatarintsev = new ApplicationUser {UserName = "tatarintsev"};
+            var zhadko = new ServerUser {UserName = "zhadko"};
+            var fomin = new ServerUser {UserName = "fomin"};
+            var sivykh = new ServerUser {UserName = "sivykh"};
+            var tatarintsev = new ServerUser {UserName = "tatarintsev"};
             _userManager.CreateAsync(zhadko, "8yyyy1C4^xx@").Wait();
             _userManager.CreateAsync(fomin, "PCd0c%74gNI2").Wait();
             _userManager.CreateAsync(sivykh, "R22ueOf%#v*!").Wait();

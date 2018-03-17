@@ -12,9 +12,10 @@ using System;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180312215437_AddedForeignPackId")]
+    partial class AddedForeignPackId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,6 +200,8 @@ namespace HatServer.Migrations
 
                     b.Property<int>("PhraseId");
 
+                    b.Property<int?>("PhraseItemId");
+
                     b.Property<int>("RoundId");
 
                     b.Property<int?>("StateId");
@@ -207,7 +210,7 @@ namespace HatServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PhraseId");
+                    b.HasIndex("PhraseItemId");
 
                     b.HasIndex("RoundId");
 
@@ -474,8 +477,7 @@ namespace HatServer.Migrations
                 {
                     b.HasOne("HatServer.Models.PhraseItem", "PhraseItem")
                         .WithMany()
-                        .HasForeignKey("PhraseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PhraseItemId");
 
                     b.HasOne("HatServer.Models.Round", "Round")
                         .WithMany("RoundPhrases")

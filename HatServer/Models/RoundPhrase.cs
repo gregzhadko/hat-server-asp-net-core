@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,8 +13,9 @@ namespace HatServer.Models
 
         public RoundPhraseState State { get; set; }
 
-        public int PhraseId { get; set; }
+        [ForeignKey("PhraseId")]
         public PhraseItem PhraseItem { get; set; }
+        public int PhraseId { get; set; }
 
         public int RoundId { get; set; }
         public Round Round { get; set; }

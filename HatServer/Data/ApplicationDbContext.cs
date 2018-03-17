@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace HatServer.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ServerUser>
     {
         public ApplicationDbContext() : base() { }
 

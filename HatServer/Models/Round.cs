@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,12 +16,13 @@ namespace HatServer.Models
         public int SettingsId { get; set; }
         public Settings Settings { get; set; }
 
-        public List<RoundPhrase> RoundPhrases { get; set; }
-
-        public int PlayerId { get; set; }
+        [ForeignKey("PlayerId")]
         public Player Player { get; set; }
+        public int PlayerId { get; set; }
 
         public int StageId { get; set; }
         public Stage Stage { get; set; }
+
+        public List<RoundPhrase> RoundPhrases { get; set; }
     }
 }

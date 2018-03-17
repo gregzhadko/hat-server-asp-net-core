@@ -16,13 +16,13 @@ namespace HatServer.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ServerUser> _userManager;
+        private readonly SignInManager<ServerUser> _signInManager;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<ServerUser> userManager,
+            SignInManager<ServerUser> signInManager,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
@@ -160,7 +160,7 @@ namespace HatServer.Controllers
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ServerUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
