@@ -31,7 +31,7 @@ namespace HatServer.Models
 
         public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 
-        public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.ApplicationUser?.NormalizedUserName;
+        public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.ServerUser?.NormalizedUserName;
         
         public void FormatPhrase()
         {

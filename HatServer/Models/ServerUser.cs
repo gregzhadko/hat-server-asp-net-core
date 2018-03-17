@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace HatServer.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
-    public class ApplicationUser : IdentityUser
+    // Add profile data for application users by adding properties to the ServerUser class
+    public class ServerUser : IdentityUser
     {
     }
 }

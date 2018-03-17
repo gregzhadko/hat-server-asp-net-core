@@ -20,8 +20,10 @@ namespace HatServer.Models
         public Player Player { get; set; }
         public int PlayerId { get; set; }
 
-        public int StageId { get; set; }
+        [ForeignKey("StageId")]
         public Stage Stage { get; set; }
+
+        public int StageId { get; set; }
 
         public List<RoundPhrase> RoundPhrases { get; set; }
     }
