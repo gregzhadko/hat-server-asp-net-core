@@ -5,6 +5,13 @@
     <UserSecretsId>aspnet-HatServer-69276578-5437-4E54-B501-1E21BA8AE802</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20180319205241_AddPhraseState.cs" />
+    <Compile Remove="Migrations\20180319205241_AddPhraseState.Designer.cs" />
+    <Compile Remove="Migrations\20180319210803_AddPhraseState1.cs" />
+    <Compile Remove="Migrations\20180319210803_AddPhraseState1.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
