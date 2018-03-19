@@ -5,7 +5,7 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Alba.CsConsoleFormat" Version="0.10.0" />
+    <PackageReference Include="Alba.CsConsoleFormat" Version="1.0.0" />
     <PackageReference Include="YandexTranslateCSharpSdk" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>

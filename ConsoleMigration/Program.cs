@@ -68,7 +68,7 @@ namespace ConsoleMigration
 
         private static async Task TranslatePackAsync(int packId)
         {
-            var pack = await OldService.GetPack(packId);
+            var pack = await OldService.GetPackAsync(packId);
             var finalList = new List<(string, string)>();
 
             foreach (var phrase in pack.Phrases)
