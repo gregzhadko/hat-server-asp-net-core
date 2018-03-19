@@ -26,7 +26,7 @@ namespace HatServer.Data
         public DbSet<ServerUser> ServerUsers { get; set; }
         public DbSet<PhraseState> PhraseStates { get; set; }
 
-        public DbSet<HatServer.Models.PhraseItem> PhraseItems { get; set; }
+        public DbSet<PhraseItem> PhraseItems { get; set; }
 
         public DbSet<HatServer.Models.Pack> Packs { get; set; }
 

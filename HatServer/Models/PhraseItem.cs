@@ -2,8 +2,10 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Utilities;
 
 namespace HatServer.Models
@@ -24,12 +26,12 @@ namespace HatServer.Models
 
         public string Description { get; set; }
 
-        //    [Required]
-        //    public int PackId { get; set; }
+        [Required]
+        public int PackId { get; set; }
+        [ForeignKey("PackId")]
+        public virtual Pack Pack { get; set; }
 
-        //    public virtual Pack Pack { get; set; }
-
-            public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
+        public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 
         public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.ServerUser?.NormalizedUserName;
 
@@ -39,5 +41,4 @@ namespace HatServer.Models
             Description = Description.FormatDescription();
         }
     }
-
 }
