@@ -32,7 +32,8 @@ namespace HatServer.Models
 
         protected RoundPhraseState() { } //For EF
 
-        [Key][DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
         [Required, MaxLength(100)]

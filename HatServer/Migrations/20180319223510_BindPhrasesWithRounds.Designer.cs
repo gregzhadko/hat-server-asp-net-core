@@ -12,9 +12,10 @@ using System;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180319223510_BindPhrasesWithRounds")]
+    partial class BindPhrasesWithRounds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,7 +161,7 @@ namespace HatServer.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("RoundPhrases");
+                    b.ToTable("RoundPhrase");
                 });
 
             modelBuilder.Entity("HatServer.Models.RoundPhraseState", b =>
@@ -176,7 +177,7 @@ namespace HatServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoundPhraseStates");
+                    b.ToTable("RoundPhraseState");
                 });
 
             modelBuilder.Entity("HatServer.Models.ServerUser", b =>

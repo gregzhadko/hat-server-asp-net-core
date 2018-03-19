@@ -16,6 +16,10 @@
     <Compile Remove="Migrations\20180319222138_AddRounds.Designer.cs" />
     <Compile Remove="Migrations\20180319222609_Test.cs" />
     <Compile Remove="Migrations\20180319222609_Test.Designer.cs" />
+    <Compile Remove="Migrations\20180319223220_Test.cs" />
+    <Compile Remove="Migrations\20180319223220_Test.Designer.cs" />
+    <Compile Remove="Migrations\20180319223400_BindPhrasesWithRounds.cs" />
+    <Compile Remove="Migrations\20180319223400_BindPhrasesWithRounds.Designer.cs" />
   </ItemGroup>
 
 

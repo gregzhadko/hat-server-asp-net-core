@@ -26,6 +26,6 @@ namespace HatServer.Models
 
         public int StageId { get; set; }
 
-        //public List<RoundPhrase> RoundPhrases { get; set; }
+        public List<RoundPhrase> RoundPhrases { get; set; }
     }
 }
