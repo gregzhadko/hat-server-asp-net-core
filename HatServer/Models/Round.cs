@@ -17,9 +17,9 @@ namespace HatServer.Models
         public Settings Settings { get; set; }
         public int SettingsId { get; set; }
 
-        //[ForeignKey("PlayerId")]
-        //public Player Player { get; set; }
-        //public int PlayerId { get; set; }
+        [ForeignKey("PlayerId")]
+        public Player Player { get; set; }
+        public int PlayerId { get; set; }
 
         [ForeignKey("StageId")]
         public Stage Stage { get; set; }
