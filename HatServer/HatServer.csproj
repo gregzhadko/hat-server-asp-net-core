@@ -12,6 +12,8 @@
     <Compile Remove="Migrations\20180319210803_AddPhraseState1.Designer.cs" />
     <Compile Remove="Migrations\20180319215540_AddSettings.cs" />
     <Compile Remove="Migrations\20180319215540_AddSettings.Designer.cs" />
+    <Compile Remove="Migrations\20180319222138_AddRounds.cs" />
+    <Compile Remove="Migrations\20180319222138_AddRounds.Designer.cs" />
   </ItemGroup>
 
 

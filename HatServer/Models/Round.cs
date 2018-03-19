@@ -13,18 +13,19 @@ namespace HatServer.Models
         public int RoundNumber { get; set; }
         public int Time { get; set; }
 
-        public int SettingsId { get; set; }
+        [ForeignKey("SettingsId")]
         public Settings Settings { get; set; }
+        public int SettingsId { get; set; }
 
-        [ForeignKey("PlayerId")]
-        public Player Player { get; set; }
-        public int PlayerId { get; set; }
+        //[ForeignKey("PlayerId")]
+        //public Player Player { get; set; }
+        //public int PlayerId { get; set; }
 
-        [ForeignKey("StageId")]
-        public Stage Stage { get; set; }
+        //[ForeignKey("StageId")]
+        //public Stage Stage { get; set; }
 
-        public int StageId { get; set; }
+        //public int StageId { get; set; }
 
-        public List<RoundPhrase> RoundPhrases { get; set; }
+        //public List<RoundPhrase> RoundPhrases { get; set; }
     }
 }
