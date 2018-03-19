@@ -17,6 +17,6 @@ namespace HatServer.Models
         public Game Game { get; set; }
         public int GameId { get; set; }
 
-        //public List<Round> Rounds { get; set; }
+        public List<Round> Rounds { get; set; }
     }
 }
