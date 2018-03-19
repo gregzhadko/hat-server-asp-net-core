@@ -23,6 +23,9 @@ namespace HatServer.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
+        public DbSet<ServerUser> ServerUsers { get; set; }
+        public DbSet<PhraseState> PhraseStates { get; set; }
+
         public DbSet<HatServer.Models.PhraseItem> PhraseItems { get; set; }
 
         public DbSet<HatServer.Models.Pack> Packs { get; set; }

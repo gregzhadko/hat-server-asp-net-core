@@ -24,15 +24,15 @@ namespace HatServer.Models
 
         public string Description { get; set; }
 
-        [Required]
-        public int PackId { get; set; }
+        //    [Required]
+        //    public int PackId { get; set; }
 
-        public virtual Pack Pack { get; set; }
+        //    public virtual Pack Pack { get; set; }
 
-        public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
+            public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 
         public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.ServerUser?.NormalizedUserName;
-        
+
         public void FormatPhrase()
         {
             Phrase = Phrase.FormatPhrase();
