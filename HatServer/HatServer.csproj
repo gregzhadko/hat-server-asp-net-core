@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20180319205241_AddPhraseState.Designer.cs" />
     <Compile Remove="Migrations\20180319210803_AddPhraseState1.cs" />
     <Compile Remove="Migrations\20180319210803_AddPhraseState1.Designer.cs" />
+    <Compile Remove="Migrations\20180319215540_AddSettings.cs" />
+    <Compile Remove="Migrations\20180319215540_AddSettings.Designer.cs" />
   </ItemGroup>
 
 
