@@ -4,12 +4,19 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>\..\bin\Debug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Alba.CsConsoleFormat" Version="1.0.0" />
     <PackageReference Include="YandexTranslateCSharpSdk" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HatServer\HatServer.csproj" />
+    <ProjectReference Include="..\SpellChecker\SpellChecker.csproj">
+      <Project>{A4562344-5FDF-4F2A-A2FD-E37D3B8C187A}</Project>
+      <Name>SpellChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 </Project>

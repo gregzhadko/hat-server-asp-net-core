@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Alba.CsConsoleFormat;
 using HatServer.Old;
 using Utilities;
+using SpellChecker;
 using YandexTranslateCSharpSdk;
 
 namespace ConsoleMigration
@@ -18,17 +19,18 @@ namespace ConsoleMigration
         public static async Task Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            
-            SetupTranslator();
 
-            await TranslatePackAsync(1);
-
-//            LoadPhrases(23, @"C:\Users\Grigory_Zhadko\Downloads\Telegram Desktop\Simple Words.txt");
-//            var count = OldService.GetPack(23).Result.Phrases.Count;
-//            Console.WriteLine(count);
+            await RunSpellCheckerAsync();
             
             Console.WriteLine("Press any key...");
             Console.ReadKey();
+        }
+
+        private static async Task RunSpellCheckerAsync()
+        {
+            var packs = await OldService.GetAllPacksAsync();
+            var spellChecker = new SpellChecker.SpellChecker(packs);
+            spellChecker.Run();
         }
 
         /// <summary>
@@ -62,8 +64,7 @@ namespace ConsoleMigration
 
         private static void SetupTranslator()
         {
-            _translatorWrapper = new YandexTranslateSdk();
-            _translatorWrapper.ApiKey = File.ReadLines("Settings.txt").ToArray()[1];
+            _translatorWrapper = new YandexTranslateSdk {ApiKey = File.ReadLines("Settings.txt").ToArray()[1]};
         }
 
         private static async Task TranslatePackAsync(int packId)

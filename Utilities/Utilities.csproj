@@ -2,6 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>\..\bin\Debug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Alba.CsConsoleFormat" Version="0.10.0" />
   </ItemGroup>

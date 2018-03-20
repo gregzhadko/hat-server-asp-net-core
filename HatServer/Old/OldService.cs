@@ -59,7 +59,7 @@ namespace HatServer.Old
             }
         }
 
-        public static async Task<List<Pack>> GetAllPacksAsync(List<ServerUser> users)
+        public static async Task<List<Pack>> GetAllPacksAsync(List<ServerUser> users = null)
         {
             try
             {
