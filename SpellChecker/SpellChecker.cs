@@ -126,7 +126,9 @@ namespace SpellChecker
         private void SaveNewCustomWord(Hunspell hunSpell, string word)
         {
             hunSpell.Add(word);
+#if DEBUG
             File.AppendAllLines(@"..\..\CustomDictionary.txt", new[] {word});
+#endif
             File.AppendAllLines(@"CustomDictionary.txt", new[] {word});
             Console.WriteLine($"\nСлово {word} было добавлено в персональный словарь");
         }
@@ -134,7 +136,9 @@ namespace SpellChecker
         private void SaveNewSkipWord(string word, string wholeWord, int packId)
         {
             var stringToSave = $"{word}|{packId}|{wholeWord}";
+#if DEBUG
             File.AppendAllLines(@"..\..\SkipDictionary.txt", new[] {stringToSave});
+#endif
             File.AppendAllLines(@"SkipDictionary.txt", new[] {stringToSave});
             Console.WriteLine($"\nСлово {word} было добавлено в словарь пропущенных слов");
         }
