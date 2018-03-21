@@ -16,7 +16,7 @@ namespace ConsoleMigration
     {
         static YandexTranslateSdk _translatorWrapper;
 
-        public static async Task Main(string[] args)
+        public static async Task Main()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
