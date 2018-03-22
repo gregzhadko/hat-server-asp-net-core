@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using HatServer.Models;
 using NHunspell;
+using Utilities;
 using Yandex.Speller.Api;
 using Yandex.Speller.Api.DataContract;
 
@@ -56,7 +57,7 @@ namespace SpellChecker
 
         private void SpellPhrase(Pack pack, string phrase, Hunspell hunSpell, Hunspell hunSpellEng, IYandexSpeller speller)
         {
-            var words = GetWords(phrase);
+            var words = StringUtilities.GetWordsFromString(phrase);
             foreach (var word in words.Select(w => w.ToLowerInvariant().Replace('ё', 'е')))
             {
                 if (hunSpell.Spell(word) || hunSpellEng.Spell(word) || ExistsInSkipped(word, phrase, pack.Id))
@@ -89,12 +90,12 @@ namespace SpellChecker
             }
         }
 
-        private bool YandexSpellCheckPass(IYandexSpeller speller, string word)
+        private static bool YandexSpellCheckPass(IYandexSpeller speller, string word)
         {
             return !speller.CheckText(word, Lang.Ru | Lang.En, Options.IgnoreCapitalization, TextFormat.Plain).Errors.Any();
         }
 
-        private void ShowSpellErrorMessages(Pack pack, string phrase, string word)
+        private static void ShowSpellErrorMessages(Pack pack, string phrase, string word)
         {
             var color = Console.ForegroundColor;
             Console.Write($"{DateTime.Now:hh:mm:ss}: Ошибка в слове ");
@@ -123,46 +124,24 @@ namespace SpellChecker
                                                                                 string.Compare(line[2], wholeWord, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
-        private void SaveNewCustomWord(Hunspell hunSpell, string word)
+        private static void SaveNewCustomWord(Hunspell hunSpell, string word)
         {
             hunSpell.Add(word);
 #if DEBUG
             File.AppendAllLines(@"..\..\CustomDictionary.txt", new[] {word});
 #endif
             File.AppendAllLines(@"CustomDictionary.txt", new[] {word});
-            Console.WriteLine($"\nСлово {word} было добавлено в персональный словарь");
+            ConsoleUtilities.WriteValid($"\nСлово {word} было добавлено в персональный словарь");
         }
 
-        private void SaveNewSkipWord(string word, string wholeWord, int packId)
+        private static void SaveNewSkipWord(string word, string wholeWord, int packId)
         {
             var stringToSave = $"{word}|{packId}|{wholeWord}";
 #if DEBUG
             File.AppendAllLines(@"..\..\SkipDictionary.txt", new[] {stringToSave});
 #endif
             File.AppendAllLines(@"SkipDictionary.txt", new[] {stringToSave});
-            Console.WriteLine($"\nСлово {word} было добавлено в словарь пропущенных слов");
-        }
-
-        private IEnumerable<string> GetWords(string input)
-        {
-            var matches = Regex.Matches(input, @"\b[\w']*\b");
-
-            var words = from m in matches.Cast<Match>()
-                where !string.IsNullOrEmpty(m.Value)
-                select TrimSuffix(m.Value);
-
-            return words.ToArray();
-        }
-
-        private string TrimSuffix(string word)
-        {
-            var apostropheLocation = word.IndexOf('\'');
-            if (apostropheLocation != -1)
-            {
-                word = word.Substring(0, apostropheLocation);
-            }
-
-            return word;
+            ConsoleUtilities.WriteValid($"\nСлово {word} было добавлено в словарь пропущенных слов");
         }
     }
 }

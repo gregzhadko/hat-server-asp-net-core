@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -6,7 +7,7 @@ namespace Utilities
 {
     public static class StringUtilities
     {
-        public static string ReplaceQuotes(this string s)
+        private static string ReplaceQuotes(this string s)
         {
             if (String.IsNullOrEmpty(s))
             {
@@ -110,5 +111,12 @@ namespace Utilities
         }
 
         public static string FormatPhrase(this string phrase) => phrase?.Trim().ToLowerInvariant();
+
+        public static IEnumerable<string> GetWordsFromString(string text)
+        {
+            var punctuationAndSpaces = text.Where(Char.IsPunctuation).Distinct().ToArray();
+            var words = text.Split().Select(x => x.Trim().Trim(punctuationAndSpaces)).Where(x => !String.IsNullOrWhiteSpace(x));
+            return words;
+        }
     }
 }
