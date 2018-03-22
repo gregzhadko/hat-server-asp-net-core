@@ -88,7 +88,7 @@ namespace Utilities
             var last = s.Last();
             if (last != '.' || last != '.')
             {
-                return s + ".";
+                return $"{s}.";
             }
             return s;
         }
