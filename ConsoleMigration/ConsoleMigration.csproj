@@ -15,6 +15,10 @@
     <PackageReference Include="YandexTranslateCSharpSdk" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DictionaryService\DictionaryService.csproj">
+      <Project>{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}</Project>
+      <Name>DictionaryService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HatServer\HatServer.csproj" />
     <ProjectReference Include="..\SpellChecker\SpellChecker.csproj">
       <Project>{A4562344-5FDF-4F2A-A2FD-E37D3B8C187A}</Project>

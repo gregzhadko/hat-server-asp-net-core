@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Alba.CsConsoleFormat;
+using DictionaryService;
 using HatServer.Old;
 using Utilities;
 using SpellChecker;
@@ -20,7 +21,8 @@ namespace ConsoleMigration
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            await RunSpellCheckerAsync();
+            //await RunSpellCheckerAsync();
+            await LoadDescriptionsAsync(20);
             
             Console.WriteLine("Press any key...");
             Console.ReadKey();
@@ -31,6 +33,21 @@ namespace ConsoleMigration
             var packs = await OldService.GetAllPacksAsync();
             var spellChecker = new SpellChecker.SpellChecker(packs);
             spellChecker.Run();
+        }
+
+        public static async Task LoadDescriptionsAsync(int packId)
+        {
+            var settings = File.ReadLines("Settings.txt").ToList();
+            var oxfordService = new OxfordService(settings[2], settings[3]);
+            var description = await oxfordService.LoadDescriptionAsync("cell");
+
+            var definitions = description.results.SelectMany(r => r.lexicalEntries).SelectMany(l => l.entries).SelectMany(e => e.senses)
+                .SelectMany(s => s.definitions);
+
+            foreach (var definition in definitions)
+            {
+                Console.WriteLine(definition);
+            }
         }
 
         /// <summary>

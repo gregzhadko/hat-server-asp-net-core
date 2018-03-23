@@ -7,11 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HatServer", "HatServer\HatS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleMigration", "ConsoleMigration\ConsoleMigration.csproj", "{64C52521-80E3-46DE-A25A-F69E7B102654}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{8A5193B2-85DF-4195-9685-57A38972FCE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{8A5193B2-85DF-4195-9685-57A38972FCE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpellChecker", "SpellChecker\SpellChecker.csproj", "{A4562344-5FDF-4F2A-A2FD-E37D3B8C187A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpellChecker", "SpellChecker\SpellChecker.csproj", "{A4562344-5FDF-4F2A-A2FD-E37D3B8C187A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilitiesTests", "UtilitiesTests\UtilitiesTests.csproj", "{9852CA62-D162-4463-918D-54A5CCCEA5B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilitiesTests", "UtilitiesTests\UtilitiesTests.csproj", "{9852CA62-D162-4463-918D-54A5CCCEA5B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DictionaryService", "DictionaryService\DictionaryService.csproj", "{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9852CA62-D162-4463-918D-54A5CCCEA5B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9852CA62-D162-4463-918D-54A5CCCEA5B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9852CA62-D162-4463-918D-54A5CCCEA5B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
