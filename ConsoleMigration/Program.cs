@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Alba.CsConsoleFormat;
 using DictionaryService;
+using HatServer.Models;
 using HatServer.Old;
 using Utilities;
 using SpellChecker;
@@ -22,8 +23,10 @@ namespace ConsoleMigration
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             //await RunSpellCheckerAsync();
-            await LoadDescriptionsAsync(20);
+
+            await LoadDescriptionsAsync(23);
             
+
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
@@ -35,20 +38,13 @@ namespace ConsoleMigration
             spellChecker.Run();
         }
 
-        public static async Task LoadDescriptionsAsync(int packId)
+        public static Task LoadDescriptionsAsync(int packId)
         {
-            var settings = File.ReadLines("Settings.txt").ToList();
-            var oxfordService = new OxfordService(settings[2], settings[3]);
-            var description = await oxfordService.LoadDescriptionAsync("cell");
-
-            var definitions = description.results.SelectMany(r => r.lexicalEntries).SelectMany(l => l.entries).SelectMany(e => e.senses)
-                .SelectMany(s => s.definitions);
-
-            foreach (var definition in definitions)
-            {
-                Console.WriteLine(definition);
-            }
+            var service = new DescriptionUpdater();
+            return service.UpdateDescriptionsAsync(packId);
         }
+
+        
 
         /// <summary>
         /// Loads phrases to the pack from file
