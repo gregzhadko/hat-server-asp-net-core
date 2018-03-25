@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Alba.CsConsoleFormat.Fluent;
 using HatServer.Models;
 using HatServer.Old;
 using Utilities;
@@ -13,7 +12,7 @@ namespace DictionaryService
 {
     public class DescriptionUpdater
     {
-        private OxfordService _oxfordService;
+        private readonly OxfordService _oxfordService;
 
         public DescriptionUpdater()
         {
@@ -25,7 +24,7 @@ namespace DictionaryService
         {
             var pack = await OldService.GetPackAsync(packId);
 
-            foreach (var phrase in pack.Phrases/*.Where(p => String.IsNullOrWhiteSpace(p.Description))*/)
+            foreach (var phrase in pack.Phrases.Where(p => String.IsNullOrWhiteSpace(p.Description)))
             {
                 try
                 {
@@ -70,12 +69,11 @@ namespace DictionaryService
         {
             try
             {
-                return (await _oxfordService.GetDescriptionsAsync(phrase.Phrase)).Take(3).ToList();
+                return (await _oxfordService.GetDescriptionsAsync(phrase.Phrase)).Take(1).ToList();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ConsoleUtilities.WriteError($"Can't load description for {phrase.Phrase}");
-                //ConsoleUtilities.WriteException(e, $"Can't load description for {phrase.Phrase}");
                 throw;
             }
         }

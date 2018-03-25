@@ -1,4 +1,5 @@
-﻿namespace DictionaryService
+﻿// ReSharper disable All
+namespace DictionaryService
 {
     public class Rootobject
     {

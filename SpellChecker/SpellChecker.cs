@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using HatServer.Models;
 using NHunspell;
 using Utilities;
@@ -15,12 +14,11 @@ namespace SpellChecker
     {
         private readonly List<Pack> _packs;
         private readonly List<string> _skippedPhrases;
-        private const char _specialSymbol = '♆';
+        private const char SpecialSymbol = '♆';
 
         public SpellChecker(List<Pack> packs)
         {
             _packs = packs;
-            var dir = Directory.GetCurrentDirectory();
             _skippedPhrases = File.ReadAllLines("SkipDictionary.txt").ToList();
         }
 
@@ -36,7 +34,7 @@ namespace SpellChecker
                 //Skip test pack with id 20
                 foreach (var pack in _packs.Where(p => p.Id != 20))
                 {
-                    Console.WriteLine($"Смотрю пак {pack.Name}");
+                    Console.WriteLine($"Checking pack {pack.Name}");
                     foreach (var phrase in pack.Phrases)
                     {
                         SpellPhrase(pack, phrase.Phrase, hunSpell, hunSpellEng, yandexSpellCheck);
@@ -120,10 +118,10 @@ namespace SpellChecker
 
         private bool ExistsInSkipped(string word, string wholeWord, int id)
         {
-            var formatedWholeWord = wholeWord.Replace('\n', _specialSymbol);
+            var formattedWholeWord = wholeWord.Replace('\n', SpecialSymbol);
             return _skippedPhrases.Select(s => s.Split('|')).Any(line => string.Compare(line[0], word, StringComparison.OrdinalIgnoreCase) == 0 &&
                                                                                 string.Compare(line[1], id.ToString(), StringComparison.OrdinalIgnoreCase) == 0 &&
-                                                                                string.Compare(line[2], formatedWholeWord, StringComparison.OrdinalIgnoreCase) == 0);
+                                                                                string.Compare(line[2], formattedWholeWord, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
         private static void SaveNewCustomWord(Hunspell hunSpell, string word)
@@ -138,8 +136,8 @@ namespace SpellChecker
 
         private static void SaveNewSkipWord(string word, string wholeWord, int packId)
         {
-            var formatedWholeWord = wholeWord.Replace('\n', _specialSymbol);
-            var stringToSave = $"{word}|{packId}|{formatedWholeWord}";
+            var formattedWholeWord = wholeWord.Replace('\n', SpecialSymbol);
+            var stringToSave = $"{word}|{packId}|{formattedWholeWord}";
 #if DEBUG
             File.AppendAllLines(@"..\..\SkipDictionary.txt", new[] {stringToSave});
 #endif
