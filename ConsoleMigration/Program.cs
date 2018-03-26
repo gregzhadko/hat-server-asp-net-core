@@ -23,11 +23,18 @@ namespace ConsoleMigration
 
             //await DeleteWordsInPackAsync(15);
             //await LoadPhrasesAsync(15, @"D:\sport.txt");
-            await LoadDescriptionsAsync(15);
-            
+            //await LoadDescriptionsAsync(15);
+
+            await ManuallyDescriptionUpdatingAsync(15);
 
             Console.WriteLine("Press any key...");
             Console.ReadKey();
+        }
+
+        private static Task ManuallyDescriptionUpdatingAsync(int packId)
+        {
+            var definitionUpdate = new DescriptionUpdaterManager();
+            return definitionUpdate.RunManualUpdatingAsync(packId);
         }
 
         private static async Task DeleteWordsInPackAsync(int packId)
@@ -39,7 +46,7 @@ namespace ConsoleMigration
                 await OldService.DeletePhraseAsync(packId, phrase.Phrase);
             }
 
-            ConsoleUtilities.WriteValid("Removing of phrases is completed");
+            ConsoleUtilities.WriteGreenLine("Removing of phrases is completed");
         }
 
         public static async void RunMigration()
@@ -55,8 +62,8 @@ namespace ConsoleMigration
 
         private static Task LoadDescriptionsAsync(int packId)
         {
-            var service = new DescriptionUpdater();
-            return service.UpdateDescriptionsAsync(packId);
+            var service = new DescriptionUpdaterManager();
+            return service.UpdateDescriptionsAsync(packId, 1, p => String.IsNullOrWhiteSpace(p.Description));
         }
 
         /// <summary>
@@ -67,7 +74,7 @@ namespace ConsoleMigration
         private static async Task LoadPhrasesAsync(int packId, string path)
         {
             var lines = File.ReadAllLines(path);
-            var service = new DescriptionUpdater();
+            var service = new DescriptionUpdaterManager();
             foreach (var line in lines)
             {
                 //var spaceIndex = line.IndexOf(' ');
@@ -83,14 +90,14 @@ namespace ConsoleMigration
                     var definitions = await service.LoadDescriptionsAsync(phrase);
                     if (definitions == null)
                     {
-                        ConsoleUtilities.WriteError($"No definitions for {phrase}");
+                        ConsoleUtilities.WriteRedLine($"No definitions for {phrase}");
                     }
                     await OldService.AddPhraseAsync(packId, phrase, definitions?.FirstOrDefault());
-                    ConsoleUtilities.WriteValid($"Phrase was added {phrase}");
+                    ConsoleUtilities.WriteGreenLine($"Phrase was added {phrase}");
                 }
                 catch
                 {
-                    ConsoleUtilities.WriteError($"Phrase wasn't added {phrase}");
+                    ConsoleUtilities.WriteRedLine($"Phrase wasn't added {phrase}");
                 }
             }
         }
@@ -109,7 +116,7 @@ namespace ConsoleMigration
             {
                 var translated = await TranslateAsync(phrase.Phrase);
                 finalList.Add((phrase.Phrase, translated));
-                ConsoleUtilities.WriteValid($"{phrase.Phrase}\t\t{translated}");
+                ConsoleUtilities.WriteGreenLine($"{phrase.Phrase}\t\t{translated}");
             }
 
             finalList.ToList().ForEach(i => Console.WriteLine("{0,-30}{1,30}", i.Item1, i.Item2));

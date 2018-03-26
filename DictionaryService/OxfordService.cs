@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace DictionaryService
 {
-    public class OxfordService
+    public class OxfordService : IOnlineDictionaryService
     {
         private readonly string _key;
         private readonly string _id;
@@ -38,7 +38,6 @@ namespace DictionaryService
         {
             using (var client = new HttpClient())
             {
-                //client.BaseAddress = new Uri(Url);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("app_id", _id);
                 client.DefaultRequestHeaders.Add("app_key", _key);
@@ -48,7 +47,6 @@ namespace DictionaryService
                 }
                 catch (HttpRequestException e)
                 {
-
                     return null;
                 }
             }
@@ -57,3 +55,4 @@ namespace DictionaryService
         private static Rootobject Deserialize(string response) => JsonConvert.DeserializeObject<Rootobject>(response);
     }
 }
+

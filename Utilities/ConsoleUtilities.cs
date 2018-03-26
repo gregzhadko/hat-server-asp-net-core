@@ -54,7 +54,7 @@ namespace Utilities
             WriteRedLine($"{message}:\n{exception}");
         }
 
-        public static void WriteValidLine(string message)
+        public static void WriteGreenLine(string message)
         {
             WriteLine(message, ConsoleColor.Green);
         }

@@ -131,7 +131,7 @@ namespace SpellChecker
             File.AppendAllLines(@"..\..\CustomDictionary.txt", new[] {word});
 #endif
             File.AppendAllLines(@"CustomDictionary.txt", new[] {word});
-            ConsoleUtilities.WriteValid($"\nСлово {word} было добавлено в персональный словарь");
+            ConsoleUtilities.WriteGreenLine($"\nСлово {word} было добавлено в персональный словарь");
         }
 
         private static void SaveNewSkipWord(string word, string wholeWord, int packId)
@@ -142,7 +142,7 @@ namespace SpellChecker
             File.AppendAllLines(@"..\..\SkipDictionary.txt", new[] {stringToSave});
 #endif
             File.AppendAllLines(@"SkipDictionary.txt", new[] {stringToSave});
-            ConsoleUtilities.WriteValid($"\nСлово {word} было добавлено в словарь пропущенных слов");
+            ConsoleUtilities.WriteGreenLine($"\nСлово {word} было добавлено в словарь пропущенных слов");
         }
     }
 }

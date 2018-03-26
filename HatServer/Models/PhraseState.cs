@@ -15,5 +15,7 @@ namespace HatServer.Models
         public ServerUser ServerUser { get; set; }
 
         public ReviewState ReviewState { get; set; }
+
+        public override string ToString() => $"{ServerUser.UserName}: {ReviewState}";
     }
 }
