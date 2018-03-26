@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DictionaryService;
 using HatServer.Old;
+using Microsoft.EntityFrameworkCore;
 using Utilities;
 using YandexTranslateCSharpSdk;
 
@@ -20,11 +21,29 @@ namespace ConsoleMigration
 
             //await RunSpellCheckerAsync();
 
-            await LoadDescriptionsAsync(23);
+            //await DeleteWordsInPackAsync(15);
+            //await LoadPhrasesAsync(15, @"D:\sport.txt");
+            await LoadDescriptionsAsync(15);
             
 
             Console.WriteLine("Press any key...");
             Console.ReadKey();
+        }
+
+        private static async Task DeleteWordsInPackAsync(int packId)
+        {
+            var pack = await OldService.GetPackAsync(packId);
+            foreach (var phrase in pack.Phrases)
+            {
+                Console.WriteLine($"Removing of phrase {phrase.Phrase}");
+                await OldService.DeletePhraseAsync(packId, phrase.Phrase);
+            }
+
+            ConsoleUtilities.WriteValid("Removing of phrases is completed");
+        }
+
+        public static async void RunMigration()
+        {
         }
 
         private static async Task RunSpellCheckerAsync()
@@ -34,34 +53,39 @@ namespace ConsoleMigration
             spellChecker.Run();
         }
 
-        public static Task LoadDescriptionsAsync(int packId)
+        private static Task LoadDescriptionsAsync(int packId)
         {
             var service = new DescriptionUpdater();
             return service.UpdateDescriptionsAsync(packId);
         }
-
-        
 
         /// <summary>
         /// Loads phrases to the pack from file
         /// </summary>
         /// <param name="packId">Pack id</param>
         /// <param name="path">Path to the file with a list of phrases</param>
-        private static void LoadPhrases(int packId, string path)
+        private static async Task LoadPhrasesAsync(int packId, string path)
         {
             var lines = File.ReadAllLines(path);
-            foreach(var line in lines)
+            var service = new DescriptionUpdater();
+            foreach (var line in lines)
             {
                 //var spaceIndex = line.IndexOf(' ');
                 //var phrase = line.Substring(spaceIndex, line.Length-spaceIndex).FormatPhrase();
                 var phrase = line.FormatPhrase();
+
                 if (String.IsNullOrWhiteSpace(phrase))
                 {
                     continue;
                 }
                 try
                 {
-                    OldService.AddPhraseAsync(packId, phrase).GetAwaiter().GetResult();
+                    var definitions = await service.LoadDescriptionsAsync(phrase);
+                    if (definitions == null)
+                    {
+                        ConsoleUtilities.WriteError($"No definitions for {phrase}");
+                    }
+                    await OldService.AddPhraseAsync(packId, phrase, definitions?.FirstOrDefault());
                     ConsoleUtilities.WriteValid($"Phrase was added {phrase}");
                 }
                 catch

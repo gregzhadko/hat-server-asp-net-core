@@ -23,17 +23,16 @@ namespace DictionaryService
         public async Task UpdateDescriptionsAsync(int packId)
         {
             var pack = await OldService.GetPackAsync(packId);
+            var errorList = new List<string>();
 
             foreach (var phrase in pack.Phrases.Where(p => String.IsNullOrWhiteSpace(p.Description)))
             {
                 try
                 {
-
                     ConsoleUtilities.WriteValid("Loading of description for " + phrase.Phrase);
-                    var definitions = await LoadDescriptionsAsync(phrase);
-                    definitions.ForEach(Console.WriteLine);
-
-                    if (definitions.Count == 0)
+                    var definitions = await LoadDescriptionsAsync(phrase.Phrase);
+                    
+                    if (definitions == null || definitions.Count == 0)
                     {
                         ConsoleUtilities.WriteError($"There is no definition for {phrase.Phrase}");
                         continue;
@@ -59,21 +58,25 @@ namespace DictionaryService
                 }
                 catch (Exception e)
                 {
-                    ConsoleUtilities.WriteException(e);
+                    errorList.Add(phrase.Phrase);
                 }
             }
 
+            Console.WriteLine("Description weren't added for the following words:");
+            errorList.ForEach(Console.WriteLine);
+
         }
 
-        private async Task<List<string>> LoadDescriptionsAsync(PhraseItem phrase)
+        public async Task<List<string>> LoadDescriptionsAsync(string phrase)
         {
             try
             {
-                return (await _oxfordService.GetDescriptionsAsync(phrase.Phrase)).Take(1).ToList();
+                var listOfDescriptions = await _oxfordService.GetDescriptionsAsync(phrase);
+                return listOfDescriptions?.Take(1).ToList();
             }
             catch (Exception)
             {
-                ConsoleUtilities.WriteError($"Can't load description for {phrase.Phrase}");
+                ConsoleUtilities.WriteError($"Can't load description for {phrase}");
                 throw;
             }
         }
@@ -82,6 +85,10 @@ namespace DictionaryService
         {
             try
             {
+                if (phrase.Complexity <= 0)
+                {
+                    phrase.Complexity = 1;
+                }
                 await OldService.AddPhraseDescriptionAsync(pack.Id, phrase, description);
                 ConsoleUtilities.WriteValid($"Description for phrase {phrase.Phrase} was added");
             }

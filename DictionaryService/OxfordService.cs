@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,6 +22,10 @@ namespace DictionaryService
         public async Task<IEnumerable<string>> GetDescriptionsAsync(string word)
         {
             var response = await LoadDescriptionAsync(word);
+            if (response == null)
+            {
+                return null;
+            }
             var rootObject = Deserialize(response);
 
             var list = rootObject.results.SelectMany(r => r.lexicalEntries).SelectMany(l => l.entries).SelectMany(e => e.senses)
@@ -37,8 +42,15 @@ namespace DictionaryService
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("app_id", _id);
                 client.DefaultRequestHeaders.Add("app_key", _key);
+                try
+                {
+                    return await client.GetStringAsync(Url + word.ToLowerInvariant()).ConfigureAwait(false);
+                }
+                catch (HttpRequestException e)
+                {
 
-                return await client.GetStringAsync(Url + word.ToLowerInvariant()).ConfigureAwait(false);
+                    return null;
+                }
             }
         }
 

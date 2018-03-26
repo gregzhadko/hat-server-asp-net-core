@@ -17,19 +17,21 @@ namespace HatServer.Old
         public static Task AddPhraseAsync(int packId, PhraseItem phrase) => GetResponseAsync(
             $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={phrase.Description}&level={phrase.Complexity}&author={phrase.Author}", 8091);
 
-        public static Task AddPhraseAsync(int packId, string phrase, string description, int complexity = 1, string author = "zhadko") => AddPhraseAsync(packId,
-            new PhraseItem {Phrase = phrase, Description = description, Complexity = complexity, PhraseStates = GetDefaultPhraseState()});
-
-        public static Task AddPhraseAsync(int packId, string phrase) => AddPhraseAsync(packId,
-            new PhraseItem
+        public static Task AddPhraseAsync(int packId, string phrase, string description, int complexity = 1)
+        {
+            if (!String.IsNullOrWhiteSpace(description))
             {
-                Phrase = phrase,
-                Complexity = 1,
-                Description = "",
-                Version = 0,
-                PackId = packId,
-                PhraseStates = GetDefaultPhraseState()
-            });
+                return AddPhraseAsync(packId,
+                    new PhraseItem {Phrase = phrase, Description = description, Complexity = complexity, PhraseStates = GetDefaultPhraseState()});
+            }
+
+            return AddPhraseAsync(packId, phrase);
+        }
+
+        public static Task AddPhraseAsync(int packId, string phrase)
+        {
+            return GetResponseAsync($"addPackWord?id={packId}&word={phrase}&author=zhadko", 8091);
+        }
 
         //чушь конечно иметь такой метод. Но кое-кто был слишком упрямым чтобы делать нормальные айдишники для слов. С новым сервачком такого говна не будет.
         public static async Task EditPhraseAsync(int packId, PhraseItem oldPhrase, PhraseItem newPhrase, string selectedAuthor = "zhadko")
@@ -51,7 +53,7 @@ namespace HatServer.Old
             $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={description.ReplaceSemicolons()}&level={phrase.Complexity}&author={selectedAuthor}",
             8091);
 
-        public static Task DeletePhraseAsync(int packId, string phrase, string author) => GetResponseAsync($"removePackWord?id={packId}&word={phrase}&author={author}", 8091);
+        public static Task DeletePhraseAsync(int packId, string phrase, string author = "zhadko") => GetResponseAsync($"removePackWord?id={packId}&word={phrase}&author={author}", 8091);
 
         private static List<PhraseState> GetDefaultPhraseState() => new List<PhraseState>
         {
@@ -97,7 +99,7 @@ namespace HatServer.Old
                 //TODO: remove OrderBy (it was done for testing purposes)
                 foreach (var packInfo in packs.OrderBy(p => p.Id))
                 {
-                    Pack pack = await GetPackAsync(packInfo.Id, users);
+                    var pack = await GetPackAsync(packInfo.Id, users);
                     ConsoleUtilities.WriteInfo("Downloaded", pack.Id.ToString(), pack.Name, $"Words: {pack.Phrases.Count}", pack.Description);
                     result.Add(pack);
                 }
