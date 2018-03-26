@@ -57,7 +57,6 @@ namespace HatServer.Data
         private async Task SeedPacksAsync()
         {
             var users = _userManager.Users.ToList();
-            var service = new OldService();
             var result = await OldService.GetAllPacksAsync(users).ConfigureAwait(false);
 
             _context.Packs.AddRange(result);
