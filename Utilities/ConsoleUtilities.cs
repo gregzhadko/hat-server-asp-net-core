@@ -51,22 +51,36 @@ namespace Utilities
 
         public static void WriteException(Exception exception, string message = "")
         {
-            WriteError($"{message}:\n{exception}");
+            WriteRedLine($"{message}:\n{exception}");
         }
-        
-        public static void WriteValid(string message)
+
+        public static void WriteValidLine(string message)
+        {
+            WriteLine(message, ConsoleColor.Green);
+        }
+
+        public static void WriteRedLine(string message)
+        {
+            WriteLine(message, ConsoleColor.Red);
+        }
+
+        public static void WriteRed(string message) => Write(message, ConsoleColor.Red);
+
+        public static void WriteGreen(string message) => Write(message, ConsoleColor.Green);
+
+        private static void WriteLine(string message, ConsoleColor color)
         {
             var temp = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = color;
             Console.WriteLine($"{message}");
             Console.ForegroundColor = temp;
         }
 
-        public static void WriteError(string message)
+        private static void Write(string message, ConsoleColor color)
         {
             var temp = Console.ForegroundColor;
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{message}");
+            Console.ForegroundColor = color;
+            Console.Write($"{message}");
             Console.ForegroundColor = temp;
         }
     }
