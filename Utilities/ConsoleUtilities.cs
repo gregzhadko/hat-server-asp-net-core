@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Alba.CsConsoleFormat;
-using Alba.CsConsoleFormat.Fluent;
 
 namespace Utilities
 {
@@ -52,7 +51,7 @@ namespace Utilities
 
         public static void WriteException(Exception exception, string message = "")
         {
-            Console.WriteLine($"{message}\n{exception}".Red());
+            WriteError($"{message}:\n{exception}");
         }
         
         public static void WriteValid(string message)

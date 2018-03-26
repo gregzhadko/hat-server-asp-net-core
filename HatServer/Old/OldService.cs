@@ -17,6 +17,9 @@ namespace HatServer.Old
         public static Task AddPhraseAsync(int packId, PhraseItem phrase) => GetResponseAsync(
             $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={phrase.Description}&level={phrase.Complexity}&author={phrase.Author}", 8091);
 
+        public static Task AddPhraseAsync(int packId, string phrase, string description, int complexity = 1, string author = "zhadko") => AddPhraseAsync(packId,
+            new PhraseItem {Phrase = phrase, Description = description, Complexity = complexity, PhraseStates = GetDefaultPhraseState()});
+
         public static Task AddPhraseAsync(int packId, string phrase) => AddPhraseAsync(packId,
             new PhraseItem
             {
@@ -25,15 +28,39 @@ namespace HatServer.Old
                 Description = "",
                 Version = 0,
                 PackId = packId,
-                PhraseStates = new List<PhraseState>
-                {
-                    new PhraseState
-                    {
-                        ReviewState = ReviewState.Accept,
-                        ServerUser = new ServerUser {UserName = "zhadko"}
-                    }
-                }
+                PhraseStates = GetDefaultPhraseState()
             });
+
+        //чушь конечно иметь такой метод. Но кое-кто был слишком упрямым чтобы делать нормальные айдишники для слов. С новым сервачком такого говна не будет.
+        public static async Task EditPhraseAsync(int packId, PhraseItem oldPhrase, PhraseItem newPhrase, string selectedAuthor = "zhadko")
+        {
+            if (oldPhrase.Phrase != newPhrase.Phrase)
+            {
+                await DeletePhraseAsync(packId, oldPhrase.Phrase, selectedAuthor);
+            }
+
+            if (!string.Equals(oldPhrase.Phrase, newPhrase.Phrase, StringComparison.Ordinal) ||
+                Math.Abs(oldPhrase.Complexity - newPhrase.Complexity) > 0.01 ||
+                !string.Equals(oldPhrase.Description, newPhrase.Description, StringComparison.Ordinal))
+            {
+                await AddPhraseDescriptionAsync(packId, newPhrase, newPhrase.Description, selectedAuthor);
+            }
+        }
+
+        public static Task AddPhraseDescriptionAsync(int packId, PhraseItem phrase, string description, string selectedAuthor = "zhadko") => GetResponseAsync(
+            $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={description.ReplaceSemicolons()}&level={phrase.Complexity}&author={selectedAuthor}",
+            8091);
+
+        public static Task DeletePhraseAsync(int packId, string phrase, string author) => GetResponseAsync($"removePackWord?id={packId}&word={phrase}&author={author}", 8091);
+
+        private static List<PhraseState> GetDefaultPhraseState() => new List<PhraseState>
+        {
+            new PhraseState
+            {
+                ReviewState = ReviewState.Accept,
+                ServerUser = new ServerUser {UserName = "zhadko"}
+            }
+        };
 
         public static async Task<List<Pack>> GetAllPacksInfoAsync()
         {

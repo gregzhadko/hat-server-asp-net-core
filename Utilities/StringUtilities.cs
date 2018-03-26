@@ -67,10 +67,7 @@ namespace Utilities
             return Regex.Replace(s, @"\[[^\]]+\]\s*", "");
         }
 
-        public static string ReplaceSemicolons(this string s)
-        {
-            return s.Replace(";", "%3B");
-        }
+        public static string ReplaceSemicolons(this string s) => s.Replace(";", "%3B");
 
         public static string RemoveMultipleSpaces(this string s)
         {
@@ -86,7 +83,7 @@ namespace Utilities
         public static string AddDot(this string s)
         {
             var last = s.Last();
-            if (last != '.' || last != '.')
+            if (last != '.' || last != '!')
             {
                 return $"{s}.";
             }

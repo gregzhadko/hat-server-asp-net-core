@@ -1,27 +1,28 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Alba.CsConsoleFormat;
+using DictionaryService;
 using HatServer.Old;
 using Utilities;
-using SpellChecker;
 using YandexTranslateCSharpSdk;
 
 namespace ConsoleMigration
 {
     public class Program
     {
-        static YandexTranslateSdk _translatorWrapper;
+        private static YandexTranslateSdk _translatorWrapper;
 
         public static async Task Main()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            await RunSpellCheckerAsync();
+            //await RunSpellCheckerAsync();
+
+            await LoadDescriptionsAsync(23);
             
+
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
@@ -32,6 +33,14 @@ namespace ConsoleMigration
             var spellChecker = new SpellChecker.SpellChecker(packs);
             spellChecker.Run();
         }
+
+        public static Task LoadDescriptionsAsync(int packId)
+        {
+            var service = new DescriptionUpdater();
+            return service.UpdateDescriptionsAsync(packId);
+        }
+
+        
 
         /// <summary>
         /// Loads phrases to the pack from file
@@ -74,7 +83,7 @@ namespace ConsoleMigration
 
             foreach (var phrase in pack.Phrases)
             {
-                var translated = await Translate(phrase.Phrase);
+                var translated = await TranslateAsync(phrase.Phrase);
                 finalList.Add((phrase.Phrase, translated));
                 ConsoleUtilities.WriteValid($"{phrase.Phrase}\t\t{translated}");
             }
@@ -82,9 +91,6 @@ namespace ConsoleMigration
             finalList.ToList().ForEach(i => Console.WriteLine("{0,-30}{1,30}", i.Item1, i.Item2));
         }
 
-        private static async Task<string> Translate(string text)
-        {
-            return await _translatorWrapper.TranslateText(text, "ru-en");
-        }
+        private static Task<string> TranslateAsync(string text) => _translatorWrapper.TranslateText(text, "ru-en");
     }
 }

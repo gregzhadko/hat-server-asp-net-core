@@ -40,5 +40,20 @@ namespace HatServer.Models
             Phrase = Phrase.FormatPhrase();
             Description = Description.FormatDescription();
         }
+
+        //TODO: remove this when use a new server
+        public PhraseItem FluentClone()
+        {
+            return new PhraseItem
+            {
+                Phrase = Phrase,
+                Description = Description,
+                Complexity = Complexity,
+                PhraseStates = new List<PhraseState>
+                {
+                    new PhraseState {ReviewState = ReviewState.Accept, ServerUser = new ServerUser {UserName = "zhadko"}}
+                }
+            };
+        }
     }
 }
