@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using HatServer.Models;
 using NHunspell;
 using Utilities;
@@ -37,6 +38,7 @@ namespace SpellChecker
                     Console.WriteLine($"Checking pack {pack.Name}");
                     foreach (var phrase in pack.Phrases)
                     {
+                        Console.WriteLine($"Working with phrase {phrase.Phrase}");
                         SpellPhrase(pack, phrase.Phrase, hunSpell, hunSpellEng, yandexSpellCheck);
                         SpellPhrase(pack, phrase.Description, hunSpell, hunSpellEng, yandexSpellCheck);
                     }
@@ -63,24 +65,16 @@ namespace SpellChecker
                 {
                     continue;
                 }
+                if (SeveralLanguages(word))
+                {
+                    ShowSpellErrorMessages(pack, phrase, word, "Несколько языков в слове");
+                    HandleErrorWord(pack, word, phrase, hunSpell);
+                    continue;
+                }
                 if (!YandexSpellCheckPass(speller, word))
                 {
                     ShowSpellErrorMessages(pack, phrase, word);
-                    var key = Console.ReadKey();
-                    switch (key.KeyChar)
-                    {
-                        case 'y':
-                        case 'Y':
-                        case 'd':
-                        case 'D':
-                            SaveNewCustomWord(hunSpell, word);
-                            break;
-                        case 's':
-                        case 'S':
-                            SaveNewSkipWord(word, phrase, pack.Id);
-                            break;
-                    }
-                    Console.WriteLine("Работаем Дальше!");
+                    HandleErrorWord(pack, word, phrase, hunSpell);
                 }
                 else
                 {
@@ -89,15 +83,46 @@ namespace SpellChecker
             }
         }
 
+        private static void HandleErrorWord(Pack pack, string word, string phrase, Hunspell hunSpell)
+        {
+            var key = Console.ReadKey();
+            switch (key.KeyChar)
+            {
+                case 'y':
+                case 'Y':
+                case 'd':
+                case 'D':
+                    SaveNewCustomWord(hunSpell, word);
+                    break;
+                case 's':
+                case 'S':
+                    SaveNewSkipWord(word, phrase, pack.Id);
+                    break;
+            }
+
+            Console.WriteLine("Работаем Дальше!");
+        }
+
+        private static bool SeveralLanguages(string word)
+        {
+            var engMatches = Regex.Matches(word, @"[a-zA-Z]");
+            if (engMatches.Count <= 0)
+            {
+                return false;
+            }
+            var rusMatches = Regex.Matches(word, @"[а-яА-Я]");
+            return rusMatches.Count > 0;
+        }
+
         private static bool YandexSpellCheckPass(IYandexSpeller speller, string word)
         {
             return !speller.CheckText(word, Lang.Ru | Lang.En, Options.IgnoreCapitalization, TextFormat.Plain).Errors.Any();
         }
 
-        private static void ShowSpellErrorMessages(Pack pack, string phrase, string word)
+        private static void ShowSpellErrorMessages(Pack pack, string phrase, string word, string error = "Ошибка в слове")
         {
             var color = Console.ForegroundColor;
-            Console.Write($"{DateTime.Now:hh:mm:ss}: Ошибка в слове ");
+            Console.Write($"{DateTime.Now:hh:mm:ss}: {error} ");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(word);
             Console.ForegroundColor = color;

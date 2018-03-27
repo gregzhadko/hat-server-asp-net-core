@@ -19,13 +19,13 @@ namespace ConsoleMigration
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            //await RunSpellCheckerAsync();
+            await RunSpellCheckerAsync();
 
             //await DeleteWordsInPackAsync(15);
             //await LoadPhrasesAsync(15, @"D:\sport.txt");
             //await LoadDescriptionsAsync(15);
 
-            await ManuallyDescriptionUpdatingAsync(15);
+            //await ManuallyDescriptionUpdatingAsync(15);
 
             Console.WriteLine("Press any key...");
             Console.ReadKey();
