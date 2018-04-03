@@ -39,6 +39,7 @@ namespace HatServer.Old
             if (oldPhrase.Phrase != newPhrase.Phrase)
             {
                 await DeletePhraseAsync(packId, oldPhrase.Phrase, selectedAuthor);
+                await AddPhraseAsync(packId, newPhrase);
             }
 
             if (!string.Equals(oldPhrase.Phrase, newPhrase.Phrase, StringComparison.Ordinal) ||

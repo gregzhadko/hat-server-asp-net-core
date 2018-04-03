@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DictionaryService;
+using HatServer.Models;
 using HatServer.Old;
 using Microsoft.EntityFrameworkCore;
 using Utilities;
@@ -19,7 +20,7 @@ namespace ConsoleMigration
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            await RunSpellCheckerAsync();
+            //await RunSpellCheckerAsync();
 
             //await DeleteWordsInPackAsync(15);
             //await LoadPhrasesAsync(15, @"D:\sport.txt");
@@ -27,6 +28,8 @@ namespace ConsoleMigration
 
             //await ManuallyDescriptionUpdatingAsync(15);
 
+            await FormatAllAsync(15);
+            
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
@@ -49,8 +52,29 @@ namespace ConsoleMigration
             ConsoleUtilities.WriteGreenLine("Removing of phrases is completed");
         }
 
-        public static async void RunMigration()
+        private static async Task FormatAllAsync(int packId)
         {
+            var pack = await OldService.GetPackAsync(packId);
+            foreach (var phrase in pack.Phrases)
+            {
+                Console.WriteLine($"{phrase.Phrase}");
+                var newPhrase = phrase.Phrase.FormatPhrase();
+                var newDescription = phrase.Description.FormatDescription();
+                await OldService.EditPhraseAsync(packId, phrase,
+                    new PhraseItem {Phrase = newPhrase, Description = newDescription, Complexity = phrase.Complexity});
+                
+                if (newPhrase != phrase.Phrase)
+                {
+                    ConsoleUtilities.WriteRedLine($"{phrase.Phrase}     ->      {newPhrase}");
+                }
+                if (newDescription != phrase.Description)
+                {
+                    ConsoleUtilities.WriteRedLine($"{phrase.Description}");
+                    Console.WriteLine("|");
+                    ConsoleUtilities.WriteRedLine($"{newDescription}");
+                }
+
+            }
         }
 
         private static async Task RunSpellCheckerAsync()
