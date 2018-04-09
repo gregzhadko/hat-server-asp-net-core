@@ -1,5 +1,4 @@
-﻿@using HatServer.Views.Manage
-@inject SignInManager<ServerUser> SignInManager
+﻿@inject SignInManager<ServerUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

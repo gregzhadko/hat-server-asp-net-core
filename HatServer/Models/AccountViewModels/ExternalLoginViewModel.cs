@@ -1,6 +1,4 @@
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace HatServer.Models.AccountViewModels
 {

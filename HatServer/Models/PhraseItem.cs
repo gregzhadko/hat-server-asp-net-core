@@ -1,11 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Utilities;
 
 namespace HatServer.Models

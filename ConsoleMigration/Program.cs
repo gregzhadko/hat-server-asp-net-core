@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using DictionaryService;
 using HatServer.Models;
 using HatServer.Old;
-using Microsoft.EntityFrameworkCore;
 using Utilities;
 using YandexTranslateCSharpSdk;
+// ReSharper disable UnusedMember.Local
 
 namespace ConsoleMigration
 {
