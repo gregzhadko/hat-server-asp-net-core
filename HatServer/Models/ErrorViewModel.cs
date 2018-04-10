@@ -1,5 +1,3 @@
-using System;
-
 namespace HatServer.Models
 {
     public class ErrorViewModel

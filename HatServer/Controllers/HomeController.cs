@@ -1,8 +1,6 @@
 ﻿using HatServer.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace HatServer.Controllers
 {

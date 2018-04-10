@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,7 +56,7 @@ namespace DictionaryService
 
                     await AddDescriptionAsync(pack, phrase, description.ToString());
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     errorList.Add(phrase.Phrase);
                 }
