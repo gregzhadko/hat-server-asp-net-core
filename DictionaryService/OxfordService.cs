@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -31,6 +32,23 @@ namespace DictionaryService
                 .Where(e => e.definitions != null).SelectMany(s => s.definitions).Where(d => d != null);
 
             return list;
+        }
+
+        public async Task<bool> DoesWordExist(string word)
+        {
+            var descriptions = await GetDescriptionsAsync(word);
+            if (descriptions == null)
+            {
+                return false;
+            }
+
+            var list = descriptions.ToList();
+            if (list.Count == 0 || String.IsNullOrWhiteSpace(list.First()))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private async Task<string> LoadDescriptionAsync(string word)

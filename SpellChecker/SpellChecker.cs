@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using DictionaryService;
 using HatServer.Models;
 using NHunspell;
 using Utilities;
@@ -16,9 +17,11 @@ namespace SpellChecker
         private readonly List<Pack> _packs;
         private readonly List<string> _skippedPhrases;
         private const char SpecialSymbol = '♆';
+        private OxfordService _oxfordService;
 
-        public SpellChecker(List<Pack> packs)
+        public SpellChecker(List<Pack> packs, OxfordService service)
         {
+            _oxfordService = service;
             _packs = packs;
             _skippedPhrases = File.ReadAllLines("SkipDictionary.txt").ToList();
         }
@@ -69,18 +72,22 @@ namespace SpellChecker
                 {
                     ShowSpellErrorMessages(pack, phrase, word, "Несколько языков в слове");
                     HandleErrorWord(pack, word, phrase, hunSpell);
-                    continue;
                 }
-                if (!YandexSpellCheckPass(speller, word))
+                else if (YandexSpellCheckPass(speller, word) || OxforSpellCheck(pack, word))
+                {
+                    SaveNewCustomWord(hunSpell, word);
+                }
+                else
                 {
                     ShowSpellErrorMessages(pack, phrase, word);
                     HandleErrorWord(pack, word, phrase, hunSpell);
                 }
-                else
-                {
-                    SaveNewCustomWord(hunSpell, word);
-                }
             }
+        }
+
+        private bool OxforSpellCheck(Pack pack, string word)
+        {
+            return pack.Language == "en" && _oxfordService.DoesWordExist(word).GetAwaiter().GetResult();
         }
 
         private static void HandleErrorWord(Pack pack, string word, string phrase, Hunspell hunSpell)

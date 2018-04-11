@@ -13,6 +13,10 @@
     <PackageReference Include="Yandex.Speller.Api" Version="1.0.5650.35359" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DictionaryService\DictionaryService.csproj">
+      <Project>{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}</Project>
+      <Name>DictionaryService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HatServer\HatServer.csproj">
       <Project>{F1250DA1-80DE-41D9-89F1-AF3334D3CADA}</Project>
       <Name>HatServer</Name>

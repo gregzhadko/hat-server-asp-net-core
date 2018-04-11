@@ -20,7 +20,7 @@ namespace ConsoleMigration
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            //await RunSpellCheckerAsync();
+            await RunSpellCheckerAsync();
 
             //await DeleteWordsInPackAsync(15);
             //await LoadPhrasesAsync(15, @"D:\sport.txt");
@@ -28,7 +28,7 @@ namespace ConsoleMigration
 
             //await ManuallyDescriptionUpdatingAsync(15);
 
-            await FormatAllAsync(15);
+            //await FormatAllAsync(15);
             
             Console.WriteLine("Press any key...");
             Console.ReadKey();
@@ -79,8 +79,10 @@ namespace ConsoleMigration
 
         private static async Task RunSpellCheckerAsync()
         {
+            var settings = File.ReadLines("Settings.txt").ToList();
+            var service = new OxfordService(settings[2], settings[3]);
             var packs = await OldService.GetAllPacksAsync();
-            var spellChecker = new SpellChecker.SpellChecker(packs);
+            var spellChecker = new SpellChecker.SpellChecker(packs, service);
             spellChecker.Run();
         }
 
