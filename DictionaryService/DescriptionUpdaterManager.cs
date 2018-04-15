@@ -106,7 +106,7 @@ namespace DictionaryService
                 phrase.PhraseStates.ForEach(s => arr.Add(s.ToString()));
                 ConsoleUtilities.WriteInfo("", arr.ToArray());
                 Console.Write("Do you want to change it?\ny/n ");
-                ConsoleKeyInfo answer = Console.ReadKey();
+                var answer = Console.ReadKey();
                 Console.WriteLine();
                 if (answer.Key == ConsoleKey.Y)
                 {
@@ -119,7 +119,7 @@ namespace DictionaryService
                     }
 
                     Console.WriteLine("Available definitions:");
-                    for (int i = 0; i < descriptions.Count; i++)
+                    for (var i = 0; i < descriptions.Count; i++)
                     {
                         ConsoleUtilities.WriteGreenLine($"{i+1}. {descriptions[i]}" );
                     }

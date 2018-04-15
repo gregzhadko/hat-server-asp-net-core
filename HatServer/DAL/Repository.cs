@@ -19,7 +19,7 @@ namespace HatServer.DAL
         }
         public virtual IEnumerable<T> GetAll() => Entities.AsEnumerable();
 
-        public virtual async Task<T> GetAsync(int id) => await Entities.FindAsync(id);
+        public virtual Task<T> GetAsync(int id) => Entities.FindAsync(id);
 
         public virtual async Task InsertAsync(T entity)
         {
@@ -31,23 +31,24 @@ namespace HatServer.DAL
             await Context.SaveChangesAsync();
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual Task UpdateAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
-            await Context.SaveChangesAsync();
+
+            return Context.SaveChangesAsync();
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual Task DeleteAsync(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
             Entities.Remove(entity);
-            await Context.SaveChangesAsync();
+            return Context.SaveChangesAsync();
         }
 
         public virtual async Task DeleteAsync(int id)

@@ -15,7 +15,7 @@ namespace Utilities
             }
             var array = s.ToCharArray();
 
-            for (int i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length; i++)
             {
                 if (array[i] == '\"')
                 {
@@ -46,7 +46,7 @@ namespace Utilities
             }
 
             var array = s.ToCharArray();
-            for (int i = 1; i < array.Length - 1; i++)
+            for (var i = 1; i < array.Length - 1; i++)
             {
                 if (array[i] == '-' && array[i - 1] == ' ' && array[i + 1] == ' ')
                 {
