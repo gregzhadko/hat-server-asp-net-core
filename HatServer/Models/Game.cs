@@ -8,7 +8,7 @@ namespace HatServer.Models
         public int Id { get; set; }
 
         public List<Team> Teams { get; set; }
-        public List<Stage> Stages { get; set; }
+        //public List<Stage> Stages { get; set; }
 
         [ForeignKey("UserId")]
         public User User { get; set; }

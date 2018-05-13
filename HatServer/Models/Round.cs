@@ -16,12 +16,11 @@ namespace HatServer.Models
 
         [ForeignKey("PlayerId")]
         public Player Player { get; set; }
-        public int PlayerId { get; set; }
+        public int? PlayerId { get; set; }
 
-        [ForeignKey("StageId")]
-        public Stage Stage { get; set; }
+        //public Stage Stage { get; set; }
 
-        public int StageId { get; set; }
+        //public int? StageId { get; set; }
 
         public List<RoundPhrase> RoundPhrases { get; set; }
     }

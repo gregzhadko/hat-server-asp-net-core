@@ -12,15 +12,29 @@ using System;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180319221302_AddPlayers")]
-    partial class AddPlayers
+    [Migration("20180513195840_NewMigrationWithoutStage")]
+    partial class NewMigrationWithoutStage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("HatServer.Models.Game", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Games");
+                });
 
             modelBuilder.Entity("HatServer.Models.Pack", b =>
                 {
@@ -89,9 +103,77 @@ namespace HatServer.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int>("TeamId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("TeamId");
+
                     b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("HatServer.Models.Round", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("PlayerId");
+
+                    b.Property<int>("RoundNumber");
+
+                    b.Property<int>("SettingsId");
+
+                    b.Property<int>("Time");
+
+                    b.Property<int>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("SettingsId");
+
+                    b.ToTable("Rounds");
+                });
+
+            modelBuilder.Entity("HatServer.Models.RoundPhrase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("PhraseId");
+
+                    b.Property<int>("RoundId");
+
+                    b.Property<int?>("StateId");
+
+                    b.Property<int>("Time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhraseId");
+
+                    b.HasIndex("RoundId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("RoundPhrases");
+                });
+
+            modelBuilder.Entity("HatServer.Models.RoundPhraseState", b =>
+                {
+                    b.Property<int>("Id");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoundPhraseStates");
                 });
 
             modelBuilder.Entity("HatServer.Models.ServerUser", b =>
@@ -159,6 +241,22 @@ namespace HatServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("HatServer.Models.Team", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("GameId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("HatServer.Models.User", b =>
@@ -295,6 +393,14 @@ namespace HatServer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("HatServer.Models.Game", b =>
+                {
+                    b.HasOne("HatServer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("HatServer.Models.PhraseItem", b =>
                 {
                     b.HasOne("HatServer.Models.Pack", "Pack")
@@ -313,6 +419,51 @@ namespace HatServer.Migrations
                     b.HasOne("HatServer.Models.ServerUser", "ServerUser")
                         .WithMany("PhraseStates")
                         .HasForeignKey("ServerUserId");
+                });
+
+            modelBuilder.Entity("HatServer.Models.Player", b =>
+                {
+                    b.HasOne("HatServer.Models.Team", "Team")
+                        .WithMany("Players")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HatServer.Models.Round", b =>
+                {
+                    b.HasOne("HatServer.Models.Player", "Player")
+                        .WithMany("Rounds")
+                        .HasForeignKey("PlayerId");
+
+                    b.HasOne("HatServer.Models.Settings", "Settings")
+                        .WithMany()
+                        .HasForeignKey("SettingsId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HatServer.Models.RoundPhrase", b =>
+                {
+                    b.HasOne("HatServer.Models.PhraseItem", "PhraseItem")
+                        .WithMany()
+                        .HasForeignKey("PhraseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("HatServer.Models.Round", "Round")
+                        .WithMany("RoundPhrases")
+                        .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("HatServer.Models.RoundPhraseState", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId");
+                });
+
+            modelBuilder.Entity("HatServer.Models.Team", b =>
+                {
+                    b.HasOne("HatServer.Models.Game", "Game")
+                        .WithMany("Teams")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

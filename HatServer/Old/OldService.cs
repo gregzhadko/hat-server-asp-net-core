@@ -101,7 +101,7 @@ namespace HatServer.Old
                 foreach (var packInfo in packs.OrderBy(p => p.Id))
                 {
                     var pack = await GetPackAsync(packInfo.Id, users);
-                    ConsoleUtilities.WriteInfo("Downloaded", pack.Id.ToString(), pack.Name, $"Words: {pack.Phrases.Count}", pack.Description);
+                    Console.WriteLine($"Downloaded {pack.Id.ToString()}, {pack.Name}, Words: {pack.Phrases.Count} {pack.Description}");
                     result.Add(pack);
                 }
 

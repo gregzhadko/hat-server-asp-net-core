@@ -21,20 +21,20 @@ namespace HatServer.Data
         }
 
         //This example just creates an Administrator role and one Admin users
-        public async Task InitializeAsync()
+        public void Initialize()
         {
-            _context.Database.EnsureDeleted();
+            //_context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
 
             _context.Database.OpenConnection();
-
+    
             try
             {
                 SeedUsers();
-                await SeedPacksAsync().ConfigureAwait(false);
-                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Packs ON").ConfigureAwait(false);
+                SeedPacks();
+                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
                 _context.SaveChanges();
-                await _context.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Packs OFF").ConfigureAwait(false);
+                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
             }
             finally
             {
@@ -54,12 +54,12 @@ namespace HatServer.Data
             _userManager.CreateAsync(tatarintsev, "Qq6t^hJSkr1p").Wait();
         }
 
-        private async Task SeedPacksAsync()
+        private void SeedPacks()
         {
             var users = _userManager.Users.ToList();
-            var result = await OldService.GetAllPacksAsync(users).ConfigureAwait(false);
+            var packs = OldService.GetAllPacksAsync(users).GetAwaiter().GetResult();
 
-            _context.Packs.AddRange(result);
+            _context.Packs.AddRange(packs);
         }
     }
 }
