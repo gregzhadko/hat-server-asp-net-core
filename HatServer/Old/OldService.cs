@@ -65,7 +65,7 @@ namespace HatServer.Old
             }
         };
 
-        public static async Task<List<Pack>> GetAllPacksInfoAsync()
+        private static async Task<List<Pack>> GetAllPacksInfoAsync()
         {
             var response = await GetResponseAsync("getPacks", 8081).ConfigureAwait(false);
             var jObjectPacks = JObject.Parse(response)["packs"].Children().ToList();
@@ -98,7 +98,9 @@ namespace HatServer.Old
                 var result = new List<Pack>();
 
                 //TODO: remove OrderBy (it was done for testing purposes)
-                foreach (var packInfo in packs.OrderBy(p => p.Id))
+                foreach (var packInfo in packs
+                    .Where(p => !String.IsNullOrEmpty(p.Name))
+                    .OrderBy(p => p.Id))
                 {
                     var pack = await GetPackAsync(packInfo.Id, users);
                     Console.WriteLine($"Downloaded {pack.Id.ToString()}, {pack.Name}, Words: {pack.Phrases.Count} {pack.Description}");

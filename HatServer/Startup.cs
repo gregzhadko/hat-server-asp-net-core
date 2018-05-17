@@ -1,5 +1,6 @@
 ﻿using HatServer.DAL;
 using HatServer.Data;
+using HatServer.Migrations;
 using HatServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +42,7 @@ namespace HatServer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbInitializer dbInitializer)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -58,8 +59,7 @@ namespace HatServer
 
             app.UseAuthentication();
 
-            //Generate EF Core Seed Data
-            //dbInitializer.Initialize();
+            ApplyMigrationAndSeeding(app);
 
             app.UseMvc(routes =>
             {
@@ -67,6 +67,22 @@ namespace HatServer
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static void ApplyMigrationAndSeeding(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                if (!context.AllMigrationsApplied())
+                {
+                    context.Database.Migrate();
+
+                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                    var dbInitializer = new DbInitializer(context, userManager);
+                    dbInitializer.Initialize();
+                }
+            }
         }
     }
 }

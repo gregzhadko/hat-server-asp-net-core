@@ -35,7 +35,7 @@ namespace HatServer.Data
             var pack = new Pack
             {
                 Id = packItem["id"].Value<int>(),
-                Language = packItem["language"].Value<string>(),
+                Language = packItem["language"].HasValues ? packItem["language"].Value<string>() : "ru",
                 Name = packItem["name"].Value<string>(),
                 Description = packItem["description"].Value<string>(),
                 Phrases = new List<PhraseItem>()

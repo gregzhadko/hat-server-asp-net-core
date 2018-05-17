@@ -23,11 +23,8 @@ namespace HatServer.Data
         //This example just creates an Administrator role and one Admin users
         public void Initialize()
         {
-            //_context.Database.EnsureDeleted();
-            _context.Database.EnsureCreated();
-
             _context.Database.OpenConnection();
-    
+
             try
             {
                 SeedUsers();

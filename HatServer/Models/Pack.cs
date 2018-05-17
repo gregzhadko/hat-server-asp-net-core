@@ -15,7 +15,6 @@ namespace HatServer.Models
         [Required]
         public string Name { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
         public IList<PhraseItem> Phrases { get; set; } = new List<PhraseItem>();
