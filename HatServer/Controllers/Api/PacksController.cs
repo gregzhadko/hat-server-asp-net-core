@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using HatServer.DAL;
 using HatServer.Models;
@@ -13,9 +14,9 @@ namespace HatServer.Controllers.Api
     [Route("api/[controller]")]
     public class PacksController : Controller
     {
-        private IRepository<Pack> _packRepository;
+        private readonly IPackRepository _packRepository;
 
-        public PacksController(IRepository<Pack> packRepository)
+        public PacksController(IPackRepository packRepository)
         {
             _packRepository = packRepository;
         }
@@ -54,7 +55,23 @@ namespace HatServer.Controllers.Api
 
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                var errors = new List<string>();
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        errors.Add(error.ErrorMessage);
+                    }
+                }
+
+                return BadRequest(errors);
+            }
+
+
+            var existing = await _packRepository.GetByNameAsync(item.Name);
+            if (existing != null)
+            {
+                return BadRequest($"Pack with name {item.Name} already exists");
             }
 
             await _packRepository.InsertAsync(item);
@@ -64,8 +81,25 @@ namespace HatServer.Controllers.Api
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> UpdateNameAndDescription(int id, [FromBody]string name, [FromBody]string description)
         {
+            if (id == 0 || String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(description))
+            {
+                return BadRequest();
+            }
+
+            var pack = await _packRepository.GetAsync(id);
+            if (pack == null)
+            {
+                return NotFound();
+            }
+
+            pack.Name = name;
+            pack.Description = description;
+
+            await _packRepository.UpdateAsync(pack);
+
+            return NoContent();
         }
 
         // DELETE api/<controller>/5
