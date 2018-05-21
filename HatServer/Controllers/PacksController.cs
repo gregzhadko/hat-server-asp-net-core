@@ -1,12 +1,4 @@
-﻿using HatServer.DAL;
-using HatServer.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HatServer.Controllers
+﻿namespace HatServer.Controllers
 {
     //[Route("api/[controller]")]
     //public class PacksController : ControllerBase

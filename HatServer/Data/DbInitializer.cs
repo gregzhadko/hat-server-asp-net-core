@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using HatServer.Models;
 using HatServer.Old;
 using Microsoft.AspNetCore.Identity;

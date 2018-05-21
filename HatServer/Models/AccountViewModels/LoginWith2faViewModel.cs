@@ -2,6 +2,7 @@
 
 namespace HatServer.Models.AccountViewModels
 {
+    // ReSharper disable once InconsistentNaming
     public class LoginWith2faViewModel
     {
         [Required]

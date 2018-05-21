@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HatServer.Data;
 using HatServer.Models;
 using Microsoft.EntityFrameworkCore;

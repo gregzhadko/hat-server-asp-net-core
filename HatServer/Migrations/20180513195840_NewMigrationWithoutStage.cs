@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
-using System.Collections.Generic;
 
 namespace HatServer.Migrations
 {
@@ -13,7 +12,7 @@ namespace HatServer.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<string>(),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true)
@@ -27,20 +26,20 @@ namespace HatServer.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Id = table.Column<string>(),
+                    AccessFailedCount = table.Column<int>(),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    EmailConfirmed = table.Column<bool>(),
+                    LockoutEnabled = table.Column<bool>(),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    PhoneNumberConfirmed = table.Column<bool>(),
                     SecurityStamp = table.Column<string>(nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
                 constraints: table =>
@@ -52,15 +51,15 @@ namespace HatServer.Migrations
                 name: "GameUsers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Device = table.Column<string>(nullable: true),
-                    DeviceId = table.Column<Guid>(nullable: false),
+                    DeviceId = table.Column<Guid>(),
                     DeviceModel = table.Column<string>(nullable: true),
                     Os = table.Column<string>(nullable: true),
                     OsVersion = table.Column<string>(nullable: true),
                     PushToken = table.Column<string>(nullable: true),
-                    TimeStamp = table.Column<int>(nullable: false),
+                    TimeStamp = table.Column<int>(),
                     Version = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -72,7 +71,7 @@ namespace HatServer.Migrations
                 name: "Packs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
                     Language = table.Column<string>(nullable: true),
@@ -87,9 +86,9 @@ namespace HatServer.Migrations
                 name: "RoundPhraseStates",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<int>(),
                     Description = table.Column<string>(maxLength: 100, nullable: true),
-                    Name = table.Column<string>(maxLength: 100, nullable: false)
+                    Name = table.Column<string>(maxLength: 100)
                 },
                 constraints: table =>
                 {
@@ -100,11 +99,11 @@ namespace HatServer.Migrations
                 name: "Settings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BadItalicSimulated = table.Column<bool>(nullable: false),
-                    CanChangeWord = table.Column<bool>(nullable: false),
-                    RoundTime = table.Column<int>(nullable: false)
+                    BadItalicSimulated = table.Column<bool>(),
+                    CanChangeWord = table.Column<bool>(),
+                    RoundTime = table.Column<int>()
                 },
                 constraints: table =>
                 {
@@ -115,11 +114,11 @@ namespace HatServer.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<string>(nullable: false)
+                    RoleId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -136,11 +135,11 @@ namespace HatServer.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -157,10 +156,10 @@ namespace HatServer.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(nullable: false),
-                    ProviderKey = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(),
+                    ProviderKey = table.Column<string>(),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -177,8 +176,8 @@ namespace HatServer.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<string>(),
+                    RoleId = table.Column<string>()
                 },
                 constraints: table =>
                 {
@@ -201,9 +200,9 @@ namespace HatServer.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(),
+                    LoginProvider = table.Column<string>(),
+                    Name = table.Column<string>(),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -221,9 +220,9 @@ namespace HatServer.Migrations
                 name: "Games",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>()
                 },
                 constraints: table =>
                 {
@@ -240,13 +239,13 @@ namespace HatServer.Migrations
                 name: "PhraseItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Complexity = table.Column<int>(nullable: false),
+                    Complexity = table.Column<int>(),
                     Description = table.Column<string>(nullable: true),
-                    PackId = table.Column<int>(nullable: false),
-                    Phrase = table.Column<string>(nullable: false),
-                    Version = table.Column<int>(nullable: false)
+                    PackId = table.Column<int>(),
+                    Phrase = table.Column<string>(),
+                    Version = table.Column<int>()
                 },
                 constraints: table =>
                 {
@@ -263,9 +262,9 @@ namespace HatServer.Migrations
                 name: "Teams",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    GameId = table.Column<int>(nullable: false),
+                    GameId = table.Column<int>(),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -283,10 +282,10 @@ namespace HatServer.Migrations
                 name: "PhraseStates",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PhraseItemId = table.Column<int>(nullable: false),
-                    ReviewState = table.Column<int>(nullable: false),
+                    PhraseItemId = table.Column<int>(),
+                    ReviewState = table.Column<int>(),
                     ServerUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -310,10 +309,10 @@ namespace HatServer.Migrations
                 name: "Players",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
-                    TeamId = table.Column<int>(nullable: false)
+                    TeamId = table.Column<int>()
                 },
                 constraints: table =>
                 {
@@ -330,13 +329,13 @@ namespace HatServer.Migrations
                 name: "Rounds",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PlayerId = table.Column<int>(nullable: true),
-                    RoundNumber = table.Column<int>(nullable: false),
-                    SettingsId = table.Column<int>(nullable: false),
-                    Time = table.Column<int>(nullable: false),
-                    Timestamp = table.Column<int>(nullable: false)
+                    RoundNumber = table.Column<int>(),
+                    SettingsId = table.Column<int>(),
+                    Time = table.Column<int>(),
+                    Timestamp = table.Column<int>()
                 },
                 constraints: table =>
                 {
@@ -359,12 +358,12 @@ namespace HatServer.Migrations
                 name: "RoundPhrases",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>()
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PhraseId = table.Column<int>(nullable: false),
-                    RoundId = table.Column<int>(nullable: false),
+                    PhraseId = table.Column<int>(),
+                    RoundId = table.Column<int>(),
                     StateId = table.Column<int>(nullable: true),
-                    Time = table.Column<int>(nullable: false)
+                    Time = table.Column<int>()
                 },
                 constraints: table =>
                 {
