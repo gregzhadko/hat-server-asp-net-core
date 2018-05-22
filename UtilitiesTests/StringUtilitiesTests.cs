@@ -6,7 +6,7 @@ using Utilities;
 namespace UtilitiesTests
 {
     [TestFixture]
-    public class StringUtilitiesTests
+    public sealed class StringUtilitiesTests
     {
         [Test]
         [TestCase("Лос-Анджелес", ExpectedResult = 1)]
@@ -18,7 +18,7 @@ namespace UtilitiesTests
             var words = StringUtilities.GetWordsFromString(original);
             return words.Count();
         }
-        
+
         [Test]
         [TestCase("Тест", ExpectedResult = 1)]
         [TestCase("Тест тест", ExpectedResult = 2)]
@@ -36,7 +36,7 @@ namespace UtilitiesTests
             var words = StringUtilities.GetWordsFromString(original);
             CollectionAssert.AreEquivalent(expectedWords, words);
         }
-        
+
         [Test]
         [TestCaseSource(typeof(GetWordsFromStringTestCaseSources), nameof(GetWordsFromStringTestCaseSources.WordsWithPunctuation))]
         public void GetWordsFromString_WordWithIsPunctuation_CorrectResults(string original, List<string> expectedWords)
@@ -46,7 +46,7 @@ namespace UtilitiesTests
         }
     }
 
-    internal class GetWordsFromStringTestCaseSources
+    internal sealed class GetWordsFromStringTestCaseSources
     {
         internal static object[] SimpleWordsTest =
         {
@@ -80,7 +80,7 @@ namespace UtilitiesTests
                     "mad",
                     "You're",
                     "mad"
-                },
+                }
             }
         };
     }

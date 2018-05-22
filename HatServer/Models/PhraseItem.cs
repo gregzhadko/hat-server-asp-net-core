@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
+using JetBrains.Annotations;
 using Utilities;
 
 namespace HatServer.Models
@@ -30,6 +31,7 @@ namespace HatServer.Models
 
         public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 
+        [CanBeNull]
         public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.ServerUser?.UserName;
 
         public void FormatPhrase()
@@ -39,6 +41,7 @@ namespace HatServer.Models
         }
 
         //TODO: remove this when use a new server
+        [NotNull]
         public PhraseItem FluentClone()
         {
             return new PhraseItem

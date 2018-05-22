@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using DictionaryService;
 using HatServer.Models;
+using JetBrains.Annotations;
 using NHunspell;
 using Utilities;
 using Yandex.Speller.Api;
@@ -12,12 +13,12 @@ using Yandex.Speller.Api.DataContract;
 
 namespace SpellChecker
 {
-    public class SpellChecker
+    public sealed class SpellChecker
     {
         private readonly List<Pack> _packs;
         private readonly List<string> _skippedPhrases;
         private const char SpecialSymbol = '♆';
-        private OxfordService _oxfordService;
+        private readonly OxfordService _oxfordService;
 
         public SpellChecker(List<Pack> packs, OxfordService service)
         {
@@ -47,6 +48,7 @@ namespace SpellChecker
                     }
                 }
             }
+
             Console.WriteLine("Spell check is finished");
         }
 
@@ -62,18 +64,15 @@ namespace SpellChecker
         private void SpellPhrase(Pack pack, string phrase, Hunspell hunSpell, Hunspell hunSpellEng, IYandexSpeller speller)
         {
             var words = StringUtilities.GetWordsFromString(phrase);
-            foreach (var word in words.Select(w => w.ToLowerInvariant().Replace('ё', 'е')))
+            foreach (var word in words.Select(w => w.ToLowerInvariant().Replace('ё', 'е')).Where(word =>
+                !hunSpell.Spell(word) && !hunSpellEng.Spell(word) && !ExistsInSkipped(word, phrase, pack.Id)))
             {
-                if (hunSpell.Spell(word) || hunSpellEng.Spell(word) || ExistsInSkipped(word, phrase, pack.Id))
-                {
-                    continue;
-                }
                 if (SeveralLanguages(word))
                 {
                     ShowSpellErrorMessages(pack, phrase, word, "Несколько языков в слове");
                     HandleErrorWord(pack, word, phrase, hunSpell);
                 }
-                else if (YandexSpellCheckPass(speller, word) || OxforSpellCheck(pack, word))
+                else if (YandexSpellCheckPass(speller, word) || OxfordSpellCheck(pack, word))
                 {
                     SaveNewCustomWord(hunSpell, word);
                 }
@@ -85,10 +84,8 @@ namespace SpellChecker
             }
         }
 
-        private bool OxforSpellCheck(Pack pack, string word)
-        {
-            return pack.Language == "en" && _oxfordService.DoesWordExist(word).GetAwaiter().GetResult();
-        }
+        private bool OxfordSpellCheck([NotNull] Pack pack, string word) =>
+            pack.Language == "en" && _oxfordService.DoesWordExist(word).GetAwaiter().GetResult();
 
         private static void HandleErrorWord(Pack pack, string word, string phrase, Hunspell hunSpell)
         {
@@ -110,23 +107,22 @@ namespace SpellChecker
             Console.WriteLine("Работаем Дальше!");
         }
 
-        private static bool SeveralLanguages(string word)
+        private static bool SeveralLanguages([NotNull] string word)
         {
             var engMatches = Regex.Matches(word, @"[a-zA-Z]");
             if (engMatches.Count <= 0)
             {
                 return false;
             }
+
             var rusMatches = Regex.Matches(word, @"[а-яА-Я]");
             return rusMatches.Count > 0;
         }
 
-        private static bool YandexSpellCheckPass(IYandexSpeller speller, string word)
-        {
-            return !speller.CheckText(word, Lang.Ru | Lang.En, Options.IgnoreCapitalization, TextFormat.Plain).Errors.Any();
-        }
+        private static bool YandexSpellCheckPass([NotNull] IYandexSpeller speller, string word) =>
+            !speller.CheckText(word, Lang.Ru | Lang.En, Options.IgnoreCapitalization, TextFormat.Plain).Errors.Any();
 
-        private static void ShowSpellErrorMessages(Pack pack, string phrase, string word, string error = "Ошибка в слове")
+        private static void ShowSpellErrorMessages([NotNull] Pack pack, string phrase, string word, string error = "Ошибка в слове")
         {
             var color = Console.ForegroundColor;
             Console.Write($"{DateTime.Now:hh:mm:ss}: {error} ");
@@ -148,15 +144,15 @@ namespace SpellChecker
             Console.ForegroundColor = color;
         }
 
-        private bool ExistsInSkipped(string word, string wholeWord, int id)
+        private bool ExistsInSkipped(string word, [NotNull] string wholeWord, int id)
         {
             var formattedWholeWord = wholeWord.Replace('\n', SpecialSymbol);
             return _skippedPhrases.Select(s => s.Split('|')).Any(line => string.Compare(line[0], word, StringComparison.OrdinalIgnoreCase) == 0 &&
-                                                                                string.Compare(line[1], id.ToString(), StringComparison.OrdinalIgnoreCase) == 0 &&
-                                                                                string.Compare(line[2], formattedWholeWord, StringComparison.OrdinalIgnoreCase) == 0);
+                                                                         string.Compare(line[1], id.ToString(), StringComparison.OrdinalIgnoreCase) == 0 &&
+                                                                         string.Compare(line[2], formattedWholeWord, StringComparison.OrdinalIgnoreCase) == 0);
         }
 
-        private static void SaveNewCustomWord(Hunspell hunSpell, string word)
+        private static void SaveNewCustomWord([NotNull] Hunspell hunSpell, string word)
         {
             hunSpell.Add(word);
 #if DEBUG
@@ -166,7 +162,7 @@ namespace SpellChecker
             ConsoleUtilities.WriteGreenLine($"\nСлово {word} было добавлено в персональный словарь");
         }
 
-        private static void SaveNewSkipWord(string word, string wholeWord, int packId)
+        private static void SaveNewSkipWord(string word, [NotNull] string wholeWord, int packId)
         {
             var formattedWholeWord = wholeWord.Replace('\n', SpecialSymbol);
             var stringToSave = $"{word}|{packId}|{formattedWholeWord}";

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using JetBrains.Annotations;
 
 namespace HatServer.Models
 {
@@ -15,6 +16,7 @@ namespace HatServer.Models
 
         public ReviewState ReviewState { get; set; }
 
+        [NotNull]
         public override string ToString() => $"{ServerUser.UserName}: {ReviewState}";
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace HatServer.Models
 {
@@ -19,6 +20,7 @@ namespace HatServer.Models
 
         public IList<PhraseItem> Phrases { get; set; } = new List<PhraseItem>();
 
+        [NotNull]
         public override string ToString() => $"{Id}. {Name}\t{Description}";
     }
 }

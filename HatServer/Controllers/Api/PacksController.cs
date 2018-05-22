@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL;
 using HatServer.Models;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,8 +22,12 @@ namespace HatServer.Controllers.Api
         }
 
         // GET: api/<controller>
+        [NotNull]
         [HttpGet]
-        public List<Pack> GetAll() => _packRepository.GetAll().ToList();
+        public List<Pack> GetAll()
+        {
+            return _packRepository.GetAll().ToList();
+        }
 
         // GET api/<controller>/5
         [HttpGet("{id}", Name = "Get")]
@@ -45,7 +50,7 @@ namespace HatServer.Controllers.Api
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Pack item)
+        public async Task<IActionResult> Create([CanBeNull] [FromBody] Pack item)
         {
             if (item == null)
             {
@@ -80,7 +85,7 @@ namespace HatServer.Controllers.Api
 
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNameAndDescription(int id, [FromBody]string name, [FromBody]string description)
+        public async Task<IActionResult> UpdateNameAndDescription(int id, [CanBeNull] [FromBody] string name, [CanBeNull] [FromBody] string description)
         {
             if (id == 0 || String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(description))
             {

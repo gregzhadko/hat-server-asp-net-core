@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using HatServer.Extensions;
+using JetBrains.Annotations;
 
 namespace HatServer.Models
 {
@@ -38,8 +39,9 @@ namespace HatServer.Models
         [MaxLength(100)]
         public string Description { get; set; }
 
+        [NotNull]
         public static implicit operator RoundPhraseState(RoundPhraseStateEnum @enum) => new RoundPhraseState(@enum);
 
-        public static implicit operator RoundPhraseStateEnum(RoundPhraseState faculty) => (RoundPhraseStateEnum)faculty.Id;
+        public static implicit operator RoundPhraseStateEnum([NotNull] RoundPhraseState faculty) => (RoundPhraseStateEnum)faculty.Id;
     }
 }

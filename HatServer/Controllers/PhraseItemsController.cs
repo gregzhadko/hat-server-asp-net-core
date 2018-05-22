@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace HatServer.Controllers
 {
@@ -83,7 +84,7 @@ namespace HatServer.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Phrase,Complexity,Description,PackId")] PhraseItem phraseItem)
+        public async Task<IActionResult> Edit(int id, [NotNull] [Bind("Id,Phrase,Complexity,Description,PackId")] PhraseItem phraseItem)
         {
             if (id != phraseItem.Id)
             {

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using HatServer.Data;
 using HatServer.Models;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Utilities;
@@ -14,10 +15,12 @@ namespace HatServer.Old
 {
     public class OldService
     {
-        public static Task AddPhraseAsync(int packId, PhraseItem phrase) => GetResponseAsync(
+        [NotNull]
+        public static Task AddPhraseAsync(int packId, [NotNull] PhraseItem phrase) => GetResponseAsync(
             $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={phrase.Description}&level={phrase.Complexity}&author={phrase.Author}", 8091);
 
-        public static Task AddPhraseAsync(int packId, string phrase, string description, int complexity = 1)
+        [NotNull]
+        public static Task AddPhraseAsync(int packId, string phrase, [CanBeNull] string description, int complexity = 1)
         {
             if (!String.IsNullOrWhiteSpace(description))
             {
@@ -28,13 +31,14 @@ namespace HatServer.Old
             return AddPhraseAsync(packId, phrase);
         }
 
+        [NotNull]
         public static Task AddPhraseAsync(int packId, string phrase)
         {
             return GetResponseAsync($"addPackWord?id={packId}&word={phrase}&author=zhadko", 8091);
         }
 
         //чушь конечно иметь такой метод. Но кое-кто был слишком упрямым чтобы делать нормальные айдишники для слов. С новым сервачком такого говна не будет.
-        public static async Task EditPhraseAsync(int packId, PhraseItem oldPhrase, PhraseItem newPhrase, string selectedAuthor = "zhadko")
+        public static async Task EditPhraseAsync(int packId, [NotNull] PhraseItem oldPhrase, [NotNull] PhraseItem newPhrase, string selectedAuthor = "zhadko")
         {
             if (oldPhrase.Phrase != newPhrase.Phrase)
             {
@@ -50,12 +54,15 @@ namespace HatServer.Old
             }
         }
 
-        public static Task AddPhraseDescriptionAsync(int packId, PhraseItem phrase, string description, string selectedAuthor = "zhadko") => GetResponseAsync(
+        [NotNull]
+        public static Task AddPhraseDescriptionAsync(int packId, [NotNull] PhraseItem phrase, string description, string selectedAuthor = "zhadko") => GetResponseAsync(
             $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={description.ReplaceSemicolons()}&level={phrase.Complexity}&author={selectedAuthor}",
             8091);
 
+        [NotNull]
         public static Task DeletePhraseAsync(int packId, string phrase, string author = "zhadko") => GetResponseAsync($"removePackWord?id={packId}&word={phrase}&author={author}", 8091);
 
+        [NotNull]
         private static List<PhraseState> GetDefaultPhraseState() => new List<PhraseState>
         {
             new PhraseState
@@ -65,6 +72,7 @@ namespace HatServer.Old
             }
         };
 
+        [ItemNotNull]
         private static async Task<List<Pack>> GetAllPacksInfoAsync()
         {
             var response = await GetResponseAsync("getPacks", 8081).ConfigureAwait(false);
@@ -89,7 +97,8 @@ namespace HatServer.Old
             }
         }
 
-        public static async Task<List<Pack>> GetAllPacksAsync(List<ServerUser> users = null)
+        [ItemCanBeNull]
+        public static async Task<List<Pack>> GetAllPacksAsync([CanBeNull] List<ServerUser> users = null)
         {
             try
             {
@@ -116,7 +125,7 @@ namespace HatServer.Old
             }
         }
 
-        public static async Task<Pack> GetPackAsync(int id, List<ServerUser> users = null)
+        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null)
         {
             var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));

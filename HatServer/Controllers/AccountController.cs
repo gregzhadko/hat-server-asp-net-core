@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace HatServer.Controllers
 {
@@ -34,7 +35,7 @@ namespace HatServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl = null)
+        public async Task<IActionResult> Login([CanBeNull] string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -46,7 +47,7 @@ namespace HatServer.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, [CanBeNull] string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -59,6 +60,7 @@ namespace HatServer.Controllers
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
+
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
@@ -84,7 +86,7 @@ namespace HatServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public IActionResult Register([CanBeNull] string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             return View();
@@ -102,7 +104,7 @@ namespace HatServer.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        public IActionResult ExternalLogin(string provider, [CanBeNull] string returnUrl = null)
         {
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
@@ -112,13 +114,14 @@ namespace HatServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalLoginCallback([CanBeNull] string returnUrl = null, [CanBeNull] string remoteError = null)
         {
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToAction(nameof(Login));
             }
+
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -149,7 +152,7 @@ namespace HatServer.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, [CanBeNull] string returnUrl = null)
         {
             if (ModelState.IsValid)
             {
@@ -180,7 +183,7 @@ namespace HatServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        public async Task<IActionResult> ConfirmEmail([CanBeNull] string userId, [CanBeNull] string code)
         {
             if (userId == null || code == null)
             {
@@ -197,7 +200,7 @@ namespace HatServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
+        public IActionResult ResetPassword([NotNull] string code = null)
         {
             if (code == null)
             {
@@ -247,7 +250,7 @@ namespace HatServer.Controllers
 
         #region Helpers
 
-        private void AddErrors(IdentityResult result)
+        private void AddErrors([NotNull] IdentityResult result)
         {
             foreach (var error in result.Errors)
             {

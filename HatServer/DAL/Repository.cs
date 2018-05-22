@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace HatServer.DAL
 {
@@ -12,7 +13,7 @@ namespace HatServer.DAL
         protected readonly ApplicationDbContext Context;
         protected readonly DbSet<T> Entities;
 
-        public Repository(ApplicationDbContext context)
+        public Repository([NotNull] ApplicationDbContext context)
         {
             Context = context;
             Entities = context.Set<T>();
@@ -21,32 +22,19 @@ namespace HatServer.DAL
 
         public virtual Task<T> GetAsync(int id) => Entities.FindAsync(id);
 
-        public virtual async Task InsertAsync(T entity)
+        public virtual async Task InsertAsync([NotNull] T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
             await Entities.AddAsync(entity);
             await Context.SaveChangesAsync();
         }
 
-        public virtual Task UpdateAsync(T entity)
+        public virtual Task UpdateAsync([NotNull] T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-
             return Context.SaveChangesAsync();
         }
 
-        public virtual Task DeleteAsync(T entity)
+        public virtual Task DeleteAsync([NotNull] T entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
             Entities.Remove(entity);
             return Context.SaveChangesAsync();
         }

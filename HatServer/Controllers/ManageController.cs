@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace HatServer.Controllers
 {
@@ -191,7 +192,7 @@ namespace HatServer.Controllers
 
         #region Helpers
 
-        private void AddErrors(IdentityResult result)
+        private void AddErrors([NotNull] IdentityResult result)
         {
             foreach (var error in result.Errors)
             {

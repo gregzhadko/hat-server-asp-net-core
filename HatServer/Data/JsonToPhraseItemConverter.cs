@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 
 namespace HatServer.Data
 {
@@ -19,7 +20,8 @@ namespace HatServer.Data
             throw new NotImplementedException();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        [CanBeNull]
+        public override object ReadJson([NotNull] JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType != JsonToken.StartObject)
             {
@@ -29,6 +31,7 @@ namespace HatServer.Data
             return ReadPack(reader);
         }
 
+        [NotNull]
         private Pack ReadPack(JsonReader reader)
         {
             var packItem = JObject.Load(reader);
@@ -44,7 +47,7 @@ namespace HatServer.Data
             return pack;
         }
 
-        private void ReadPhrases(JObject packItem, Pack pack)
+        private void ReadPhrases([NotNull] JObject packItem, Pack pack)
         {
             foreach (var phraseItem in packItem["phrases"].Children().ToList())
             {
@@ -61,7 +64,7 @@ namespace HatServer.Data
             }
         }
 
-        private void ReadReviewers(JToken phraseItem, PhraseItem phrase)
+        private void ReadReviewers([NotNull] JToken phraseItem, PhraseItem phrase)
         {
             if (phraseItem["reviews"] == null || _users == null)
             {
