@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using HatServer.Models;
 using HatServer.Old;
+using JetBrains.Annotations;
 using Utilities;
 
 namespace DictionaryService
 {
-    public class DescriptionUpdaterManager
+    public sealed class DescriptionUpdaterManager
     {
         private readonly IOnlineDictionaryService _service;
 
@@ -20,7 +21,7 @@ namespace DictionaryService
             _service = new OxfordService(settings[2], settings[3]);
         }
 
-        public async Task UpdateDescriptionsAsync(int packId, int maxDescription, Func<PhraseItem, bool> filter)
+        public async Task UpdateDescriptionsAsync(int packId, int maxDescription, [NotNull] Func<PhraseItem, bool> filter)
         {
             var pack = await OldService.GetPackAsync(packId);
             var errorList = new List<string>();
@@ -31,7 +32,7 @@ namespace DictionaryService
                 {
                     ConsoleUtilities.WriteGreenLine("Loading of description for " + phrase.Phrase);
                     var definitions = (await LoadDescriptionsAsync(phrase.Phrase))?.Take(maxDescription).ToList();
-                    
+
                     if (definitions == null || definitions.Count == 0)
                     {
                         ConsoleUtilities.WriteRedLine($"There is no definitions for {phrase.Phrase}");
@@ -79,7 +80,7 @@ namespace DictionaryService
             }
         }
 
-        private static async Task AddDescriptionAsync(Pack pack, PhraseItem phrase, string description)
+        private static async Task AddDescriptionAsync(Pack pack, [NotNull] PhraseItem phrase, string description)
         {
             try
             {
@@ -87,6 +88,7 @@ namespace DictionaryService
                 {
                     phrase.Complexity = 1;
                 }
+
                 await OldService.AddPhraseDescriptionAsync(pack.Id, phrase, description);
                 ConsoleUtilities.WriteGreenLine($"Description for phrase {phrase.Phrase} was added");
             }
@@ -111,7 +113,7 @@ namespace DictionaryService
                 if (answer.Key == ConsoleKey.Y)
                 {
                     var descriptions = (await LoadDescriptionsAsync(phrase.Phrase))?.ToList();
-                    if (descriptions == null || !descriptions.Any())
+                    if (descriptions?.Any() != true)
                     {
                         ConsoleUtilities.WriteRed("There are no descriptions for phrase");
                         Console.WriteLine(phrase.Phrase);
@@ -121,12 +123,13 @@ namespace DictionaryService
                     Console.WriteLine("Available definitions:");
                     for (var i = 0; i < descriptions.Count; i++)
                     {
-                        ConsoleUtilities.WriteGreenLine($"{i+1}. {descriptions[i]}" );
+                        ConsoleUtilities.WriteGreenLine($"{i + 1}. {descriptions[i]}");
                     }
+
                     Console.WriteLine("Enter the description number");
                     var line = Console.ReadLine();
                     Console.WriteLine();
-                    if (Int32.TryParse(line, out var number) && number - 1 >= 0 && number - 1 < descriptions.Count)
+                    if (int.TryParse(line, out var number) && number - 1 >= 0 && number - 1 < descriptions.Count)
                     {
                         await AddDescriptionAsync(pack, phrase, descriptions[number - 1]);
                     }
@@ -139,7 +142,6 @@ namespace DictionaryService
                 {
                     ConsoleUtilities.WriteRedLine("Definition wasn't added");
                 }
-
             }
         }
     }

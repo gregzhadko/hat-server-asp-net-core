@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HatServer.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ServerUser>
+    public sealed class ApplicationDbContext : IdentityDbContext<ServerUser>
     {
         public ApplicationDbContext() : base() { }
 

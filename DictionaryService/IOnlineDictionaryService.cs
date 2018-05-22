@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DictionaryService
 {
-    public interface IOnlineDictionaryService
+    internal interface IOnlineDictionaryService
     {
         Task<IEnumerable<string>> GetDescriptionsAsync(string word);
     }

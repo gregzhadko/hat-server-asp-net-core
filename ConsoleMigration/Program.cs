@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using DictionaryService;
 using HatServer.Models;
 using HatServer.Old;
+using JetBrains.Annotations;
 using Utilities;
 using YandexTranslateCSharpSdk;
+
 // ReSharper disable UnusedMember.Local
 
 namespace ConsoleMigration
 {
-    public class Program
+    internal static class Program
     {
         private static YandexTranslateSdk _translatorWrapper;
 
@@ -29,11 +31,12 @@ namespace ConsoleMigration
             //await ManuallyDescriptionUpdatingAsync(15);
 
             //await FormatAllAsync(15);
-            
+
             Console.WriteLine("Press any key...");
             Console.ReadKey();
         }
 
+        [NotNull]
         private static Task ManuallyDescriptionUpdatingAsync(int packId)
         {
             var definitionUpdate = new DescriptionUpdaterManager();
@@ -62,18 +65,18 @@ namespace ConsoleMigration
                 var newDescription = phrase.Description.FormatDescription();
                 await OldService.EditPhraseAsync(packId, phrase,
                     new PhraseItem {Phrase = newPhrase, Description = newDescription, Complexity = phrase.Complexity});
-                
+
                 if (newPhrase != phrase.Phrase)
                 {
                     ConsoleUtilities.WriteRedLine($"{phrase.Phrase}     ->      {newPhrase}");
                 }
+
                 if (newDescription != phrase.Description)
                 {
                     ConsoleUtilities.WriteRedLine($"{phrase.Description}");
                     Console.WriteLine("|");
                     ConsoleUtilities.WriteRedLine($"{newDescription}");
                 }
-
             }
         }
 
@@ -86,10 +89,11 @@ namespace ConsoleMigration
             spellChecker.Run();
         }
 
+        [NotNull]
         private static Task LoadDescriptionsAsync(int packId)
         {
             var service = new DescriptionUpdaterManager();
-            return service.UpdateDescriptionsAsync(packId, 1, p => String.IsNullOrWhiteSpace(p.Description));
+            return service.UpdateDescriptionsAsync(packId, 1, filter: p => string.IsNullOrWhiteSpace(p.Description));
         }
 
         /// <summary>
@@ -101,16 +105,8 @@ namespace ConsoleMigration
         {
             var lines = File.ReadAllLines(path);
             var service = new DescriptionUpdaterManager();
-            foreach (var line in lines)
+            foreach (var phrase in lines.Select(selector: line => line.FormatPhrase()).Where(predicate: phrase => !string.IsNullOrWhiteSpace(phrase)))
             {
-                //var spaceIndex = line.IndexOf(' ');
-                //var phrase = line.Substring(spaceIndex, line.Length-spaceIndex).FormatPhrase();
-                var phrase = line.FormatPhrase();
-
-                if (String.IsNullOrWhiteSpace(phrase))
-                {
-                    continue;
-                }
                 try
                 {
                     var definitions = await service.LoadDescriptionsAsync(phrase);
@@ -118,6 +114,7 @@ namespace ConsoleMigration
                     {
                         ConsoleUtilities.WriteRedLine($"No definitions for {phrase}");
                     }
+
                     await OldService.AddPhraseAsync(packId, phrase, definitions?.FirstOrDefault());
                     ConsoleUtilities.WriteGreenLine($"Phrase was added {phrase}");
                 }
@@ -145,7 +142,7 @@ namespace ConsoleMigration
                 ConsoleUtilities.WriteGreenLine($"{phrase.Phrase}\t\t{translated}");
             }
 
-            finalList.ToList().ForEach(i => Console.WriteLine("{0,-30}{1,30}", i.Item1, i.Item2));
+            finalList.ToList().ForEach(action: i => Console.WriteLine("{0,-30}{1,30}", i.Item1, i.Item2));
         }
 
         private static Task<string> TranslateAsync(string text) => _translatorWrapper.TranslateText(text, "ru-en");

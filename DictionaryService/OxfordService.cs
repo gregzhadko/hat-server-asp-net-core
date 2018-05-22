@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace DictionaryService
 {
-    public class OxfordService : IOnlineDictionaryService
+    public sealed class OxfordService : IOnlineDictionaryService
     {
         private readonly string _key;
         private readonly string _id;
@@ -19,6 +19,7 @@ namespace DictionaryService
             _key = applicationKey;
         }
 
+        [ItemCanBeNull]
         public async Task<IEnumerable<string>> GetDescriptionsAsync(string word)
         {
             var response = await LoadDescriptionAsync(word);
@@ -26,6 +27,7 @@ namespace DictionaryService
             {
                 return null;
             }
+
             var rootObject = Deserialize(response);
 
             var list = rootObject.results.SelectMany(r => r.lexicalEntries).SelectMany(l => l.entries).SelectMany(e => e.senses)
@@ -43,12 +45,7 @@ namespace DictionaryService
             }
 
             var list = descriptions.ToList();
-            if (list.Count == 0 || String.IsNullOrWhiteSpace(list.First()))
-            {
-                return false;
-            }
-
-            return true;
+            return list.Count != 0 && !string.IsNullOrWhiteSpace(list.First());
         }
 
         private async Task<string> LoadDescriptionAsync(string word)
