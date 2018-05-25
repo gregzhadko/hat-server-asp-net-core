@@ -12,8 +12,8 @@ using System;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180513195840_NewMigrationWithoutStage")]
-    partial class NewMigrationWithoutStage
+    [Migration("20180525143013_Initialization")]
+    partial class Initialization
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,9 +43,11 @@ namespace HatServer.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<string>("Language");
+                    b.Property<string>("Language")
+                        .IsRequired();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -56,6 +58,10 @@ namespace HatServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("ClearReviews");
+
+                    b.Property<string>("Comment");
 
                     b.Property<int>("Complexity");
 
@@ -86,6 +92,8 @@ namespace HatServer.Migrations
                     b.Property<int>("ReviewState");
 
                     b.Property<string>("ServerUserId");
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
@@ -416,7 +424,7 @@ namespace HatServer.Migrations
                         .HasForeignKey("PhraseItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("HatServer.Models.ServerUser", "ServerUser")
+                    b.HasOne("HatServer.Models.ServerUser")
                         .WithMany("PhraseStates")
                         .HasForeignKey("ServerUserId");
                 });

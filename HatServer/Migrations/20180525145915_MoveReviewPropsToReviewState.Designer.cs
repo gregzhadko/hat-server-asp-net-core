@@ -12,8 +12,8 @@ using System;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180517104039_RequiredFieldsForPacks")]
-    partial class RequiredFieldsForPacks
+    [Migration("20180525145915_MoveReviewPropsToReviewState")]
+    partial class MoveReviewPropsToReviewState
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -59,8 +59,6 @@ namespace HatServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Author");
-
                     b.Property<int>("Complexity");
 
                     b.Property<string>("Description");
@@ -85,11 +83,17 @@ namespace HatServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("ClearReviews");
+
+                    b.Property<string>("Comment");
+
                     b.Property<int>("PhraseItemId");
 
                     b.Property<int>("ReviewState");
 
                     b.Property<string>("ServerUserId");
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
@@ -420,7 +424,7 @@ namespace HatServer.Migrations
                         .HasForeignKey("PhraseItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("HatServer.Models.ServerUser", "ServerUser")
+                    b.HasOne("HatServer.Models.ServerUser")
                         .WithMany("PhraseStates")
                         .HasForeignKey("ServerUserId");
                 });

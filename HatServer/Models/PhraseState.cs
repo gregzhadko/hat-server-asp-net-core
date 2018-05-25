@@ -15,6 +15,9 @@ namespace HatServer.Models
 
         public ReviewState ReviewState { get; set; }
 
+        public string Comment { get; set; }
+        public bool ClearReviews { get; set; }
+
         [NotNull]
         public override string ToString() => $"{UserName}: {ReviewState}";
     }

@@ -79,8 +79,8 @@ namespace HatServer
                     context.Database.Migrate();
 
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var dbInitializer = new DbInitializer(context, userManager);
-                    dbInitializer.Initialize();
+//                    var dbInitializer = new DbInitializer(context, userManager);
+//                    dbInitializer.Initialize();
                 }
             }
         }

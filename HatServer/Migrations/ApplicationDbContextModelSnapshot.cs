@@ -58,10 +58,6 @@ namespace HatServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("ClearReviews");
-
-                    b.Property<string>("Comment");
-
                     b.Property<int>("Complexity");
 
                     b.Property<string>("Description");
@@ -86,11 +82,17 @@ namespace HatServer.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("ClearReviews");
+
+                    b.Property<string>("Comment");
+
                     b.Property<int>("PhraseItemId");
 
                     b.Property<int>("ReviewState");
 
                     b.Property<string>("ServerUserId");
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
@@ -421,7 +423,7 @@ namespace HatServer.Migrations
                         .HasForeignKey("PhraseItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("HatServer.Models.ServerUser", "ServerUser")
+                    b.HasOne("HatServer.Models.ServerUser")
                         .WithMany("PhraseStates")
                         .HasForeignKey("ServerUserId");
                 });
