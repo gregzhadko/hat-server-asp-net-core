@@ -71,16 +71,22 @@ namespace HatServer
 
         private static void ApplyMigrationAndSeeding([NotNull] IApplicationBuilder app)
         {
+
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                //var dbInitializer = new DbInitializer(context, userManager);
+                //dbInitializer.Initialize();
+
                 if (!context.AllMigrationsApplied())
                 {
                     context.Database.Migrate();
 
-                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-//                    var dbInitializer = new DbInitializer(context, userManager);
-//                    dbInitializer.Initialize();
+                    //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                    //var dbInitializer = new DbInitializer(context, userManager);
+                    //dbInitializer.Initialize();
                 }
             }
         }

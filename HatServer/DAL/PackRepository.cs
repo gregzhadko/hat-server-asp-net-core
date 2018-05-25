@@ -15,5 +15,11 @@ namespace HatServer.DAL
         {
             return Entities.FirstOrDefaultAsync(p => p.Name == name);
         }
+
+        public override Task<Pack> GetAsync(int id)
+        {
+            return Context.Packs.Include(p=>p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
+        }
+        
     }
 }

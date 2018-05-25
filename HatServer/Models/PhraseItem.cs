@@ -9,7 +9,7 @@ using Utilities;
 namespace HatServer.Models
 {
     [DebuggerDisplay("{Phrase}, {Complexity}, {Description}")]
-    public class PhraseItem
+    public sealed class PhraseItem
     {
         public int Id { get; set; }
 
@@ -27,7 +27,7 @@ namespace HatServer.Models
         [Required]
         public int PackId { get; set; }
         [ForeignKey("PackId")]
-        public virtual Pack Pack { get; set; }
+        public Pack Pack { get; set; }
 
         public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 

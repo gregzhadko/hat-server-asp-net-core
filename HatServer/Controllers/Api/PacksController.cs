@@ -24,10 +24,8 @@ namespace HatServer.Controllers.Api
         // GET: api/<controller>
         [NotNull]
         [HttpGet]
-        public async Task<List<Pack>> GetAll()
+        public List<Pack> GetAll()
         {
-            var pack = new Pack { Name = (1000).ToString(), Description = "Description", Language = "Ru" };
-            await _packRepository.InsertAsync(pack);
             return _packRepository.GetAll().ToList();
         }
 
