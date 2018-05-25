@@ -29,6 +29,9 @@ namespace HatServer.Models
         [ForeignKey("PackId")]
         public virtual Pack Pack { get; set; }
 
+        public string Comment { get; set; }
+        public bool ClearReviews { get; set; }
+
         public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 
         [CanBeNull]
