@@ -35,7 +35,7 @@ namespace HatServer.Models
         public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
 
         [CanBeNull]
-        public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.ServerUser?.UserName;
+        public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.UserName;
 
         public void FormatPhrase()
         {
@@ -54,7 +54,7 @@ namespace HatServer.Models
                 Complexity = Complexity,
                 PhraseStates = new List<PhraseState>
                 {
-                    new PhraseState {ReviewState = ReviewState.Accept, ServerUser = new ServerUser {UserName = "zhadko"}}
+                    new PhraseState {ReviewState = ReviewState.Accept, UserName = Constants.DefaultUserName}
                 }
             };
         }

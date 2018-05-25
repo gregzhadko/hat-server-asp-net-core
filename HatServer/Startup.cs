@@ -34,7 +34,6 @@ namespace HatServer
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IRepository<PhraseItem>), typeof(PhraseItemRepository));
             services.AddScoped(typeof(IPackRepository), typeof(PackRepository));
-            services.AddScoped(typeof(IRepository<ServerUser>), typeof(AccountsRepository));
 
             services.AddMvc();
 

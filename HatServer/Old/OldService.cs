@@ -68,7 +68,7 @@ namespace HatServer.Old
             new PhraseState
             {
                 ReviewState = ReviewState.Accept,
-                ServerUser = new ServerUser {UserName = "zhadko"}
+                UserName = Constants.DefaultUserName
             }
         };
 
@@ -98,7 +98,7 @@ namespace HatServer.Old
         }
 
         [ItemCanBeNull]
-        public static async Task<List<Pack>> GetAllPacksAsync([CanBeNull] List<ServerUser> users = null)
+        public static async Task<List<Pack>> GetAllPacksAsync([CanBeNull] List<string> users = null)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace HatServer.Old
             }
         }
 
-        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null)
+        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<string> users = null)
         {
             var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
