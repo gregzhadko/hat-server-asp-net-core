@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HatServer.Data;
 using HatServer.Models;
 using JetBrains.Annotations;
@@ -22,7 +21,5 @@ namespace HatServer.DAL
         {
             return Entities.Include(p => p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
         }
-        }
-        
     }
 }
