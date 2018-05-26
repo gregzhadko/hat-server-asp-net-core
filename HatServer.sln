@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpellChecker", "SpellChecke
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilitiesTests", "UtilitiesTests\UtilitiesTests.csproj", "{9852CA62-D162-4463-918D-54A5CCCEA5B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DictionaryService", "DictionaryService\DictionaryService.csproj", "{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DictionaryService", "DictionaryService\DictionaryService.csproj", "{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{45B170AA-1B87-4D61-9393-B92C15CABA7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8265CBC-2E81-4C61-9F1A-D37B9A21E32D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45B170AA-1B87-4D61-9393-B92C15CABA7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45B170AA-1B87-4D61-9393-B92C15CABA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45B170AA-1B87-4D61-9393-B92C15CABA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45B170AA-1B87-4D61-9393-B92C15CABA7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

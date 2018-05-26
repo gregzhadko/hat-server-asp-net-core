@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using HatServer.Extensions;
 using JetBrains.Annotations;
+using Utilities;
 
 namespace HatServer.Models
 {

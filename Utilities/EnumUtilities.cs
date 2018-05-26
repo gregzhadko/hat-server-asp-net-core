@@ -1,15 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace HatServer.Extensions
+namespace Utilities
 {
     public static class EnumUtilities
     {
-        [NotNull]
-        public static string GetEnumDescription<TEnum>([NotNull] this TEnum item)
+        public static string GetEnumDescription<TEnum>(this TEnum item)
             => item.GetType()
                    .GetField(item.ToString())
                    .GetCustomAttributes(typeof(DescriptionAttribute), false)
