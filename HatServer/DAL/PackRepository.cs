@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using HatServer.Data;
 using HatServer.Models;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace HatServer.DAL
 {
-    public class PackRepository : Repository<Pack>, IPackRepository
+    internal sealed class PackRepository : Repository<Pack>, IPackRepository
     {
-        public PackRepository(ApplicationDbContext context) : base(context)
+        public PackRepository([NotNull] ApplicationDbContext context) : base(context)
         {
         }
 
@@ -18,7 +20,8 @@ namespace HatServer.DAL
 
         public override Task<Pack> GetAsync(int id)
         {
-            return Context.Packs.Include(p=>p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
+            return Entities.Include(p => p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
+        }
         }
         
     }

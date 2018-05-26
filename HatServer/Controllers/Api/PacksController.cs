@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HatServer.Controllers.Api
 {
     [Route("api/[controller]")]
-    public class PacksController : Controller
+    public sealed class PacksController : Controller
     {
         private readonly IPackRepository _packRepository;
 

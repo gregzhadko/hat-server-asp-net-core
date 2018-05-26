@@ -26,6 +26,7 @@ namespace HatServer.Models
 
         [Required]
         public int PackId { get; set; }
+
         [ForeignKey("PackId")]
         public Pack Pack { get; set; }
 

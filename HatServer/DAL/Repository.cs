@@ -18,9 +18,16 @@ namespace HatServer.DAL
             Context = context;
             Entities = context.Set<T>();
         }
-        public virtual IEnumerable<T> GetAll() => Entities.AsEnumerable();
 
-        public virtual Task<T> GetAsync(int id) => Entities.FindAsync(id);
+        public virtual IEnumerable<T> GetAll()
+        {
+            return Entities.AsEnumerable();
+        }
+
+        public virtual Task<T> GetAsync(int id)
+        {
+            return Entities.FindAsync(id);
+        }
 
         public virtual async Task InsertAsync([NotNull] T entity)
         {
