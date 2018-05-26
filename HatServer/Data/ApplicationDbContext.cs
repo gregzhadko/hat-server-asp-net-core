@@ -6,7 +6,9 @@ namespace HatServer.Data
 {
     public sealed class ApplicationDbContext : IdentityDbContext<ServerUser>
     {
-        public ApplicationDbContext() : base() { }
+        public ApplicationDbContext() : base()
+        {
+        }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

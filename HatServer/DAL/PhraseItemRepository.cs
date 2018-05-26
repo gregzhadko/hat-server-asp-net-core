@@ -3,12 +3,13 @@ using HatServer.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace HatServer.DAL
 {
-    public class PhraseItemRepository : Repository<PhraseItem>
+    internal sealed class PhraseItemRepository : Repository<PhraseItem>
     {
-        public PhraseItemRepository(ApplicationDbContext context) : base(context)
+        public PhraseItemRepository([NotNull] ApplicationDbContext context) : base(context)
         {
         }
 

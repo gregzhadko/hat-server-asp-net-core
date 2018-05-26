@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using HatServer.Models;
 using HatServer.Old;
 using Microsoft.AspNetCore.Identity;
