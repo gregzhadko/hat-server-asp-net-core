@@ -38,7 +38,7 @@ namespace HatServer.Controllers.Api
                 return NotFound();
             }
 
-            var pack = await _packRepository.GetAsync(id.Value);
+            var pack = await _packRepository.GetFullInfo(id.Value);
             if (pack == null)
             {
                 return NotFound();

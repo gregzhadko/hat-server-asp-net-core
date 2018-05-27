@@ -22,5 +22,10 @@ namespace HatServer.DAL
         {
             return Entities.Include(p => p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public Task<Pack> GetFullInfo(int id)
+        {
+            return Entities.Include(p => p.Phrases).ThenInclude(p => p.PhraseStates).FirstOrDefaultAsync(p => p.Id == id);
+        }
     }
 }

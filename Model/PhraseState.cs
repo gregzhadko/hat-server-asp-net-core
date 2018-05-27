@@ -9,6 +9,7 @@ namespace Model
 
         [ForeignKey("PhraseItemId")]
         public virtual PhraseItem PhraseItem { get; set; }
+
         public int PhraseItemId { get; set; }
 
         public string UserName { get; set; }
