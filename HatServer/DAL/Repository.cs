@@ -12,7 +12,7 @@ namespace HatServer.DAL
         protected readonly ApplicationDbContext Context;
         protected readonly DbSet<T> Entities;
 
-        public Repository([NotNull] ApplicationDbContext context)
+        protected Repository([NotNull] ApplicationDbContext context)
         {
             Context = context;
             Entities = context.Set<T>();
@@ -30,8 +30,13 @@ namespace HatServer.DAL
 
         public virtual Task UpdateAsync([NotNull] T entity) => Context.SaveChangesAsync();
 
-        public virtual Task DeleteAsync([NotNull] T entity)
+        public virtual Task DeleteAsync([CanBeNull] T entity)
         {
+            if (entity == null)
+            {
+                return null;
+            }
+
             Entities.Remove(entity);
             return Context.SaveChangesAsync();
         }
