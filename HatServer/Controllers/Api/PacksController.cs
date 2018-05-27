@@ -79,7 +79,7 @@ namespace HatServer.Controllers.Api
             }
 
             await _packRepository.InsertAsync(item);
-            return CreatedAtRoute("Get", new { id = item.Id }, item);
+            return CreatedAtRoute("Get", new {id = item.Id}, item);
         }
 
 

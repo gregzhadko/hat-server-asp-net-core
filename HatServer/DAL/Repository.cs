@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace HatServer.DAL
 {
-    public class Repository<T> : IRepository<T> where T : class
+    internal class Repository<T> : IRepository<T> where T : class
     {
         protected readonly ApplicationDbContext Context;
         protected readonly DbSet<T> Entities;
@@ -18,15 +18,9 @@ namespace HatServer.DAL
             Entities = context.Set<T>();
         }
 
-        public virtual IEnumerable<T> GetAll()
-        {
-            return Entities.AsEnumerable();
-        }
+        public virtual IEnumerable<T> GetAll() => Entities.AsEnumerable();
 
-        public virtual Task<T> GetAsync(int id)
-        {
-            return Entities.FindAsync(id);
-        }
+        public virtual Task<T> GetAsync(int id) => Entities.FindAsync(id);
 
         public virtual async Task InsertAsync([NotNull] T entity)
         {
@@ -34,10 +28,7 @@ namespace HatServer.DAL
             await Context.SaveChangesAsync();
         }
 
-        public virtual Task UpdateAsync([NotNull] T entity)
-        {
-            return Context.SaveChangesAsync();
-        }
+        public virtual Task UpdateAsync([NotNull] T entity) => Context.SaveChangesAsync();
 
         public virtual Task DeleteAsync([NotNull] T entity)
         {
