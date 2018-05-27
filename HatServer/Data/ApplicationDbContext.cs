@@ -1,6 +1,6 @@
-﻿using HatServer.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Model;
 
 namespace HatServer.Data
 {

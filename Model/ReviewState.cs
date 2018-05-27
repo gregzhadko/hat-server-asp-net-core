@@ -1,4 +1,4 @@
-﻿namespace HatServer.Models
+﻿namespace Model
 {
     public enum ReviewState
     {

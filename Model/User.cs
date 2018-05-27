@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HatServer.Models
+namespace Model
 {
     public class User
     {

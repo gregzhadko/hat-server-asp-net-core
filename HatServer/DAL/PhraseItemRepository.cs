@@ -1,9 +1,9 @@
 ﻿using HatServer.Data;
-using HatServer.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Model;
 
 namespace HatServer.DAL
 {

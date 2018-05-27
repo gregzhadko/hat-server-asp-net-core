@@ -1,4 +1,4 @@
-namespace HatServer.Models
+namespace Model
 {
     public class ErrorViewModel
     {

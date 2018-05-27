@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 
-namespace HatServer.Models
+namespace Model
 {
     public class PhraseState
     {

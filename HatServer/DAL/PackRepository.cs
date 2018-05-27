@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using HatServer.Data;
-using HatServer.Models;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Model;
 
 namespace HatServer.DAL
 {

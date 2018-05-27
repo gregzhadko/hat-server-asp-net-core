@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HatServer.Models;
 using HatServer.Old;
 using JetBrains.Annotations;
+using Model;
 using Utilities;
 
 namespace DictionaryService

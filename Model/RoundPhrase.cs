@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HatServer.Models
+namespace Model
 {
     public class RoundPhrase
     {

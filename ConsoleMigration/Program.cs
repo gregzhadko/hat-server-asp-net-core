@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DictionaryService;
-using HatServer.Models;
 using HatServer.Old;
 using JetBrains.Annotations;
+using Model;
 using Utilities;
 using YandexTranslateCSharpSdk;
 

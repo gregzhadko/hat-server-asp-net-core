@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using HatServer.Data;
-using HatServer.Models;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Model;
 
 namespace HatServer.Migrations
 {

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
-namespace HatServer.Models
+namespace Model
 {
     // Add profile data for application users by adding properties to the ServerUser class
     public class ServerUser : IdentityUser

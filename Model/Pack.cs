@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using JetBrains.Annotations;
 
-namespace HatServer.Models
+namespace Model
 {
     [DebuggerDisplay("{Id}, {Name}, {Description}")]
     public class Pack

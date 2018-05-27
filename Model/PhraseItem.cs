@@ -6,7 +6,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using Utilities;
 
-namespace HatServer.Models
+namespace Model
 {
     [DebuggerDisplay("{Phrase}, {Complexity}, {Description}")]
     public sealed class PhraseItem

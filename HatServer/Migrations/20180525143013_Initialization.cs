@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
+// ReSharper disable RedundantArgumentDefaultValue
 
 namespace HatServer.Migrations
 {

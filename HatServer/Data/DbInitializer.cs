@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using HatServer.Models;
 using HatServer.Old;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Model;
 
 namespace HatServer.Data
 {
