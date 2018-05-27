@@ -16,13 +16,13 @@ namespace HatServer.Migrations
 
             migrationBuilder.AddColumn<bool>(
                 name: "ClearReviews",
-                table: "PhraseStates",
+                table: "ReviewStates",
                 nullable: false,
                 defaultValue: false);
 
             migrationBuilder.AddColumn<string>(
                 name: "Comment",
-                table: "PhraseStates",
+                table: "ReviewStates",
                 nullable: true);
         }
 
@@ -30,11 +30,11 @@ namespace HatServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ClearReviews",
-                table: "PhraseStates");
+                table: "ReviewStates");
 
             migrationBuilder.DropColumn(
                 name: "Comment",
-                table: "PhraseStates");
+                table: "ReviewStates");
 
             migrationBuilder.AddColumn<bool>(
                 name: "ClearReviews",

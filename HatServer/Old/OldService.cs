@@ -17,7 +17,7 @@ namespace HatServer.Old
     {
         [NotNull]
         public static Task AddPhraseAsync(int packId, [NotNull] PhraseItem phrase) => GetResponseAsync(
-            $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={phrase.Description}&level={phrase.Complexity}&author={phrase.Author}", 8091);
+            $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={phrase.Description}&level={phrase.Complexity}&author=zhadko", 8091);
 
         [NotNull]
         public static Task AddPhraseAsync(int packId, string phrase, [CanBeNull] string description, int complexity = 1)
@@ -25,7 +25,7 @@ namespace HatServer.Old
             if (!String.IsNullOrWhiteSpace(description))
             {
                 return AddPhraseAsync(packId,
-                    new PhraseItem {Phrase = phrase, Description = description, Complexity = complexity, PhraseStates = GetDefaultPhraseState()});
+                    new PhraseItem {Phrase = phrase, Description = description, Complexity = complexity, ReviewState = GetDefaultReviewState()});
             }
 
             return AddPhraseAsync(packId, phrase);
@@ -63,11 +63,11 @@ namespace HatServer.Old
         public static Task DeletePhraseAsync(int packId, string phrase, string author = "zhadko") => GetResponseAsync($"removePackWord?id={packId}&word={phrase}&author={author}", 8091);
 
         [NotNull]
-        private static List<PhraseState> GetDefaultPhraseState() => new List<PhraseState>
+        private static List<ReviewState> GetDefaultReviewState() => new List<ReviewState>
         {
-            new PhraseState
+            new ReviewState
             {
-                ReviewState = ReviewState.Accept,
+                State = State.Accept,
                 UserName = Constants.DefaultUserName
             }
         };

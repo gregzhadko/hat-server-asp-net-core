@@ -282,13 +282,13 @@ namespace HatServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PhraseStates",
+                name: "ReviewStates",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PhraseItemId = table.Column<int>(nullable: false),
-                    ReviewState = table.Column<int>(nullable: false),
+                    State = table.Column<int>(nullable: false),
                     ServerUserId = table.Column<string>(nullable: true),
                     UserName = table.Column<string>(nullable: true)
                 },
@@ -443,12 +443,12 @@ namespace HatServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhraseStates_PhraseItemId",
-                table: "PhraseStates",
+                table: "ReviewStates",
                 column: "PhraseItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhraseStates_ServerUserId",
-                table: "PhraseStates",
+                table: "ReviewStates",
                 column: "ServerUserId");
 
             migrationBuilder.CreateIndex(
@@ -505,7 +505,7 @@ namespace HatServer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "PhraseStates");
+                name: "ReviewStates");
 
             migrationBuilder.DropTable(
                 name: "RoundPhrases");

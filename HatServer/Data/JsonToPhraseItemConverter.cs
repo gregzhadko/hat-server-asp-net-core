@@ -73,19 +73,19 @@ namespace HatServer.Data
 
             foreach (var user in _users)
             {
-                var reviewState = phraseItem["reviews"][user];
-                if (reviewState == null)
+                var state = phraseItem["reviews"][user];
+                if (state == null)
                 {
                     continue;
                 }
 
-                var phraseState = new PhraseState
+                var reviewState = new ReviewState
                 {
                     UserName = user,
                     PhraseItem = phrase,
-                    ReviewState = (ReviewState)reviewState.Value<int>()
+                    State = (State)state.Value<int>()
                 };
-                phrase.PhraseStates.Add(phraseState);
+                phrase.ReviewState.Add(reviewState);
             }
         }
 

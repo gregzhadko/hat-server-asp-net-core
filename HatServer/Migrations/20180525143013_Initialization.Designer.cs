@@ -81,14 +81,14 @@ namespace HatServer.Migrations
                     b.ToTable("PhraseItems");
                 });
 
-            modelBuilder.Entity("HatServer.Models.PhraseState", b =>
+            modelBuilder.Entity("HatServer.Models.ReviewState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("PhraseItemId");
 
-                    b.Property<int>("ReviewState");
+                    b.Property<int>("State");
 
                     b.Property<string>("ServerUserId");
 
@@ -100,7 +100,7 @@ namespace HatServer.Migrations
 
                     b.HasIndex("ServerUserId");
 
-                    b.ToTable("PhraseStates");
+                    b.ToTable("ReviewStates");
                 });
 
             modelBuilder.Entity("HatServer.Models.Player", b =>
@@ -416,15 +416,15 @@ namespace HatServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("HatServer.Models.PhraseState", b =>
+            modelBuilder.Entity("HatServer.Models.ReviewState", b =>
                 {
                     b.HasOne("HatServer.Models.PhraseItem", "PhraseItem")
-                        .WithMany("PhraseStates")
+                        .WithMany("ReviewStates")
                         .HasForeignKey("PhraseItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("HatServer.Models.ServerUser")
-                        .WithMany("PhraseStates")
+                        .WithMany("ReviewStates")
                         .HasForeignKey("ServerUserId");
                 });
 

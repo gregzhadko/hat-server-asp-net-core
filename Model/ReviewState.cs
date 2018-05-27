@@ -1,10 +1,25 @@
-﻿namespace Model
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using JetBrains.Annotations;
+
+namespace Model
 {
-    public enum ReviewState
+    public sealed class ReviewState
     {
-        Unknown = -1,
-        Delete = 0,
-        Edit = 1,
-        Accept = 2
+        public int Id { get; set; }
+
+        [ForeignKey("PhraseItemId")]
+        public PhraseItem PhraseItem { get; set; }
+
+        public int PhraseItemId { get; set; }
+
+        public string UserName { get; set; }
+
+        public State State { get; set; }
+
+        public string Comment { get; set; }
+        public bool ClearReviews { get; set; }
+
+        [NotNull]
+        public override string ToString() => $"{UserName}: {State}";
     }
 }

@@ -30,10 +30,7 @@ namespace Model
         [ForeignKey("PackId")]
         public Pack Pack { get; set; }
 
-        public List<PhraseState> PhraseStates { get; set; } = new List<PhraseState>();
-
-        [CanBeNull]
-        public string Author => PhraseStates.FirstOrDefault(s => s.ReviewState == ReviewState.Accept)?.UserName;
+        public List<ReviewState> ReviewState { get; set; } = new List<ReviewState>();
 
         public void FormatPhrase()
         {
@@ -50,9 +47,9 @@ namespace Model
                 Phrase = Phrase,
                 Description = Description,
                 Complexity = Complexity,
-                PhraseStates = new List<PhraseState>
+                ReviewState = new List<ReviewState>
                 {
-                    new PhraseState {ReviewState = ReviewState.Accept, UserName = Constants.DefaultUserName}
+                    new ReviewState {State = State.Accept, UserName = Constants.DefaultUserName}
                 }
             };
         }

@@ -79,6 +79,9 @@ namespace HatServer.Controllers.Api
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public Task Delete(int id) => _phraseRepository.DeleteAsync(id);
+        public Task Delete(int id)
+        {
+            return _phraseRepository.DeleteAsync(id);
+        }
     }
 }

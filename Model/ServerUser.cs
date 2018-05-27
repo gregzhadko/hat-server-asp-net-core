@@ -6,6 +6,6 @@ namespace Model
     // Add profile data for application users by adding properties to the ServerUser class
     public class ServerUser : IdentityUser
     {
-        public virtual ICollection<PhraseState> PhraseStates { get; set; }
+        public virtual ICollection<ReviewState> ReviewStates { get; set; }
     }
 }
