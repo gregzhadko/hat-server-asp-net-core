@@ -105,7 +105,7 @@ namespace DictionaryService
             {
                 Console.WriteLine("Current phrase state");
                 var arr = new List<string> {phrase.Phrase, phrase.Description};
-                phrase.ReviewState.ForEach(s => arr.Add(s.ToString()));
+                phrase.ReviewStates.ForEach(s => arr.Add(s.ToString()));
                 ConsoleUtilities.WriteInfo("", arr.ToArray());
                 Console.Write("Do you want to change it?\ny/n ");
                 var answer = Console.ReadKey();

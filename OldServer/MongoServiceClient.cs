@@ -24,7 +24,7 @@ namespace OldServer
             if (!String.IsNullOrWhiteSpace(description))
             {
                 return AddPhraseAsync(packId,
-                    new PhraseItem {Phrase = phrase, Description = description, Complexity = complexity, ReviewState = GetDefaultReviewState()});
+                    new PhraseItem {Phrase = phrase, Description = description, Complexity = complexity, ReviewStates = GetDefaultReviewState()});
             }
 
             return AddPhraseAsync(packId, phrase);

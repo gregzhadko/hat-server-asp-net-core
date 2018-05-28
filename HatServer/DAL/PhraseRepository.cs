@@ -21,17 +21,17 @@ namespace HatServer.DAL
 
         public override IEnumerable<PhraseItem> GetAll()
         {
-            return Context.PhraseItems.Include(p => p.ReviewState);
+            return Context.PhraseItems.Include(p => p.ReviewStates);
         }
 
         public override Task<PhraseItem> GetAsync(int id)
         {
-            return Context.PhraseItems.Include(p => p.ReviewState).FirstOrDefaultAsync(p => p.Id == id);
+            return Context.PhraseItems.Include(p => p.ReviewStates).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public Task<PhraseItem> GetByNameAsync(string phrase)
         {
-            return Context.PhraseItems.Include(p => p.ReviewState).FirstOrDefaultAsync(p => string.CompareOrdinal(p.Phrase, phrase) == 0);
+            return Context.PhraseItems.Include(p => p.ReviewStates).FirstOrDefaultAsync(p => string.CompareOrdinal(p.Phrase, phrase) == 0);
         }
     }
 }

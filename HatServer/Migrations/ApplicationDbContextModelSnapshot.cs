@@ -472,7 +472,7 @@ namespace HatServer.Migrations
             modelBuilder.Entity("Model.ReviewState", b =>
                 {
                     b.HasOne("Model.PhraseItem", "PhraseItem")
-                        .WithMany("ReviewState")
+                        .WithMany("ReviewStates")
                         .HasForeignKey("PhraseItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 

@@ -85,7 +85,7 @@ namespace HatServer.Data
                     PhraseItem = phrase,
                     State = (State)state.Value<int>()
                 };
-                phrase.ReviewState.Add(reviewState);
+                phrase.ReviewStates.Add(reviewState);
             }
         }
 
