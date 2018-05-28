@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="10.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,7 +15,7 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.Extensions.Identity.Stores">
-      <HintPath>C:\Users\user\.nuget\packages\microsoft.extensions.identity.stores\2.0.3\lib\netstandard2.0\Microsoft.Extensions.Identity.Stores.dll</HintPath>
+      <HintPath>..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.identity.stores\2.0.3\lib\netstandard2.0\Microsoft.Extensions.Identity.Stores.dll</HintPath>
     </Reference>
   </ItemGroup>
 
