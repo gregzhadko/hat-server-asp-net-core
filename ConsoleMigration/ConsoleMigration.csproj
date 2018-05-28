@@ -20,6 +20,7 @@
       <Name>DictionaryService</Name>
     </ProjectReference>
     <ProjectReference Include="..\HatServer\HatServer.csproj" />
+    <ProjectReference Include="..\OldServer\OldServer.csproj" />
     <ProjectReference Include="..\SpellChecker\SpellChecker.csproj">
       <Project>{A4562344-5FDF-4F2A-A2FD-E37D3B8C187A}</Project>
       <Name>SpellChecker</Name>

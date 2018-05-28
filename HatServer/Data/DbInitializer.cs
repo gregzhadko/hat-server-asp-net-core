@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using HatServer.Old;
+using OldServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Model;
@@ -54,7 +54,8 @@ namespace HatServer.Data
         {
             //var users = _userManager.Users.ToList();
             var users = new List<string> {"zhadko", "fomin", "sivykh", "tatarintsev"};
-            var packs = OldService.GetAllPacksAsync(users).GetAwaiter().GetResult();
+            
+            var packs = MongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
 
             _context.Packs.AddRange(packs);
         }

@@ -4,16 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HatServer.Data;
 using JetBrains.Annotations;
 using Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Utilities;
 
-namespace HatServer.Old
+namespace OldServer
 {
-    public class OldService
+    public class MongoServiceClient
     {
         [NotNull]
         public static Task AddPhraseAsync(int packId, [NotNull] PhraseItem phrase) => GetResponseAsync(

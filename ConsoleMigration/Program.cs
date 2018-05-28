@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DictionaryService;
-using HatServer.Old;
 using JetBrains.Annotations;
 using Model;
+using OldServer;
 using Utilities;
 using YandexTranslateCSharpSdk;
 
@@ -45,11 +45,11 @@ namespace ConsoleMigration
 
         private static async Task DeleteWordsInPackAsync(int packId)
         {
-            var pack = await OldService.GetPackAsync(packId);
+            var pack = await MongoServiceClient.GetPackAsync(packId);
             foreach (var phrase in pack.Phrases)
             {
                 Console.WriteLine($"Removing of phrase {phrase.Phrase}");
-                await OldService.DeletePhraseAsync(packId, phrase.Phrase);
+                await MongoServiceClient.DeletePhraseAsync(packId, phrase.Phrase);
             }
 
             ConsoleUtilities.WriteGreenLine("Removing of phrases is completed");
@@ -57,13 +57,13 @@ namespace ConsoleMigration
 
         private static async Task FormatAllAsync(int packId)
         {
-            var pack = await OldService.GetPackAsync(packId);
+            var pack = await MongoServiceClient.GetPackAsync(packId);
             foreach (var phrase in pack.Phrases)
             {
                 Console.WriteLine($"{phrase.Phrase}");
                 var newPhrase = phrase.Phrase.FormatPhrase();
                 var newDescription = phrase.Description.FormatDescription();
-                await OldService.EditPhraseAsync(packId, phrase,
+                await MongoServiceClient.EditPhraseAsync(packId, phrase,
                     new PhraseItem {Phrase = newPhrase, Description = newDescription, Complexity = phrase.Complexity});
 
                 if (newPhrase != phrase.Phrase)
@@ -84,7 +84,7 @@ namespace ConsoleMigration
         {
             var settings = File.ReadLines("Settings.txt").ToList();
             var service = new OxfordService(settings[2], settings[3]);
-            var packs = await OldService.GetAllPacksAsync();
+            var packs = await MongoServiceClient.GetAllPacksAsync();
             var spellChecker = new SpellChecker.SpellChecker(packs, service);
             spellChecker.Run();
         }
@@ -115,7 +115,7 @@ namespace ConsoleMigration
                         ConsoleUtilities.WriteRedLine($"No definitions for {phrase}");
                     }
 
-                    await OldService.AddPhraseAsync(packId, phrase, definitions?.FirstOrDefault());
+                    await MongoServiceClient.AddPhraseAsync(packId, phrase, definitions?.FirstOrDefault());
                     ConsoleUtilities.WriteGreenLine($"Phrase was added {phrase}");
                 }
                 catch
@@ -132,7 +132,7 @@ namespace ConsoleMigration
 
         private static async Task TranslatePackAsync(int packId)
         {
-            var pack = await OldService.GetPackAsync(packId);
+            var pack = await MongoServiceClient.GetPackAsync(packId);
             var finalList = new List<(string, string)>();
 
             foreach (var phrase in pack.Phrases)

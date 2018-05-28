@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HatServer.Old;
 using JetBrains.Annotations;
 using Model;
+using OldServer;
 using Utilities;
 
 namespace DictionaryService
@@ -23,7 +23,7 @@ namespace DictionaryService
 
         public async Task UpdateDescriptionsAsync(int packId, int maxDescription, [NotNull] Func<PhraseItem, bool> filter)
         {
-            var pack = await OldService.GetPackAsync(packId);
+            var pack = await MongoServiceClient.GetPackAsync(packId);
             var errorList = new List<string>();
 
             foreach (var phrase in pack.Phrases.Where(filter))
@@ -89,7 +89,7 @@ namespace DictionaryService
                     phrase.Complexity = 1;
                 }
 
-                await OldService.AddPhraseDescriptionAsync(pack.Id, phrase, description);
+                await MongoServiceClient.AddPhraseDescriptionAsync(pack.Id, phrase, description);
                 ConsoleUtilities.WriteGreenLine($"Description for phrase {phrase.Phrase} was added");
             }
             catch (Exception e)
@@ -100,7 +100,7 @@ namespace DictionaryService
 
         public async Task RunManualUpdatingAsync(int packId)
         {
-            var pack = await OldService.GetPackAsync(packId);
+            var pack = await MongoServiceClient.GetPackAsync(packId);
             foreach (var phrase in pack.Phrases)
             {
                 Console.WriteLine("Current phrase state");
