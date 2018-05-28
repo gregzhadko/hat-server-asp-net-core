@@ -11,9 +11,9 @@ namespace HatServer.Data
 {
     public class JsonToPhraseItemConverter : JsonConverter
     {
-        private readonly List<string> _users;
+        private readonly List<ServerUser> _users;
 
-        public JsonToPhraseItemConverter(List<string> users) => _users = users;
+        public JsonToPhraseItemConverter(List<ServerUser> users) => _users = users;
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
@@ -81,7 +81,7 @@ namespace HatServer.Data
 
                 var reviewState = new ReviewState
                 {
-                    UserName = user,
+                    User = user,
                     PhraseItem = phrase,
                     State = (State)state.Value<int>()
                 };

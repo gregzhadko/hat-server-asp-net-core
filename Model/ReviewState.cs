@@ -12,7 +12,10 @@ namespace Model
 
         public int PhraseItemId { get; set; }
 
-        public string UserName { get; set; }
+        [ForeignKey("UserId")]
+        public ServerUser User { get; set; }
+
+        public string UserId { get; set; }
 
         public State State { get; set; }
 
@@ -20,6 +23,6 @@ namespace Model
         public bool ClearReviews { get; set; }
 
         [NotNull]
-        public override string ToString() => $"{UserName}: {State}";
+        public override string ToString() => $"{User.UserName}: {State}";
     }
 }

@@ -38,20 +38,20 @@ namespace Model
             Description = Description.FormatDescription();
         }
 
-        //TODO: remove this when use a new server
-        [NotNull]
-        public PhraseItem FluentClone()
-        {
-            return new PhraseItem
-            {
-                Phrase = Phrase,
-                Description = Description,
-                Complexity = Complexity,
-                ReviewStates = new List<ReviewState>
-                {
-                    new ReviewState {State = State.Accept, UserName = Constants.DefaultUserName}
-                }
-            };
-        }
+//        //TODO: remove this when use a new server
+//        [NotNull]
+//        public PhraseItem FluentClone()
+//        {
+//            return new PhraseItem
+//            {
+//                Phrase = Phrase,
+//                Description = Description,
+//                Complexity = Complexity,
+//                ReviewStates = new List<ReviewState>
+//                {
+//                    new ReviewState {State = State.Accept, UserName = Constants.DefaultUserName}
+//                }
+//            };
+//        }
     }
 }

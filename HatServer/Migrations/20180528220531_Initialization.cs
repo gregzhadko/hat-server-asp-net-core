@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
-// ReSharper disable RedundantArgumentDefaultValue
+using System.Collections.Generic;
 
 namespace HatServer.Migrations
 {
@@ -242,8 +242,6 @@ namespace HatServer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClearReviews = table.Column<bool>(nullable: false),
-                    Comment = table.Column<string>(nullable: true),
                     Complexity = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     PackId = table.Column<int>(nullable: false),
@@ -287,23 +285,24 @@ namespace HatServer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClearReviews = table.Column<bool>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
                     PhraseItemId = table.Column<int>(nullable: false),
                     State = table.Column<int>(nullable: false),
-                    ServerUserId = table.Column<string>(nullable: true),
-                    UserName = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PhraseStates", x => x.Id);
+                    table.PrimaryKey("PK_ReviewStates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PhraseStates_PhraseItems_PhraseItemId",
+                        name: "FK_ReviewStates_PhraseItems_PhraseItemId",
                         column: x => x.PhraseItemId,
                         principalTable: "PhraseItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PhraseStates_AspNetUsers_ServerUserId",
-                        column: x => x.ServerUserId,
+                        name: "FK_ReviewStates_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -442,19 +441,19 @@ namespace HatServer.Migrations
                 column: "PackId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhraseStates_PhraseItemId",
+                name: "IX_Players_TeamId",
+                table: "Players",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReviewStates_PhraseItemId",
                 table: "ReviewStates",
                 column: "PhraseItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhraseStates_ServerUserId",
+                name: "IX_ReviewStates_UserId",
                 table: "ReviewStates",
-                column: "ServerUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Players_TeamId",
-                table: "Players",
-                column: "TeamId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoundPhrases_PhraseId",

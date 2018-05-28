@@ -9,10 +9,9 @@ using Model;
 
 namespace HatServer.Migrations
 {
-    public static class DbContextExtension
+    internal static class DbContextExtension
     {
-
-        public static bool AllMigrationsApplied([NotNull] this DbContext context)
+        internal static bool AllMigrationsApplied([NotNull] this DbContext context)
         {
             var applied = context.GetService<IHistoryRepository>()
                 .GetAppliedMigrations()
@@ -27,7 +26,6 @@ namespace HatServer.Migrations
 
         public static void EnsureSeeded(this ApplicationDbContext context, UserManager<ServerUser> userManager)
         {
-
         }
     }
 }

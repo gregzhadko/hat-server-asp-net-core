@@ -212,17 +212,15 @@ namespace HatServer.Migrations
 
                     b.Property<int>("PhraseItemId");
 
-                    b.Property<string>("ServerUserId");
-
                     b.Property<int>("State");
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PhraseItemId");
 
-                    b.HasIndex("ServerUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ReviewStates");
                 });
@@ -476,9 +474,9 @@ namespace HatServer.Migrations
                         .HasForeignKey("PhraseItemId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Model.ServerUser")
+                    b.HasOne("Model.ServerUser", "User")
                         .WithMany("ReviewStates")
-                        .HasForeignKey("ServerUserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Model.Round", b =>

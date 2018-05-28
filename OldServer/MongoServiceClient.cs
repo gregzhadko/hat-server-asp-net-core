@@ -9,6 +9,7 @@ using Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Utilities;
+using Microsoft.AspNetCore.Identity;
 
 namespace OldServer
 {
@@ -62,14 +63,17 @@ namespace OldServer
         public static Task DeletePhraseAsync(int packId, string phrase, string author = "zhadko") => GetResponseAsync($"removePackWord?id={packId}&word={phrase}&author={author}", 8091);
 
         [NotNull]
-        private static List<ReviewState> GetDefaultReviewState() => new List<ReviewState>
+        private static List<ReviewState> GetDefaultReviewState()
         {
-            new ReviewState
+            return new List<ReviewState>
             {
-                State = State.Accept,
-                UserName = Constants.DefaultUserName
-            }
-        };
+                new ReviewState
+                {
+                    State = State.Accept,
+                    User = new ServerUser {UserName = "zhadko"}
+                }
+            };
+        }
 
         [ItemNotNull]
         private static async Task<List<Pack>> GetAllPacksInfoAsync()
@@ -97,7 +101,7 @@ namespace OldServer
         }
 
         [ItemCanBeNull]
-        public static async Task<List<Pack>> GetAllPacksAsync([CanBeNull] List<string> users = null)
+        public static async Task<List<Pack>> GetAllPacksAsync([CanBeNull] List<ServerUser> users = null)
         {
             try
             {
@@ -107,7 +111,7 @@ namespace OldServer
 
                 //TODO: remove OrderBy (it was done for testing purposes)
                 foreach (var packInfo in packs
-                    .Where(p => !String.IsNullOrEmpty(p.Name))
+                    .Where(p => !string.IsNullOrEmpty(p.Name))
                     .OrderBy(p => p.Id))
                 {
                     var pack = await GetPackAsync(packInfo.Id, users);
@@ -124,7 +128,7 @@ namespace OldServer
             }
         }
 
-        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<string> users = null)
+        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null)
         {
             var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));

@@ -9,11 +9,11 @@ using Newtonsoft.Json.Linq;
 
 namespace OldServer
 {
-    public class JsonToPhraseItemConverter : JsonConverter
+    internal sealed class JsonToPhraseItemConverter : JsonConverter
     {
-        private readonly List<string> _users;
+        private readonly List<ServerUser> _users;
 
-        public JsonToPhraseItemConverter(List<string> users) => _users = users;
+        public JsonToPhraseItemConverter(List<ServerUser> users) => _users = users;
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
@@ -23,12 +23,7 @@ namespace OldServer
         [CanBeNull]
         public override object ReadJson([NotNull] JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType != JsonToken.StartObject)
-            {
-                return null;
-            }
-
-            return ReadPack(reader);
+            return reader.TokenType != JsonToken.StartObject ? null : ReadPack(reader);
         }
 
         [NotNull]
@@ -73,7 +68,7 @@ namespace OldServer
 
             foreach (var user in _users)
             {
-                var state = phraseItem["reviews"][user];
+                var state = phraseItem["reviews"][user.UserName];
                 if (state == null)
                 {
                     continue;
@@ -81,7 +76,7 @@ namespace OldServer
 
                 var reviewState = new ReviewState
                 {
-                    UserName = user,
+                    User = user,
                     PhraseItem = phrase,
                     State = (State)state.Value<int>()
                 };
