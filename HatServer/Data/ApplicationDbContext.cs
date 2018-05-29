@@ -28,9 +28,10 @@ namespace HatServer.Data
 
         public DbSet<PhraseItem> PhraseItems { get; set; }
 
+        public DbSet<PhraseItemHistory> PhraseItemHistories { get; set; }
+
         public DbSet<Pack> Packs { get; set; }
-
-
+        
         public DbSet<Game> Games { get; set; }
 
         //public DbSet<Stage> Stages { get; set; }
