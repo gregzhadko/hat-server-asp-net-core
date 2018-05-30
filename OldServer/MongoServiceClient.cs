@@ -46,7 +46,7 @@ namespace OldServer
             }
 
             if (!string.Equals(oldPhrase.Phrase, newPhrase.Phrase, StringComparison.Ordinal) ||
-                Math.Abs(oldPhrase.Complexity - newPhrase.Complexity) > 0.01 ||
+                Math.Abs(oldPhrase.Complexity.Value - newPhrase.Complexity.Value) > 0.01 ||
                 !string.Equals(oldPhrase.Description, newPhrase.Description, StringComparison.Ordinal))
             {
                 await AddPhraseDescriptionAsync(packId, newPhrase, newPhrase.Description, selectedAuthor);

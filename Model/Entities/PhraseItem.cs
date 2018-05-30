@@ -21,7 +21,7 @@ namespace Model
         public string Phrase { get; set; }
 
         [Range(1, 5)]
-        public int Complexity { get; set; }
+        public int? Complexity { get; set; }
 
         public string Description { get; set; }
 
@@ -45,7 +45,7 @@ namespace Model
         public PhraseValidator()
         {
             RuleFor(p => p.Phrase).NotEmpty();
-            RuleFor(p => p.Complexity).InclusiveBetween(1, 5);
+            RuleFor(p => p.Complexity).InclusiveBetween(1, 5).When(p => p.Complexity != null);
             RuleFor(p => p.PackId).NotEmpty();
         }
     }
