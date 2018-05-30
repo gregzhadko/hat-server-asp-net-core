@@ -30,12 +30,12 @@ namespace HatServer.Controllers.Api
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
             if (id <= 0)
             {
-                return BadRequest();
+                return BadRequest("Id should be greater than 0");
             }
 
             var phrase = await _phraseRepository.GetAsync(id);
@@ -47,12 +47,12 @@ namespace HatServer.Controllers.Api
             return Ok(phrase);
         }
 
-        [HttpGet("name/{phrase}")]
+        [HttpGet("{phrase}")]
         public async Task<IActionResult> GetByName([CanBeNull] string phrase)
         {
             if (string.IsNullOrWhiteSpace(phrase))
             {
-                return BadRequest();
+                return BadRequest("Phrase cannnot be empty");
             }
 
             var phraseItem = await _phraseRepository.GetByNameAsync(phrase);
@@ -69,6 +69,7 @@ namespace HatServer.Controllers.Api
         [HttpPost]
         public void Post([FromBody]PhraseItem phrase)
         {
+
         }
 
         // PUT api/<controller>/5

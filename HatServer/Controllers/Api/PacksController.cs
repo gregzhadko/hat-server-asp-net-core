@@ -31,14 +31,14 @@ namespace HatServer.Controllers.Api
 
         // GET api/<controller>/5
         [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> Get(int? id)
+        public async Task<IActionResult> Get(int id)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                return NotFound();
+                return BadRequest("Id should be greater than 0");
             }
 
-            var pack = await _packRepository.GetFullInfo(id.Value);
+            var pack = await _packRepository.GetFullInfo(id);
             if (pack == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace HatServer.Controllers.Api
         {
             if (item == null)
             {
-                return BadRequest();
+                return BadRequest("The body shouldn't be empty");
             }
 
             if (!ModelState.IsValid)
