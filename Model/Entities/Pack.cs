@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using FluentValidation;
 using JetBrains.Annotations;
 
 namespace Model
@@ -22,5 +23,14 @@ namespace Model
 
         [NotNull]
         public override string ToString() => $"{Id}. {Name}\t{Description}";
+    }
+
+    public class PackValidator : AbstractValidator<Pack>
+    {
+        public PackValidator()
+        {
+            RuleFor(p => p.Name).NotEmpty().Length(0, 20);
+            RuleFor(p => p.Language).NotEmpty();
+        }
     }
 }

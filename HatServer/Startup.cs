@@ -1,4 +1,6 @@
-﻿using HatServer.DAL;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using HatServer.DAL;
 using HatServer.Data;
 using HatServer.Migrations;
 using JetBrains.Annotations;
@@ -44,10 +46,19 @@ namespace HatServer
                         options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    });
+                    })
+                .AddFluentValidation();
+
+            AddValidatorsToService(services);
 
             // Add Database Initializer
             services.AddScoped<IDbInitializer, DbInitializer>();
+        }
+
+        private static void AddValidatorsToService(IServiceCollection services)
+        {
+            services.AddTransient<IValidator<Pack>, PackValidator>();
+            services.AddTransient<IValidator<PhraseItem>, PhraseValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

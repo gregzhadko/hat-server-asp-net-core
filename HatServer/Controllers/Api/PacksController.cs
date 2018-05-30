@@ -50,25 +50,11 @@ namespace HatServer.Controllers.Api
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Create([CanBeNull] [FromBody] Pack item)
+        public async Task<IActionResult> Create([FromBody] Pack item)
         {
-            if (item == null)
-            {
-                return BadRequest("The body shouldn't be empty");
-            }
-
             if (!ModelState.IsValid)
             {
-                var errors = new List<string>();
-                foreach (var state in ModelState)
-                {
-                    foreach (var error in state.Value.Errors)
-                    {
-                        errors.Add(error.ErrorMessage);
-                    }
-                }
-
-                return BadRequest(errors);
+                return BadRequest(ModelState);
             }
 
 
@@ -82,7 +68,7 @@ namespace HatServer.Controllers.Api
             return CreatedAtRoute("Get", new {id = item.Id}, item);
         }
 
-
+        //TODO: check it and refactor
         // PUT api/<controller>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNameAndDescription(int id, [CanBeNull] [FromBody] string name, [CanBeNull] [FromBody] string description)

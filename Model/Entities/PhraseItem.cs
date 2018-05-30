@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
+using FluentValidation;
 using JetBrains.Annotations;
 using Utilities;
 
@@ -37,21 +38,15 @@ namespace Model
             Phrase = Phrase.FormatPhrase();
             Description = Description.FormatDescription();
         }
+    }
 
-//        //TODO: remove this when use a new server
-//        [NotNull]
-//        public PhraseItem FluentClone()
-//        {
-//            return new PhraseItem
-//            {
-//                Phrase = Phrase,
-//                Description = Description,
-//                Complexity = Complexity,
-//                ReviewStates = new List<ReviewState>
-//                {
-//                    new ReviewState {State = State.Accept, UserName = Constants.DefaultUserName}
-//                }
-//            };
-//        }
+    public class PhraseValidator : AbstractValidator<PhraseItem>
+    {
+        public PhraseValidator()
+        {
+            RuleFor(p => p.Phrase).NotEmpty();
+            RuleFor(p => p.Complexity).InclusiveBetween(1, 5);
+            RuleFor(p => p.PackId).NotEmpty();
+        }
     }
 }

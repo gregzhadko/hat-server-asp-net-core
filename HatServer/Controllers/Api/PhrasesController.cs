@@ -71,10 +71,8 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return GetInvalidModelStateResults();
+                return BadRequest(ModelState);
             }
-
-            var r = phrase;
 
             return Ok();
         }
