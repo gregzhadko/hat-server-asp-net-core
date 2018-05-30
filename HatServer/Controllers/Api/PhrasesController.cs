@@ -12,11 +12,11 @@ using Model;
 namespace HatServer.Controllers.Api
 {
     [Route("api/[controller]")]
-    public sealed class PhraseController : Controller
+    public sealed class PhrasesController : Controller
     {
         private readonly IPhraseRepository _phraseRepository;
 
-        public PhraseController(IPhraseRepository phraseRepository)
+        public PhrasesController(IPhraseRepository phraseRepository)
         {
             _phraseRepository = phraseRepository;
         }
@@ -67,9 +67,16 @@ namespace HatServer.Controllers.Api
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]PhraseItem phrase)
+        public async Task<IActionResult> Post([FromBody]PhraseItem phrase)
         {
+            if (!ModelState.IsValid)
+            {
+                return GetInvalidModelStateResults();
+            }
 
+            var r = phrase;
+
+            return Ok();
         }
 
         // PUT api/<controller>/5
