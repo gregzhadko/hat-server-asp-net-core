@@ -74,7 +74,9 @@ namespace HatServer.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            return Ok();
+            await _phraseRepository.InsertAsync(phrase);
+
+            return Ok(phrase);
         }
 
         // PUT api/<controller>/5
