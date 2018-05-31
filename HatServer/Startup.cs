@@ -2,6 +2,8 @@
 using FluentValidation.AspNetCore;
 using HatServer.DAL;
 using HatServer.Data;
+using HatServer.DAL.Interfaces;
+using HatServer.DTO.Request;
 using HatServer.Migrations;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
@@ -58,7 +60,7 @@ namespace HatServer
         private static void AddValidatorsToService(IServiceCollection services)
         {
             services.AddTransient<IValidator<Pack>, PackValidator>();
-            services.AddTransient<IValidator<PhraseItem>, PhraseValidator>();
+            services.AddTransient<IValidator<PostPhraseItemRequest>, PostPhraseItemRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

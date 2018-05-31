@@ -33,20 +33,11 @@ namespace Model
 
         public List<ReviewState> ReviewStates { get; set; } = new List<ReviewState>();
 
-        public void FormatPhrase()
+        public PhraseItem FormatPhrase()
         {
             Phrase = Phrase.FormatPhrase();
             Description = Description.FormatDescription();
-        }
-    }
-
-    public class PhraseValidator : AbstractValidator<PhraseItem>
-    {
-        public PhraseValidator()
-        {
-            RuleFor(p => p.Phrase).NotEmpty();
-            RuleFor(p => p.Complexity).InclusiveBetween(1, 5).When(p => p.Complexity != null);
-            RuleFor(p => p.PackId).NotEmpty();
+            return this;
         }
     }
 }

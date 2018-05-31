@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL;
+using HatServer.DAL.Interfaces;
+using HatServer.DTO.Request;
+using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Model;
@@ -15,10 +18,14 @@ namespace HatServer.Controllers.Api
     public sealed class PhrasesController : Controller
     {
         private readonly IPhraseRepository _phraseRepository;
+        private readonly IPackRepository _packRepository;
+        private readonly IUserRepository _userRepository;
 
-        public PhrasesController(IPhraseRepository phraseRepository)
+        public PhrasesController(IPhraseRepository phraseRepository, IPackRepository packRepository, IUserRepository userRepository)
         {
             _phraseRepository = phraseRepository;
+            _packRepository = packRepository;
+            _userRepository = userRepository;
         }
 
         // GET: api/<controller>
@@ -44,7 +51,7 @@ namespace HatServer.Controllers.Api
                 return NotFound();
             }
 
-            return Ok(phrase);
+            return Ok(new BasePhraseItemResponse(phrase));
         }
 
         [HttpGet("{phrase}")]
@@ -61,22 +68,41 @@ namespace HatServer.Controllers.Api
                 return NotFound();
             }
 
-            return Ok(phraseItem);
+            return Ok(new BasePhraseItemResponse(phraseItem));
         }
 
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PhraseItem phrase)
+        public async Task<IActionResult> Post([FromBody]PostPhraseItemRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var existing = await _phraseRepository.GetByNameAsync(request.Phrase);
+            if (existing != null)
+            {
+                return BadRequest($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}");
+            }
+
+            var pack = await _packRepository.GetAsync(request.PackId);
+            if (pack == null)
+            {
+                return NotFound("Pack id is incorrect");
+            }
+
+            var user = await _userRepository.GetByNameAsync(request.Author);
+            if (user == null)
+            {
+                return NotFound($"User {request.Author} is not found");
+            }
+
+            var phrase = request.ToPhraseItem(user).FormatPhrase();
             await _phraseRepository.InsertAsync(phrase);
 
-            return Ok(phrase);
+            return Ok(new BasePhraseItemResponse(phrase));
         }
 
         // PUT api/<controller>/5

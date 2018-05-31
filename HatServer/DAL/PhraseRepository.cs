@@ -1,5 +1,4 @@
-﻿using System;
-using HatServer.Data;
+﻿using HatServer.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,11 +7,6 @@ using Model;
 
 namespace HatServer.DAL
 {
-    public interface IPhraseRepository : IRepository<PhraseItem>
-    {
-        Task<PhraseItem> GetByNameAsync(string phrase);
-    }
-
     internal sealed class PhraseRepository : Repository<PhraseItem>, IPhraseRepository
     {
         public PhraseRepository([NotNull] ApplicationDbContext context) : base(context)
@@ -31,7 +25,8 @@ namespace HatServer.DAL
 
         public Task<PhraseItem> GetByNameAsync(string phrase)
         {
-            return Context.PhraseItems.Include(p => p.ReviewStates).FirstOrDefaultAsync(p => string.CompareOrdinal(p.Phrase, phrase) == 0);
+            return Context.PhraseItems.Include(p => p.ReviewStates).Include(p => p.Pack)
+                .FirstOrDefaultAsync(p => string.CompareOrdinal(p.Phrase, phrase) == 0);
         }
     }
 }
