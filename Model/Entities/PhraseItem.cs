@@ -21,7 +21,7 @@ namespace Model
         public string Phrase { get; set; }
 
         [Range(1, 5)]
-        public int? Complexity { get; set; }
+        public double? Complexity { get; set; }
 
         public string Description { get; set; }
 
