@@ -35,9 +35,9 @@ namespace HatServer
                 .AddDefaultTokenProviders();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IRepository<PhraseItem>), typeof(PhraseRepository));
             services.AddScoped(typeof(IPackRepository), typeof(PackRepository));
             services.AddScoped(typeof(IPhraseRepository), typeof(PhraseRepository));
+            services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
             services.AddMvc()
                 .AddJsonOptions(
