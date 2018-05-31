@@ -9,6 +9,7 @@ using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Model;
+using Utilities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -81,7 +82,7 @@ namespace HatServer.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var existing = await _phraseRepository.GetByNameAsync(request.Phrase);
+            var existing = await _phraseRepository.GetByNameAsync(request.Phrase.FormatPhrase());
             if (existing != null)
             {
                 return BadRequest($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}");
@@ -113,9 +114,10 @@ namespace HatServer.Controllers.Api
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]
-        public Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return _phraseRepository.DeleteAsync(id);
+            await _phraseRepository.DeleteAsync(id);
+            return Ok();
         }
     }
 }
