@@ -20,7 +20,7 @@ namespace DictionaryService
         }
 
         [ItemCanBeNull]
-        public async Task<IEnumerable<string>> GetDescriptionsAsync(string word)
+        public async Task<IEnumerable<string>> GetDescriptionsAsync([NotNull]string word)
         {
             var response = await LoadDescriptionAsync(word);
             if (response == null)
@@ -36,7 +36,7 @@ namespace DictionaryService
             return list;
         }
 
-        public async Task<bool> DoesWordExist(string word)
+        public async Task<bool> DoesWordExistAsync(string word)
         {
             var descriptions = await GetDescriptionsAsync(word);
             if (descriptions == null)
@@ -48,7 +48,7 @@ namespace DictionaryService
             return list.Count != 0 && !string.IsNullOrWhiteSpace(list.First());
         }
 
-        private async Task<string> LoadDescriptionAsync(string word)
+        private async Task<string> LoadDescriptionAsync([NotNull]string word)
         {
             using (var client = new HttpClient())
             {

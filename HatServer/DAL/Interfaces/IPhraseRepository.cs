@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Model;
 using Model.Entities;
 
-namespace HatServer.DAL
+namespace HatServer.DAL.Interfaces
 {
     public interface IPhraseRepository : IRepository<PhraseItem>
     {

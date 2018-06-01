@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
 
 namespace HatServer.DAL
@@ -34,7 +35,7 @@ namespace HatServer.DAL
         {
             if (entity == null)
             {
-                return null;
+                return Task.CompletedTask;
             }
 
             Entities.Remove(entity);

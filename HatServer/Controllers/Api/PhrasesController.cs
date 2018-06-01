@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HatServer.DAL;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
-using Utilities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -59,7 +57,7 @@ namespace HatServer.Controllers.Api
         {
             if (string.IsNullOrWhiteSpace(phrase))
             {
-                return BadRequest("Phrase cannnot be empty");
+                return BadRequest("Phrase cannot be empty");
             }
 
             var phraseItem = await _phraseRepository.GetByNameAsync(phrase);
@@ -81,12 +79,6 @@ namespace HatServer.Controllers.Api
                 return BadRequest(ModelState);
             }
 
-            var existing = await _phraseRepository.GetByNameAsync(request.Phrase.FormatPhrase());
-            if (existing != null)
-            {
-                return BadRequest($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}");
-            }
-
             var pack = await _packRepository.GetAsync(request.PackId);
             if (pack == null)
             {
@@ -100,6 +92,13 @@ namespace HatServer.Controllers.Api
             }
 
             var phrase = request.ToPhraseItem(user).FormatPhrase();
+
+            var existing = await _phraseRepository.GetByNameAsync(phrase.Phrase);
+            if (existing != null)
+            {
+                return BadRequest($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}");
+            }
+
             await _phraseRepository.InsertAsync(phrase);
 
             return Ok(new BasePhraseItemResponse(phrase));

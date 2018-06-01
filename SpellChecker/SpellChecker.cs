@@ -85,7 +85,7 @@ namespace SpellChecker
         }
 
         private bool OxfordSpellCheck([NotNull] Pack pack, string word) =>
-            pack.Language == "en" && _oxfordService.DoesWordExist(word).GetAwaiter().GetResult();
+            pack.Language == "en" && _oxfordService.DoesWordExistAsync(word).GetAwaiter().GetResult();
 
         private static void HandleErrorWord(Pack pack, string word, string phrase, Hunspell hunSpell)
         {

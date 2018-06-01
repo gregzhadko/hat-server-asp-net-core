@@ -12,8 +12,9 @@ using Utilities;
 
 namespace OldServer
 {
-    public class MongoServiceClient
+    public static class MongoServiceClient
     {
+        [UsedImplicitly]
         [NotNull]
         public static Task AddPhraseAsync(int packId, [NotNull] PhraseItem phrase) => GetResponseAsync(
             $"addPackWordDescription?id={packId}&word={phrase.Phrase}&description={phrase.Description}&level={phrase.Complexity}&author=zhadko", 8091);
@@ -30,6 +31,7 @@ namespace OldServer
             return AddPhraseAsync(packId, phrase);
         }
 
+        [UsedImplicitly]
         [NotNull]
         public static Task AddPhraseAsync(int packId, string phrase)
         {

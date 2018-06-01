@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HatServer.DAL;
+using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
@@ -38,7 +38,7 @@ namespace HatServer.Controllers.Api
                 return BadRequest("Id should be greater than 0");
             }
 
-            var pack = await _packRepository.GetFullInfo(id);
+            var pack = await _packRepository.GetFullInfoAsync(id);
             if (pack == null)
             {
                 return NotFound();

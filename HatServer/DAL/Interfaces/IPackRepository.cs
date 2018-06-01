@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Model;
 using Model.Entities;
 
-namespace HatServer.DAL
+namespace HatServer.DAL.Interfaces
 {
     public interface IPackRepository : IRepository<Pack>
     {
         Task<Pack> GetByNameAsync(string name);
-        Task<Pack> GetFullInfo(int id);
+        Task<Pack> GetFullInfoAsync(int id);
     }
 }
