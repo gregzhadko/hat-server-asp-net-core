@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using DictionaryService;
 using JetBrains.Annotations;
-using Model;
+using Model.Entities;
 using NHunspell;
 using Utilities;
 using Yandex.Speller.Api;

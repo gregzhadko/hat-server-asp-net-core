@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using HatServer.DAL;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Model;
+using Model.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

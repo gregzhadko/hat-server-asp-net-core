@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 
-namespace Model
+namespace Model.Entities
 {
     [DebuggerDisplay("{Phrase}, {Complexity}, {Description}")]
     public sealed class PhraseItemHistory

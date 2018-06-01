@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DictionaryService;
 using JetBrains.Annotations;
-using Model;
+using Model.Entities;
 using OldServer;
 using Utilities;
 using YandexTranslateCSharpSdk;

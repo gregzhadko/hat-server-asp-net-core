@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Model;
+using Model.Entities;
 using OldServer;
 using Utilities;
 

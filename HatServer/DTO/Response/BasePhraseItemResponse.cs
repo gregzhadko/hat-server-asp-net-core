@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Model;
+using Model.Entities;
 
 namespace HatServer.DTO.Response
 {

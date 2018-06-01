@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 
-namespace Model
+namespace Model.Entities
 {
     public sealed class ReviewState
     {

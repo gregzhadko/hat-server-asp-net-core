@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Model;
+using Model.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Utilities;

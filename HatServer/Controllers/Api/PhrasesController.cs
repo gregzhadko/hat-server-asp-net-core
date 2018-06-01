@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL;
@@ -8,7 +7,7 @@ using HatServer.DTO.Request;
 using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Model;
+using Model.Entities;
 using Utilities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -110,6 +109,7 @@ namespace HatServer.Controllers.Api
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
+
         }
 
         // DELETE api/<controller>/5

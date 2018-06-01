@@ -4,7 +4,7 @@ using System.Diagnostics;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace Model
+namespace Model.Entities
 {
     [DebuggerDisplay("{Id}, {Name}, {Description}")]
     public class Pack

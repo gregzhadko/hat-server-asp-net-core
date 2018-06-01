@@ -2,12 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
-using System.Linq;
-using FluentValidation;
-using JetBrains.Annotations;
 using Utilities;
 
-namespace Model
+namespace Model.Entities
 {
     [DebuggerDisplay("{Phrase}, {Complexity}, {Description}")]
     public sealed class PhraseItem

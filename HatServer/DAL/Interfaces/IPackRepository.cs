@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Model;
+using Model.Entities;
 
 namespace HatServer.DAL
 {

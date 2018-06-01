@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentValidation;
-using HatServer.DAL;
 using JetBrains.Annotations;
-using Model;
+using Model.Entities;
 
 namespace HatServer.DTO.Request
 {
@@ -21,7 +20,7 @@ namespace HatServer.DTO.Request
         public PhraseItem ToPhraseItem(ServerUser user)
         {
             var reviewState = new ReviewState {User = user, State = State.Accept};
-            var phraseItem = new PhraseItem()
+            var phraseItem = new PhraseItem
             {
                 Phrase = Phrase,
                 Complexity = Complexity,

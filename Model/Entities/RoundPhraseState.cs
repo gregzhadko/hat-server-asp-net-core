@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 using Utilities;
 
-namespace Model
+namespace Model.Entities
 {
     public enum RoundPhraseStateEnum
     {

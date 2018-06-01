@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace Model
+namespace Model.Entities
 {
     // Add profile data for application users by adding properties to the ServerUser class
     public class ServerUser : IdentityUser
