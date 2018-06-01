@@ -45,12 +45,30 @@ namespace OldServer
                 await AddPhraseAsync(packId, newPhrase);
             }
 
+            var oldComplexity = oldPhrase.Complexity;
+            var newComplexity = newPhrase.Complexity;
             if (!string.Equals(oldPhrase.Phrase, newPhrase.Phrase, StringComparison.Ordinal) ||
-                Math.Abs(oldPhrase.Complexity.Value - newPhrase.Complexity.Value) > 0.01 ||
+                !AreComplexitiesEqual(oldComplexity, newComplexity) ||
                 !string.Equals(oldPhrase.Description, newPhrase.Description, StringComparison.Ordinal))
             {
                 await AddPhraseDescriptionAsync(packId, newPhrase, newPhrase.Description, selectedAuthor);
             }
+        }
+
+        private static bool AreComplexitiesEqual(double? firstComplexity, double? secondComplexity)
+        {
+            if (!firstComplexity.HasValue)
+            {
+                return !secondComplexity.HasValue;
+            }
+
+            if (secondComplexity.HasValue)
+            {
+                return Math.Abs(firstComplexity.Value - secondComplexity.Value) > 0.01;
+            }
+
+            return false;
+
         }
 
         [NotNull]
