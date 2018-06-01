@@ -125,17 +125,17 @@ namespace OldServer
             try
             {
                 var packs = await GetAllPacksInfoAsync().ConfigureAwait(false);
-
+                int trackId = 0;
                 var result = new List<Pack>();
-
                 //TODO: remove OrderBy (it was done for testing purposes)
                 foreach (var packInfo in packs
                     .Where(p => !string.IsNullOrEmpty(p.Name))
                     .OrderBy(p => p.Id))
                 {
-                    var pack = await GetPackAsync(packInfo.Id, users);
+                    var pack = await GetPackAsync(packInfo.Id, users, trackId);
                     Console.WriteLine($"Downloaded {pack.Id.ToString()}, {pack.Name}, Words: {pack.Phrases.Count} {pack.Description}");
                     result.Add(pack);
+                    trackId = GetActualTrackId(pack, trackId);
                 }
 
                 return result;
@@ -147,10 +147,21 @@ namespace OldServer
             }
         }
 
-        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null)
+        private static int GetActualTrackId([NotNull] Pack pack, int trackId)
+        {
+            var list = pack.Phrases.Select(p => p.TrackId).ToList();
+            if (list.Count > 0)
+            {
+                return list.Max() + 1;
+            }
+
+            return trackId;
+        }
+
+        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null, int trackId = 1)
         {
             var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users));
+            return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users, trackId));
         }
     }
 }

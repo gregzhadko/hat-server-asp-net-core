@@ -13,8 +13,13 @@ namespace OldServer
     internal sealed class JsonToPhraseItemConverter : JsonConverter
     {
         private readonly List<ServerUser> _users;
+        private int _trackId;
 
-        public JsonToPhraseItemConverter(List<ServerUser> users) => _users = users;
+        public JsonToPhraseItemConverter(List<ServerUser> users, int trackId)
+        {
+            _users = users;
+            _trackId = trackId;
+        }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
@@ -43,7 +48,7 @@ namespace OldServer
             return pack;
         }
 
-        private void ReadPhrases([NotNull] JObject packItem, Pack pack)
+        private void ReadPhrases([NotNull] JObject packItem, [NotNull] Pack pack)
         {
             var defaultUser = _users.First(u => u.UserName == Constants.DefaultUserName);
             foreach (var phraseItem in packItem["phrases"].Children().ToList())
@@ -54,7 +59,8 @@ namespace OldServer
                     Complexity = phraseItem["complexity"].Value<int>(),
                     Description = phraseItem["description"].Value<string>(),
                     CreatedDate = DateTime.Now,
-                    CreatedBy = defaultUser
+                    CreatedBy = defaultUser,
+                    TrackId = _trackId++
                 };
 
                 ReadReviewers(phraseItem, phrase);

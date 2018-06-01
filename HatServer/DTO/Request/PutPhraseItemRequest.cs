@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using JetBrains.Annotations;
 using Model.Entities;
-using MoreLinq;
 
 namespace HatServer.DTO.Request
 {

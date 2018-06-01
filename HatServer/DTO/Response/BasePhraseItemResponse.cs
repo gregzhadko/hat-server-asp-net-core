@@ -7,7 +7,7 @@ namespace HatServer.DTO.Response
 {
     public class BasePhraseItemResponse
     {
-        public BasePhraseItemResponse([NotNull]PhraseItem phrase)
+        public BasePhraseItemResponse([NotNull] PhraseItem phrase)
         {
             Phrase = phrase.Phrase;
             Complexity = phrase.Complexity;
