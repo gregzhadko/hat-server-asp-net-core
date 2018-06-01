@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using JetBrains.Annotations;
 using Utilities;
 
 namespace Model.Entities
@@ -25,10 +27,31 @@ namespace Model.Entities
         [Required]
         public int PackId { get; set; }
 
-        [ForeignKey("PackId")]
+        [ForeignKey(nameof(PackId))]
         public Pack Pack { get; set; }
 
         public List<ReviewState> ReviewStates { get; set; } = new List<ReviewState>();
+
+        [Required]
+        public int TrackId { get; set; }
+
+        [Required]
+        public string CreatedById { get; set; }
+
+        [ForeignKey(nameof(CreatedById))]
+        public ServerUser CreatedBy { get; set; }
+
+        [Required]
+        public DateTime CreatedDate { get; set; }
+
+        [CanBeNull]
+        public string ClosedById { get; set; }
+
+        [CanBeNull]
+        [ForeignKey(nameof(ClosedById))]
+        public string ClosedBy { get; set; }
+
+        public DateTime? ClosedDate { get; set; }
 
         public PhraseItem FormatPhrase()
         {

@@ -8,12 +8,12 @@ namespace Model.Entities
     {
         public int Id { get; set; }
 
-        [ForeignKey("PhraseItemId")]
+        [ForeignKey(nameof(PhraseItemId))]
         public PhraseItem PhraseItem { get; set; }
 
         public int PhraseItemId { get; set; }
 
-        [ForeignKey("UserId")]
+        [ForeignKey(nameof(UserId))]
         public ServerUser User { get; set; }
 
         [Required]

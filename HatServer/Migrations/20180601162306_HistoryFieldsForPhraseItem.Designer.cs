@@ -12,9 +12,10 @@ using System;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180601162306_HistoryFieldsForPhraseItem")]
+    partial class HistoryFieldsForPhraseItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,6 +201,29 @@ namespace HatServer.Migrations
                     b.ToTable("PhraseItems");
                 });
 
+            modelBuilder.Entity("Model.Entities.PhraseItemHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Complexity");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Phrase")
+                        .IsRequired();
+
+                    b.Property<int>("PhraseItemId");
+
+                    b.Property<int>("Version");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhraseItemId");
+
+                    b.ToTable("PhraseItemHistories");
+                });
+
             modelBuilder.Entity("Model.Entities.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -223,6 +247,8 @@ namespace HatServer.Migrations
 
                     b.Property<string>("Comment");
 
+                    b.Property<int?>("PhraseItemHistoryId");
+
                     b.Property<int>("PhraseItemId");
 
                     b.Property<int>("State");
@@ -231,6 +257,8 @@ namespace HatServer.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PhraseItemHistoryId");
 
                     b.HasIndex("PhraseItemId");
 
@@ -478,6 +506,14 @@ namespace HatServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Model.Entities.PhraseItemHistory", b =>
+                {
+                    b.HasOne("Model.Entities.PhraseItem", "PhraseItem")
+                        .WithMany()
+                        .HasForeignKey("PhraseItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Model.Entities.Player", b =>
                 {
                     b.HasOne("Model.Entities.Team", "Team")
@@ -488,6 +524,10 @@ namespace HatServer.Migrations
 
             modelBuilder.Entity("Model.Entities.ReviewState", b =>
                 {
+                    b.HasOne("Model.Entities.PhraseItemHistory")
+                        .WithMany("ReviewStates")
+                        .HasForeignKey("PhraseItemHistoryId");
+
                     b.HasOne("Model.Entities.PhraseItem", "PhraseItem")
                         .WithMany("ReviewStates")
                         .HasForeignKey("PhraseItemId")

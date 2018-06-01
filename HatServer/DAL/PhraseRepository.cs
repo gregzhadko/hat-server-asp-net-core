@@ -21,7 +21,8 @@ namespace HatServer.DAL
 
         public override Task<PhraseItem> GetAsync(int id)
         {
-            return Context.PhraseItems.Include(p => p.ReviewStates).FirstOrDefaultAsync(p => p.Id == id);
+            return Context.PhraseItems.Include(p => p.ReviewStates).ThenInclude(p => p.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public Task<PhraseItem> GetByNameAsync(string phrase)

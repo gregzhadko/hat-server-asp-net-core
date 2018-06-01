@@ -17,7 +17,7 @@ namespace Model.Entities
         [Required]
         public string Name { get; set; }
 
-        public string Description { get; set; }
+        [CanBeNull] public string Description { get; set; }
 
         public IList<PhraseItem> Phrases { get; set; } = new List<PhraseItem>();
 
@@ -25,6 +25,7 @@ namespace Model.Entities
         public override string ToString() => $"{Id}. {Name}\t{Description}";
     }
 
+    [UsedImplicitly]
     public class PackValidator : AbstractValidator<Pack>
     {
         public PackValidator()

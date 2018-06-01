@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using JetBrains.Annotations;
 using OldServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Model.Entities;
 
 namespace HatServer.Data
 {
+    [UsedImplicitly]
     internal sealed class DbInitializer : IDbInitializer
     {
         private readonly ApplicationDbContext _context;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Model;
 using Model.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -44,13 +45,16 @@ namespace OldServer
 
         private void ReadPhrases([NotNull] JObject packItem, Pack pack)
         {
+            var defaultUser = _users.First(u => u.UserName == Constants.DefaultUserName);
             foreach (var phraseItem in packItem["phrases"].Children().ToList())
             {
                 var phrase = new PhraseItem
                 {
                     Phrase = phraseItem["phrase"].Value<string>(),
                     Complexity = phraseItem["complexity"].Value<int>(),
-                    Description = phraseItem["description"].Value<string>()
+                    Description = phraseItem["description"].Value<string>(),
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = defaultUser
                 };
 
                 ReadReviewers(phraseItem, phrase);
