@@ -5,19 +5,25 @@ using Model.Entities;
 
 namespace HatServer.DTO.Request
 {
-    public class PostPhraseItemRequest
+    public sealed class PostPhraseItemRequest
     {
+        [UsedImplicitly]
         public string Phrase { get; set; }
 
+        [UsedImplicitly]
         public double? Complexity { get; set; }
 
+        [UsedImplicitly]
         public string Description { get; set; }
 
+        [UsedImplicitly]
         public int PackId { get; set; }
 
+        [UsedImplicitly]
         public string Author { get; set; }
 
-        public PhraseItem ToPhraseItem(ServerUser user)
+        [NotNull]
+        internal PhraseItem ToPhraseItem(ServerUser user)
         {
             var reviewState = new ReviewState {User = user, State = State.Accept};
             var phraseItem = new PhraseItem
@@ -35,7 +41,7 @@ namespace HatServer.DTO.Request
     }
 
     [UsedImplicitly]
-    public class PostPhraseItemRequestValidator : AbstractValidator<PostPhraseItemRequest>
+    public sealed class PostPhraseItemRequestValidator : AbstractValidator<PostPhraseItemRequest>
     {
         public PostPhraseItemRequestValidator()
         {

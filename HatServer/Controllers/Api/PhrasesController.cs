@@ -53,7 +53,7 @@ namespace HatServer.Controllers.Api
         }
 
         [HttpGet("{phrase}")]
-        public async Task<IActionResult> GetByName([CanBeNull] string phrase)
+        public async Task<IActionResult> GetByPhrase([CanBeNull] string phrase)
         {
             if (string.IsNullOrWhiteSpace(phrase))
             {
@@ -72,7 +72,7 @@ namespace HatServer.Controllers.Api
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PostPhraseItemRequest request)
+        public async Task<IActionResult> Post([FromBody] PostPhraseItemRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -99,24 +99,50 @@ namespace HatServer.Controllers.Api
                 return BadRequest($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}");
             }
 
+            var trackId = await _phraseRepository.GetMaxTrackIdAsync();
+            phrase.TrackId = ++trackId;
+
             await _phraseRepository.InsertAsync(phrase);
 
             return Ok(new BasePhraseItemResponse(phrase));
         }
 
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut("{trackId}")]
+        public async Task<IActionResult> Put(int trackId, [FromBody] PutPhraseItemRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var user = await _userRepository.GetByNameAsync(request.Author);
+            if (user == null)
+            {
+                return NotFound($"User {request.Author} is not found");
+            }
+
+            var actual = await _phraseRepository.GetLatestByTrackId(trackId);
+            if (actual == null)
+            {
+                return NotFound($"There is not phrase with track id {trackId}");
+            }
+
+            var phrase = request.ToPhraseItem(user, actual).FormatPhrase();
+
+            await _phraseRepository.InsertAsync(phrase);
+
+            return Ok(new BasePhraseItemResponse(phrase));
         }
 
         // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{trackId:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _phraseRepository.DeleteAsync(id);
+            //TODO: Implement
             return Ok();
         }
+
+        //TODO: delete by phrase
     }
 }

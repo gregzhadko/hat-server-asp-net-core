@@ -61,6 +61,7 @@ namespace HatServer
         {
             services.AddTransient<IValidator<Pack>, PackValidator>();
             services.AddTransient<IValidator<PostPhraseItemRequest>, PostPhraseItemRequestValidator>();
+            services.AddTransient<IValidator<PutPhraseItemRequest>, PutPhraseItemRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

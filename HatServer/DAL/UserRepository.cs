@@ -15,7 +15,7 @@ namespace HatServer.DAL
 
         public Task<ServerUser> GetByNameAsync(string name)
         {
-            return Context.ServerUsers.FirstOrDefaultAsync(u => u.UserName == name);
+            return Entities.FirstOrDefaultAsync(u => u.UserName == name);
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
+using Utilities;
 
 namespace Model.Entities
 {
-    public sealed class ReviewState
+    public sealed class ReviewState : ICloneable<ReviewState>
     {
         public int Id { get; set; }
 
@@ -25,6 +27,19 @@ namespace Model.Entities
         public string Comment { get; set; }
 
         [NotNull]
+        public ReviewState Clone()
+        {
+            return new ReviewState
+            {
+                PhraseItemId = PhraseItemId,
+                UserId = UserId,
+                State = State,
+                Comment = Comment
+            };
+        }
+
+        [NotNull]
         public override string ToString() => $"{User.UserName}: {State}";
+
     }
 }
