@@ -53,6 +53,7 @@ namespace Model.Entities
 
         public DateTime? ClosedDate { get; set; }
 
+        [NotNull]
         public PhraseItem FormatPhrase()
         {
             Phrase = Phrase.FormatPhrase();

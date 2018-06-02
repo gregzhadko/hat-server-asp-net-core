@@ -26,7 +26,7 @@ namespace HatServer.DAL
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task CloseAndInsert(PhraseItem newPhrase, PhraseItem oldPhrase, string userId)
+        public async Task CloseAndInsert([NotNull] PhraseItem newPhrase, [NotNull] PhraseItem oldPhrase, string userId)
         {
             oldPhrase.ClosedById = userId;
             oldPhrase.ClosedDate = DateTime.Now;
