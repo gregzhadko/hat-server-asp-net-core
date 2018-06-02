@@ -5,10 +5,11 @@ using Model.Entities;
 
 namespace HatServer.DTO.Response
 {
-    public class BasePhraseItemResponse
+    public sealed class BasePhraseItemResponse
     {
-        public BasePhraseItemResponse([NotNull] PhraseItem phrase)
+        internal BasePhraseItemResponse([NotNull] PhraseItem phrase)
         {
+            Id = phrase.Id;
             Phrase = phrase.Phrase;
             Complexity = phrase.Complexity;
             Description = phrase.Description;
@@ -16,6 +17,8 @@ namespace HatServer.DTO.Response
             TrackId = phrase.TrackId;
             ReviewStates = phrase.ReviewStates.Select(s => new BaseReviewStateResponse(s)).ToList();
         }
+
+        public int Id { get; set; }
 
         public string Phrase { get; set; }
 

@@ -29,9 +29,9 @@ namespace HatServer.Controllers.Api
         // GET: api/<controller>
         [NotNull]
         [HttpGet]
-        public IList<PhraseItem> Get()
+        public List<BasePhraseItemResponse> Get()
         {
-            return _phraseRepository.GetAll().ToList();
+            return _phraseRepository.GetAll().Select(p => new BasePhraseItemResponse(p)).ToList();
         }
 
         // GET api/<controller>/5

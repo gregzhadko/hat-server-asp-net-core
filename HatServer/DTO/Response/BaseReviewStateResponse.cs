@@ -5,7 +5,7 @@ namespace HatServer.DTO.Response
 {
     public class BaseReviewStateResponse
     {
-        public BaseReviewStateResponse([NotNull]ReviewState reviewState)
+        public BaseReviewStateResponse([NotNull] ReviewState reviewState)
         {
             UserName = reviewState.User.UserName;
             State = reviewState.State;

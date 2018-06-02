@@ -8,7 +8,7 @@ using Model.Entities;
 
 namespace HatServer.DTO.Request
 {
-    public class PutPhraseItemRequest
+    public sealed class PutPhraseItemRequest
     {
         public string Phrase { get; set; }
 
@@ -23,30 +23,36 @@ namespace HatServer.DTO.Request
         public string Comment { get; set; }
 
         [NotNull]
-        public PhraseItem ToPhraseItem(ServerUser user, [NotNull] PhraseItem existingPhrase)
+        public PhraseItem ToPhraseItem([NotNull] ServerUser user, [NotNull] PhraseItem existingPhrase)
         {
             var newReviewStates = new List<ReviewState>();
             foreach (var state in existingPhrase.ReviewStates)
             {
-                ReviewState newState;
                 if (state.UserId == user.Id)
                 {
-                    newState = new ReviewState {UserId = user.Id, State = State.Accept, Comment = Comment};
+                    newReviewStates.Add(new ReviewState {UserId = user.Id, State = State.Accept, Comment = Comment});
                 }
                 else
                 {
-                    newState = ClearReview ? new ReviewState {UserId = state.UserId, State = State.Unknown} : state.Clone();
+                    newReviewStates.Add(ClearReview ? new ReviewState {UserId = user.Id, State = State.Unknown} : state.Clone());
                 }
+            }
 
-                newReviewStates.Add(newState);
+            if (!newReviewStates.Select(s => s.UserId).Contains(user.Id))
+            {
+                newReviewStates.Add(new ReviewState {UserId = user.Id, State = State.Accept, Comment = Comment});
             }
 
             var phraseItem = new PhraseItem
             {
+                PackId = existingPhrase.PackId,
                 Phrase = Phrase,
                 Complexity = Complexity,
                 Description = Description,
                 Version = ++existingPhrase.Version,
+                TrackId = existingPhrase.TrackId,
+                CreatedById = user.Id,
+                CreatedDate = DateTime.Now,
                 ReviewStates = newReviewStates
             };
 
@@ -55,7 +61,7 @@ namespace HatServer.DTO.Request
     }
 
     [UsedImplicitly]
-    public class PutPhraseItemRequestValidator : AbstractValidator<PutPhraseItemRequest>
+    public sealed class PutPhraseItemRequestValidator : AbstractValidator<PutPhraseItemRequest>
     {
         public PutPhraseItemRequestValidator()
         {

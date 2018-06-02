@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentValidation;
 using JetBrains.Annotations;
 using Model.Entities;
@@ -33,6 +34,8 @@ namespace HatServer.DTO.Request
                 Description = Description,
                 PackId = PackId,
                 Version = 1,
+                CreatedBy = user,
+                CreatedDate = DateTime.Now,
                 ReviewStates = new List<ReviewState> {reviewState}
             };
 
