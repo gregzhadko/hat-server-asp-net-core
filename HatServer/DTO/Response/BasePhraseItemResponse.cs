@@ -15,21 +15,28 @@ namespace HatServer.DTO.Response
             Description = phrase.Description;
             PackId = phrase.PackId;
             TrackId = phrase.TrackId;
-            ReviewStates = phrase.ReviewStates.Select(s => new BaseReviewStateResponse(s)).ToList();
+            Reviews = phrase.ReviewStates.Select(s => new BaseReviewStateResponse(s)).ToList();
         }
 
+        [UsedImplicitly]
         public int Id { get; set; }
 
+        [UsedImplicitly]
         public string Phrase { get; set; }
 
+        [UsedImplicitly]
         public double? Complexity { get; set; }
 
+        [UsedImplicitly]
         public string Description { get; set; }
 
+        [UsedImplicitly]
         public int PackId { get; set; }
 
+        [UsedImplicitly]
         public int TrackId { get; set; }
 
-        public List<BaseReviewStateResponse> ReviewStates { get; set; }
+        [UsedImplicitly]
+        public List<BaseReviewStateResponse> Reviews { get; set; }
     }
 }

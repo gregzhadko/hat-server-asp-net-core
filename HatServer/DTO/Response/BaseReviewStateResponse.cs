@@ -3,19 +3,22 @@ using Model.Entities;
 
 namespace HatServer.DTO.Response
 {
-    public class BaseReviewStateResponse
+    public sealed class BaseReviewStateResponse
     {
-        public BaseReviewStateResponse([NotNull] ReviewState reviewState)
+        internal BaseReviewStateResponse([NotNull] ReviewState reviewState)
         {
-            UserName = reviewState.User.UserName;
-            State = reviewState.State;
+            Author = reviewState.User.UserName;
+            Status = reviewState.State;
             Comment = reviewState.Comment;
         }
 
-        public string UserName { get; set; }
+        [UsedImplicitly]
+        public string Author { get; set; }
 
-        public State State { get; set; }
+        [UsedImplicitly]
+        public State Status { get; set; }
 
+        [UsedImplicitly]
         public string Comment { get; set; }
     }
 }
