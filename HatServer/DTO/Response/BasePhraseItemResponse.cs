@@ -7,7 +7,7 @@ namespace HatServer.DTO.Response
 {
     public sealed class BasePhraseItemResponse
     {
-        internal BasePhraseItemResponse([NotNull] PhraseItem phrase)
+        internal BasePhraseItemResponse([NotNull] PhraseItem phrase, IEnumerable<ServerUser> users = null)
         {
             Id = phrase.Id;
             Phrase = phrase.Phrase;
@@ -15,7 +15,7 @@ namespace HatServer.DTO.Response
             Description = phrase.Description;
             PackId = phrase.PackId;
             TrackId = phrase.TrackId;
-            Reviews = phrase.ReviewStates.Select(s => new BaseReviewStateResponse(s)).ToList();
+            Reviews = phrase.ReviewStates.Select(s => new BaseReviewStateResponse(s, users)).ToList();
         }
 
         [UsedImplicitly]

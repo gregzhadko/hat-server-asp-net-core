@@ -17,7 +17,8 @@ namespace Model.Entities
         [Required]
         public string Name { get; set; }
 
-        [CanBeNull] public string Description { get; set; }
+        [CanBeNull]
+        public string Description { get; set; }
 
         public IList<PhraseItem> Phrases { get; set; } = new List<PhraseItem>();
 

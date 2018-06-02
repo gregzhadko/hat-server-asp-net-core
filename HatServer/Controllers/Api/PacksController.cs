@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
+using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
@@ -15,18 +16,21 @@ namespace HatServer.Controllers.Api
     public sealed class PacksController : Controller
     {
         private readonly IPackRepository _packRepository;
+        private readonly IUserRepository _userRepository;
 
-        public PacksController(IPackRepository packRepository)
+        public PacksController(IPackRepository packRepository, IUserRepository userRepository)
         {
             _packRepository = packRepository;
+            _userRepository = userRepository;
         }
 
         // GET: api/<controller>
         [NotNull]
         [HttpGet]
-        public List<Pack> GetAll()
+        public List<BasePackResponse> GetAll()
         {
-            return _packRepository.GetAll().ToList();
+            var users = _userRepository.GetAll();
+            return _packRepository.GetAll().Select(p => new BasePackResponse(p, users)).ToList();
         }
 
         // GET api/<controller>/5
@@ -44,7 +48,8 @@ namespace HatServer.Controllers.Api
                 return NotFound();
             }
 
-            return Ok(pack);
+            var users = _userRepository.GetAll();
+            return Ok(new BasePackResponse(pack, users));
         }
 
 
