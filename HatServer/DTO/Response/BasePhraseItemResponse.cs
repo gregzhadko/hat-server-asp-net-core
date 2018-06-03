@@ -15,8 +15,12 @@ namespace HatServer.DTO.Response
             Description = phrase.Description;
             PackId = phrase.PackId;
             TrackId = phrase.TrackId;
+            Version = phrase.Version;
             Reviews = phrase.ReviewStates.Select(s => new BaseReviewStateResponse(s, users)).ToList();
         }
+
+        [UsedImplicitly]
+        public int Version { get; set; }
 
         [UsedImplicitly]
         public int Id { get; set; }

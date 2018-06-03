@@ -9,20 +9,26 @@ namespace HatServer.DTO.Request
 {
     public sealed class PutPhraseItemRequest
     {
+        [UsedImplicitly]
         public string Phrase { get; set; }
 
+        [UsedImplicitly]
         public double? Complexity { get; set; }
 
+        [UsedImplicitly]
         public string Description { get; set; }
 
+        [UsedImplicitly]
         public string Author { get; set; }
 
+        [UsedImplicitly]
         public bool ClearReview { get; set; }
 
+        [UsedImplicitly]
         public string Comment { get; set; }
 
         [NotNull]
-        public PhraseItem ToPhraseItem([NotNull] ServerUser user, [NotNull] PhraseItem existingPhrase)
+        internal PhraseItem ToPhraseItem([NotNull] ServerUser user, [NotNull] PhraseItem existingPhrase)
         {
             var newReviewStates = new List<ReviewState>();
             foreach (var state in existingPhrase.ReviewStates)

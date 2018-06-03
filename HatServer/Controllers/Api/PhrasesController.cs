@@ -129,7 +129,8 @@ namespace HatServer.Controllers.Api
 
             var phrase = request.ToPhraseItem(user, actual).FormatPhrase();
 
-            await _phraseRepository.InsertAsync(phrase);
+            await _phraseRepository.CloseAndInsert(phrase, actual, user.Id);
+            //await _phraseRepository.InsertAsync(phrase);
 
             return Ok(new BasePhraseItemResponse(phrase));
         }
