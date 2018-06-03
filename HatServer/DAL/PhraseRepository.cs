@@ -35,6 +35,11 @@ namespace HatServer.DAL
             await Context.SaveChangesAsync();
         }
 
+        public Task<PhraseItem> GetByNameExceptTrackIdAsync(string phrase, int trackId)
+        {
+            return Entities.Include(p => p.Pack).FirstOrDefaultAsync(p => p.TrackId != trackId && p.Phrase == phrase);
+        }
+
         public async Task<int> GetMaxTrackIdAsync()
         {
             var maxTrackId = await Entities.MaxAsync(p => p.TrackId);

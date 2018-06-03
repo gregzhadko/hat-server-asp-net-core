@@ -124,7 +124,13 @@ namespace HatServer.Controllers.Api
             var actual = await _phraseRepository.GetLatestByTrackId(trackId);
             if (actual == null)
             {
-                return NotFound($"There is not phrase with track id {trackId}");
+                return NotFound($"There is no phrase with track id {trackId}");
+            }
+
+            var conflictedPhrase = await _phraseRepository.GetByNameExceptTrackIdAsync(request.Phrase, trackId);
+            if (conflictedPhrase != null)
+            {
+                return BadRequest($"The phrase with name {request.Phrase} exists in the pack {conflictedPhrase.Pack.Name}");
             }
 
             var phrase = request.ToPhraseItem(user, actual).FormatPhrase();
