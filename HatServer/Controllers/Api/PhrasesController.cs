@@ -99,7 +99,7 @@ namespace HatServer.Controllers.Api
             }
 
             var trackId = await _phraseRepository.GetMaxTrackIdAsync();
-            phrase.TrackId = ++trackId;
+            phrase.TrackId = trackId + 1;
 
             await _phraseRepository.InsertAsync(phrase);
 

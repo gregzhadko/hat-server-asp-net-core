@@ -54,7 +54,7 @@ namespace HatServer.DTO.Request
                 Phrase = Phrase,
                 Complexity = Complexity,
                 Description = Description,
-                Version = ++existingPhrase.Version,
+                Version = existingPhrase.Version + 1,
                 TrackId = existingPhrase.TrackId,
                 CreatedById = user.Id,
                 CreatedDate = DateTime.Now,
