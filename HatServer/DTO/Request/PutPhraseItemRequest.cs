@@ -28,24 +28,24 @@ namespace HatServer.DTO.Request
         public string Comment { get; set; }
 
         [NotNull]
-        internal PhraseItem ToPhraseItem([NotNull] ServerUser user, [NotNull] PhraseItem existingPhrase)
+        internal PhraseItem ToPhraseItem([NotNull] ServerUser authorUser, [NotNull] PhraseItem existingPhrase)
         {
             var newReviewStates = new List<ReviewState>();
             foreach (var state in existingPhrase.ReviewStates)
             {
-                if (state.UserId == user.Id)
+                if (state.UserId == authorUser.Id)
                 {
-                    newReviewStates.Add(new ReviewState {UserId = user.Id, State = State.Accept, Comment = Comment});
+                    newReviewStates.Add(new ReviewState {UserId = authorUser.Id, State = State.Accept, Comment = Comment});
                 }
                 else
                 {
-                    newReviewStates.Add(ClearReview ? new ReviewState {UserId = user.Id, State = State.Unknown} : state.Clone());
+                    newReviewStates.Add(ClearReview ? new ReviewState {UserId = state.UserId, State = State.Unknown} : state.Clone());
                 }
             }
 
-            if (!newReviewStates.Select(s => s.UserId).Contains(user.Id))
+            if (!newReviewStates.Select(s => s.UserId).Contains(authorUser.Id))
             {
-                newReviewStates.Add(new ReviewState {UserId = user.Id, State = State.Accept, Comment = Comment});
+                newReviewStates.Add(new ReviewState {UserId = authorUser.Id, State = State.Accept, Comment = Comment});
             }
 
             var phraseItem = new PhraseItem
@@ -56,7 +56,7 @@ namespace HatServer.DTO.Request
                 Description = Description,
                 Version = existingPhrase.Version + 1,
                 TrackId = existingPhrase.TrackId,
-                CreatedById = user.Id,
+                CreatedById = authorUser.Id,
                 CreatedDate = DateTime.Now,
                 ReviewStates = newReviewStates
             };
