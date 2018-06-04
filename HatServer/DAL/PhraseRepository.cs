@@ -26,13 +26,13 @@ namespace HatServer.DAL
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task CloseAndInsert(PhraseItem newPhrase, PhraseItem oldPhrase, string userId)
+        public Task CloseAndInsertAsync(PhraseItem newPhrase, PhraseItem oldPhrase, string userId)
         {
             oldPhrase.ClosedById = userId;
             oldPhrase.ClosedDate = DateTime.Now;
             Entities.Update(oldPhrase);
             Entities.Add(newPhrase);
-            await Context.SaveChangesAsync();
+            return Context.SaveChangesAsync();
         }
 
         public Task<PhraseItem> GetByNameExceptTrackIdAsync(string phrase, int trackId)
@@ -52,7 +52,7 @@ namespace HatServer.DAL
         }
 
         [ItemCanBeNull]
-        public Task<PhraseItem> GetLatestByTrackId(int trackId)
+        public Task<PhraseItem> GetLatestByTrackIdAsync(int trackId)
         {
             return Entities.Include(p => p.ReviewStates).ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(p => p.TrackId == trackId && p.ClosedBy == null && p.ClosedDate == null);

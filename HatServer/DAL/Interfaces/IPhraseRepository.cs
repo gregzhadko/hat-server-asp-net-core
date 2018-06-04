@@ -8,8 +8,8 @@ namespace HatServer.DAL.Interfaces
     {
         Task<PhraseItem> GetByNameAsync(string phrase);
         Task<int> GetMaxTrackIdAsync();
-        Task<PhraseItem> GetLatestByTrackId(int trackId);
-        Task CloseAndInsert([NotNull] PhraseItem newPhrase, [NotNull] PhraseItem oldPhrase, string userId);
+        Task<PhraseItem> GetLatestByTrackIdAsync(int trackId);
+        Task CloseAndInsertAsync([NotNull] PhraseItem newPhrase, [NotNull] PhraseItem oldPhrase, string userId);
         Task<PhraseItem> GetByNameExceptTrackIdAsync(string phrase, int trackId);
     }
 }

@@ -34,15 +34,15 @@ namespace HatServer.Controllers.Api
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{trackId:int}")]
+        public async Task<IActionResult> Get(int trackId)
         {
-            if (id <= 0)
+            if (trackId <= 0)
             {
-                return BadRequest("Id should be greater than 0");
+                return BadRequest("TrackId should be greater than 0");
             }
 
-            var phrase = await _phraseRepository.GetAsync(id);
+            var phrase = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
             if (phrase == null)
             {
                 return NotFound();
@@ -121,7 +121,7 @@ namespace HatServer.Controllers.Api
                 return NotFound($"User {request.Author} is not found");
             }
 
-            var actual = await _phraseRepository.GetLatestByTrackId(trackId);
+            var actual = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
             if (actual == null)
             {
                 return NotFound($"There is no phrase with track id {trackId}");
@@ -135,7 +135,7 @@ namespace HatServer.Controllers.Api
 
             var phrase = request.ToPhraseItem(user, actual).FormatPhrase();
 
-            await _phraseRepository.CloseAndInsert(phrase, actual, user.Id);
+            await _phraseRepository.CloseAndInsertAsync(phrase, actual, user.Id);
             //await _phraseRepository.InsertAsync(phrase);
 
             return Ok(new BasePhraseItemResponse(phrase));
