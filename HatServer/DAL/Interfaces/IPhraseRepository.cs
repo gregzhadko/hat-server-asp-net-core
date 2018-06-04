@@ -11,5 +11,6 @@ namespace HatServer.DAL.Interfaces
         Task<PhraseItem> GetLatestByTrackIdAsync(int trackId);
         Task CloseAndInsertAsync([NotNull] PhraseItem newPhrase, [NotNull] PhraseItem oldPhrase, string userId);
         Task<PhraseItem> GetByNameExceptTrackIdAsync(string phrase, int trackId);
+        Task DeleteAsync(PhraseItem phrase, string userId);
     }
 }

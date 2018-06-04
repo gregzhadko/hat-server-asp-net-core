@@ -28,11 +28,27 @@ namespace HatServer.DAL
 
         public Task CloseAndInsertAsync(PhraseItem newPhrase, PhraseItem oldPhrase, string userId)
         {
-            oldPhrase.ClosedById = userId;
-            oldPhrase.ClosedDate = DateTime.Now;
-            Entities.Update(oldPhrase);
+            ClosePhrase(oldPhrase, userId);
             Entities.Add(newPhrase);
             return Context.SaveChangesAsync();
+        }
+
+        public Task DeleteAsync(PhraseItem phrase, string userId)
+        {
+            if (phrase == null || userId == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            ClosePhrase(phrase, userId);
+            return Context.SaveChangesAsync();
+        }
+
+        private void ClosePhrase([NotNull] PhraseItem phrase, [NotNull] string userId)
+        {
+            phrase.ClosedById = userId;
+            phrase.ClosedDate = DateTime.Now;
+            Entities.Update(phrase);
         }
 
         public Task<PhraseItem> GetByNameExceptTrackIdAsync(string phrase, int trackId)
@@ -45,7 +61,7 @@ namespace HatServer.DAL
             var maxTrackId = await Entities.MaxAsync(p => p.TrackId);
             if (maxTrackId < 0)
             {
-                maxTrackId++;
+                maxTrackId = 0;
             }
 
             return maxTrackId;
@@ -60,8 +76,9 @@ namespace HatServer.DAL
 
         public Task<PhraseItem> GetByNameAsync(string phrase)
         {
-            return Entities.Include(p => p.ReviewStates).Include(p => p.Pack)
-                .FirstOrDefaultAsync(p => string.CompareOrdinal(p.Phrase, phrase) == 0 && p.TrackId > 0 && p.ClosedDate != null);
+            return Entities.Include(p => p.ReviewStates).Include(p => p.Pack).FirstOrDefaultAsync(p =>
+                string.CompareOrdinal(p.Phrase, phrase) == 0 && p.TrackId > 0 && p.ClosedBy == null &&
+                p.ClosedDate == null);
         }
     }
 }

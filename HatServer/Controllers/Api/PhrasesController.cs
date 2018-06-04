@@ -143,9 +143,27 @@ namespace HatServer.Controllers.Api
 
         // DELETE api/<controller>/5
         [HttpDelete("{trackId:int}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int trackId, [FromBody] string author)
         {
-            //TODO: Implement
+            if (trackId < 0)
+            {
+                return BadRequest("Track id cannot be less than 0");
+            }
+
+            var user = await _userRepository.GetByNameAsync(author);
+            if (user == null)
+            {
+                return BadRequest($"There is no user with name {author}");
+            }
+
+            var phrase = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
+            if (phrase == null)
+            {
+                return BadRequest($"There is no phrase with trackId '{trackId}'");
+            }
+
+            await _phraseRepository.DeleteAsync(phrase, user.Id);
+
             return Ok();
         }
 
