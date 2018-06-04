@@ -12,10 +12,11 @@ namespace OldServer
 {
     internal sealed class JsonToPhraseItemConverter : JsonConverter
     {
+        [CanBeNull]
         private readonly List<ServerUser> _users;
         private int _trackId;
 
-        public JsonToPhraseItemConverter(List<ServerUser> users, int trackId)
+        public JsonToPhraseItemConverter([CanBeNull] List<ServerUser> users, int trackId)
         {
             _users = users;
             _trackId = trackId;
@@ -50,7 +51,7 @@ namespace OldServer
 
         private void ReadPhrases([NotNull] JObject packItem, [NotNull] Pack pack)
         {
-            var defaultUser = _users.First(u => u.UserName == Constants.DefaultUserName);
+            var defaultUser = _users?.First(u => u.UserName == Constants.DefaultUserName);
             foreach (var phraseItem in packItem["phrases"].Children().ToList())
             {
                 var phrase = new PhraseItem
