@@ -14,6 +14,7 @@ namespace OldServer
     {
         [CanBeNull]
         private readonly List<ServerUser> _users;
+
         private int _trackId;
 
         public JsonToPhraseItemConverter([CanBeNull] List<ServerUser> users, int trackId)

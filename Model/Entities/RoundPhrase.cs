@@ -11,10 +11,12 @@ namespace Model.Entities
 
         [ForeignKey("PhraseId")]
         public PhraseItem PhraseItem { get; set; }
+
         public int PhraseId { get; set; }
 
         [ForeignKey("RoundId")]
         public Round Round { get; set; }
+
         public int RoundId { get; set; }
     }
 }

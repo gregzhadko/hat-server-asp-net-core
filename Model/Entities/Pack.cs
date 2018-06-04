@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 namespace Model.Entities
 {
     [DebuggerDisplay("{Id}, {Name}, {Description}")]
-    public class Pack
+    public sealed class Pack
     {
         public int Id { get; set; }
 
@@ -27,7 +27,7 @@ namespace Model.Entities
     }
 
     [UsedImplicitly]
-    public class PackValidator : AbstractValidator<Pack>
+    public sealed class PackValidator : AbstractValidator<Pack>
     {
         public PackValidator()
         {

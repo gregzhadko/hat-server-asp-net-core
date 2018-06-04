@@ -70,7 +70,6 @@ namespace OldServer
             }
 
             return false;
-
         }
 
         [NotNull]
@@ -125,7 +124,7 @@ namespace OldServer
             try
             {
                 var packs = await GetAllPacksInfoAsync().ConfigureAwait(false);
-                int trackId = 0;
+                var trackId = 0;
                 var result = new List<Pack>();
                 //TODO: remove OrderBy (it was done for testing purposes)
                 foreach (var packInfo in packs

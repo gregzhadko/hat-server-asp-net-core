@@ -18,7 +18,7 @@ namespace Model.Entities
         Deleted
     }
 
-    public class RoundPhraseState
+    public sealed class RoundPhraseState
     {
         private RoundPhraseState(RoundPhraseStateEnum @enum)
         {
@@ -27,13 +27,16 @@ namespace Model.Entities
             Description = @enum.GetEnumDescription();
         }
 
-        protected RoundPhraseState() { } //For EF
+        private RoundPhraseState() //For EF
+        {
+        }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         [MaxLength(100)]

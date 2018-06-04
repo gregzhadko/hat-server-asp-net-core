@@ -1,6 +1,6 @@
 ﻿namespace HatServer.Data
 {
-    public interface IDbInitializer
+    internal interface IDbInitializer
     {
         void Initialize();
     }

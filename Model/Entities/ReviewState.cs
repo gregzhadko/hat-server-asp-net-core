@@ -39,6 +39,5 @@ namespace Model.Entities
 
         [NotNull]
         public override string ToString() => $"{User.UserName}: {State}";
-
     }
 }

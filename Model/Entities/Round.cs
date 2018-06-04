@@ -12,10 +12,12 @@ namespace Model.Entities
 
         [ForeignKey("SettingsId")]
         public Settings Settings { get; set; }
+
         public int SettingsId { get; set; }
 
         [ForeignKey("PlayerId")]
         public Player Player { get; set; }
+
         public int? PlayerId { get; set; }
 
         //public Stage Stage { get; set; }

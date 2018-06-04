@@ -26,16 +26,16 @@ namespace HatServer.DAL
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Task CloseAndInsertAsync(PhraseItem newPhrase, PhraseItem oldPhrase, string userId)
+        public Task CloseAndInsertAsync(PhraseItem newPhrase, PhraseItem oldPhrase, [NotNull] string userId)
         {
             ClosePhrase(oldPhrase, userId);
             Entities.Add(newPhrase);
             return Context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(PhraseItem phrase, string userId)
+        public Task DeleteAsync([CanBeNull] PhraseItem phrase, [NotNull] string userId)
         {
-            if (phrase == null || userId == null)
+            if (phrase == null)
             {
                 return Task.CompletedTask;
             }

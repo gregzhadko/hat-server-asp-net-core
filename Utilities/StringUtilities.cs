@@ -13,6 +13,7 @@ namespace Utilities
             {
                 return s;
             }
+
             var array = s.ToCharArray();
 
             for (var i = 0; i < array.Length; i++)
@@ -22,6 +23,7 @@ namespace Utilities
                     array[i] = i == 0 || array[i - 1] == ' ' ? '«' : '»';
                 }
             }
+
             return new string(array);
         }
 
@@ -31,6 +33,7 @@ namespace Utilities
             {
                 return s;
             }
+
             var letter = s[0];
             letter = Char.ToUpperInvariant(letter);
             var array = s.ToCharArray();
@@ -87,6 +90,7 @@ namespace Utilities
             {
                 return $"{s}.";
             }
+
             return s;
         }
 

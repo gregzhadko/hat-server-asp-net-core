@@ -10,6 +10,7 @@ namespace Model.Entities
 
         [ForeignKey("GameId")]
         public Game Game { get; set; }
+
         public int GameId { get; set; }
 
         public List<Player> Players { get; set; }
