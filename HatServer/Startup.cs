@@ -1,4 +1,7 @@
-﻿using FluentValidation;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using HatServer.DAL;
 using HatServer.Data;
@@ -6,12 +9,14 @@ using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using HatServer.Migrations;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Model.Entities;
 
 namespace HatServer
@@ -36,10 +41,30 @@ namespace HatServer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IPackRepository), typeof(PackRepository));
-            services.AddScoped(typeof(IPhraseRepository), typeof(PhraseRepository));
-            services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+            AddRepositoriesToServices(services);
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = Configuration["JwtIssuer"],
+                        ValidAudience = Configuration["JwtIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
+
 
             services.AddMvc()
                 .AddJsonOptions(
@@ -55,6 +80,14 @@ namespace HatServer
 
             // Add Database Initializer
             services.AddScoped<IDbInitializer, DbInitializer>();
+        }
+
+        private static void AddRepositoriesToServices(IServiceCollection services)
+        {
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IPackRepository), typeof(PackRepository));
+            services.AddScoped(typeof(IPhraseRepository), typeof(PhraseRepository));
+            services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
         }
 
         private static void AddValidatorsToService(IServiceCollection services)
