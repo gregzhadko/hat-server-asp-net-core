@@ -6,23 +6,25 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using HatServer.DTO.Request;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Model.Entities;
 
 namespace HatServer.Controllers.Api
 {
-    [Route("[controller]/[action]")]
-    public class AccountController : Controller
+    [Route("api/[controller]/[action]")]
+    public sealed class AccountsController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ServerUser> _signInManager;
+        private readonly UserManager<ServerUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public AccountController(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+        public AccountsController(
+            UserManager<ServerUser> userManager,
+            SignInManager<ServerUser> signInManager,
             IConfiguration configuration
         )
         {
@@ -31,24 +33,37 @@ namespace HatServer.Controllers.Api
             _configuration = configuration;
         }
 
+        // POST api/<controller>
         [HttpPost]
-        public async Task<object> Login([FromBody] LoginDto model)
+        public async Task<object> Login([FromBody] LoginRequest model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(model.Name, model.Password, false, false);
 
             if (result.Succeeded)
             {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Name);
+                var appUser = _userManager.Users.Single(r => r.UserName == model.Name);
                 return GenerateJwtToken(model.Name, appUser);
             }
 
             throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
         }
 
-        [HttpPost]
-        public async Task<object> Register([FromBody] RegisterDto model)
+        //[HttpPost]
+        public async Task<object> Register([FromBody] RegisterRequest model)
         {
-            var user = new IdentityUser
+            //return new object();
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new ServerUser
             {
                 UserName = model.Name,
                 Email = model.Name
@@ -64,7 +79,7 @@ namespace HatServer.Controllers.Api
             throw new ApplicationException("UNKNOWN_ERROR");
         }
 
-        private object GenerateJwtToken(string email, IdentityUser user)
+        private object GenerateJwtToken(string email, [NotNull] IdentityUser user)
         {
             var claims = new List<Claim>
             {
@@ -74,7 +89,7 @@ namespace HatServer.Controllers.Api
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
 
             var token = new JwtSecurityToken(
@@ -82,7 +97,7 @@ namespace HatServer.Controllers.Api
                 _configuration["JwtIssuer"],
                 claims,
                 expires: expires,
-                signingCredentials: creds
+                signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

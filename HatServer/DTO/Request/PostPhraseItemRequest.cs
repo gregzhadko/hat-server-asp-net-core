@@ -50,8 +50,7 @@ namespace HatServer.DTO.Request
         {
             RuleFor(p => p.Phrase).NotEmpty();
             RuleFor(p => p.Author).NotEmpty();
-            RuleFor(x => x.PackId).NotEmpty().GreaterThan(0);
-
+            RuleFor(p => p.PackId).NotEmpty().GreaterThan(0);
             RuleFor(p => p.Complexity).InclusiveBetween(1, 5).When(p => p.Complexity != null);
         }
     }

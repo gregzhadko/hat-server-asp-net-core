@@ -50,14 +50,13 @@ namespace HatServer
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
                 })
                 .AddJwtBearer(cfg =>
                 {
                     cfg.RequireHttpsMetadata = false;
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
+                    {   
                         ValidIssuer = Configuration["JwtIssuer"],
                         ValidAudience = Configuration["JwtIssuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
@@ -95,6 +94,8 @@ namespace HatServer
             services.AddTransient<IValidator<Pack>, PackValidator>();
             services.AddTransient<IValidator<PostPhraseItemRequest>, PostPhraseItemRequestValidator>();
             services.AddTransient<IValidator<PutPhraseItemRequest>, PutPhraseItemRequestValidator>();
+            services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
+            services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
