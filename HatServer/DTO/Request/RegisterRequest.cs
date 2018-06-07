@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 using JetBrains.Annotations;
 
 namespace HatServer.DTO.Request
 {
-    public class RegisterRequest
+    public sealed class RegisterRequest
     {
         [Required]
         public string Name { get; set; }

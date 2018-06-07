@@ -7,7 +7,7 @@ namespace HatServer.DTO.Response
 {
     public sealed class BaseReviewStateResponse
     {
-        internal BaseReviewStateResponse([NotNull] ReviewState reviewState, IEnumerable<ServerUser> users)
+        internal BaseReviewStateResponse([NotNull] ReviewState reviewState, [CanBeNull] IEnumerable<ServerUser> users)
         {
             //TODO: do it better
             Author = reviewState.User != null ? reviewState.User.UserName : users?.FirstOrDefault(u => u.Id == reviewState.UserId)?.UserName;

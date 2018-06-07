@@ -7,7 +7,7 @@ namespace HatServer.DTO.Response
 {
     public sealed class BasePhraseItemResponse
     {
-        internal BasePhraseItemResponse([NotNull] PhraseItem phrase, IEnumerable<ServerUser> users = null)
+        internal BasePhraseItemResponse([NotNull] PhraseItem phrase, [CanBeNull] IEnumerable<ServerUser> users = null)
         {
             Id = phrase.Id;
             Phrase = phrase.Phrase;

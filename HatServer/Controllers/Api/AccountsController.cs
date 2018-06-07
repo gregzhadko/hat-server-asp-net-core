@@ -22,11 +22,7 @@ namespace HatServer.Controllers.Api
         private readonly UserManager<ServerUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public AccountsController(
-            UserManager<ServerUser> userManager,
-            SignInManager<ServerUser> signInManager,
-            IConfiguration configuration
-        )
+        public AccountsController(UserManager<ServerUser> userManager, SignInManager<ServerUser> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;

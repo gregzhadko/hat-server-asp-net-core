@@ -23,12 +23,7 @@ namespace HatServer.Data
         [CanBeNull]
         public override object ReadJson([NotNull] JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType != JsonToken.StartObject)
-            {
-                return null;
-            }
-
-            return ReadPack(reader);
+            return reader.TokenType != JsonToken.StartObject ? null : ReadPack(reader);
         }
 
         [NotNull]

@@ -28,7 +28,7 @@ namespace HatServer
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         [UsedImplicitly]
@@ -56,7 +56,7 @@ namespace HatServer
                     cfg.RequireHttpsMetadata = false;
                     cfg.SaveToken = true;
                     cfg.TokenValidationParameters = new TokenValidationParameters
-                    {   
+                    {
                         ValidIssuer = Configuration["JwtIssuer"],
                         ValidAudience = Configuration["JwtIssuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
@@ -139,8 +139,8 @@ namespace HatServer
                     context.Database.Migrate();
 
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var dbInitializer = new DbInitializer(context, userManager);
-                    dbInitializer.Initialize();
+                    var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
+                    dbInitializer.Initialize(context, userManager);
                 }
             }
         }

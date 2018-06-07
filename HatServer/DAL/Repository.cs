@@ -29,7 +29,10 @@ namespace HatServer.DAL
             await Context.SaveChangesAsync();
         }
 
-        public virtual Task UpdateAsync([NotNull] T entity) => Context.SaveChangesAsync();
+        public virtual Task UpdateAsync([NotNull] T entity)
+        {
+            return Context.SaveChangesAsync();
+        }
 
         public virtual Task DeleteAsync([CanBeNull] T entity)
         {

@@ -54,7 +54,7 @@ namespace UtilitiesTests
             new object[] {"Test    ", new List<string> {"Test"}},
             new object[] {"    Test", new List<string> {"Test"}},
             new object[] {"Test Test ", new List<string> {"Test", "Test"}},
-            new object[] {"Test   Test  s Test", new List<string> {"Test", "Test", "s", "Test"}},
+            new object[] {"Test   Test  s Test", new List<string> {"Test", "Test", "s", "Test"}}
         };
 
         internal static object[] WordsWithPunctuation =
