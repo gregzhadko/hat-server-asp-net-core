@@ -16,7 +16,6 @@ using Model.Entities;
 
 namespace HatServer.Controllers.Api
 {
-    [Authorize]
     [Route("api/[controller]/[action]")]
     public sealed class AccountsController : Controller
     {
