@@ -5,12 +5,14 @@ using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using HatServer.DTO.Response;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace HatServer.Controllers.Api
 {
+    [Authorize]
     [Route("api/[controller]")]
     public sealed class PhrasesController : Controller
     {

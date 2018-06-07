@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
 
@@ -12,6 +13,7 @@ using Model.Entities;
 
 namespace HatServer.Controllers.Api
 {
+    [Authorize]
     [Route("api/[controller]")]
     public sealed class PacksController : Controller
     {
@@ -51,7 +53,6 @@ namespace HatServer.Controllers.Api
             var users = _userRepository.GetAll();
             return Ok(new BasePackResponse(pack, users));
         }
-
 
         // POST api/<controller>
         [HttpPost]
