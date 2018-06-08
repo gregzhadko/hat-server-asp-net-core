@@ -124,7 +124,7 @@ namespace HatServer
                 template: "{controller=Home}/{action=Index}/{id?}"));
         }
 
-        private static void ApplyMigrationAndSeeding([NotNull] IApplicationBuilder app)
+        private void ApplyMigrationAndSeeding([NotNull] IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -140,7 +140,7 @@ namespace HatServer
 
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
                     var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
-                    dbInitializer.Initialize(context, userManager);
+                    dbInitializer.Initialize(context, userManager, Configuration);
                 }
             }
         }

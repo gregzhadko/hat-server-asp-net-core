@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using HatServer.DTO.Request;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
