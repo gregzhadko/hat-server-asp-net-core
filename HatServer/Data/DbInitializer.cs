@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using OldServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Model.Entities;
 
 namespace HatServer.Data
@@ -12,12 +13,14 @@ namespace HatServer.Data
     {
         private ApplicationDbContext _context;
         private UserManager<ServerUser> _userManager;
+        private IConfiguration _configuration;
 
         //This example just creates an Administrator role and one Admin users
-        public void Initialize(ApplicationDbContext context, UserManager<ServerUser> userManager)
+        public void Initialize(ApplicationDbContext context, UserManager<ServerUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
+            _configuration = configuration;
             _context.Database.OpenConnection();
 
             try
@@ -40,10 +43,10 @@ namespace HatServer.Data
             var fomin = new ServerUser {UserName = "fomin"};
             var sivykh = new ServerUser {UserName = "sivykh"};
             var tatarintsev = new ServerUser {UserName = "tatarintsev"};
-            _userManager.CreateAsync(zhadko, "8yyyy1C4^xx@").Wait();
-            _userManager.CreateAsync(fomin, "PCd0c%74gNI2").Wait();
-            _userManager.CreateAsync(sivykh, "R22ueOf%#v*!").Wait();
-            _userManager.CreateAsync(tatarintsev, "Qq6t^hJSkr1p").Wait();
+            _userManager.CreateAsync(zhadko, _configuration["zhadko"]).Wait();
+            _userManager.CreateAsync(fomin, _configuration["fomin"]).Wait();
+            _userManager.CreateAsync(sivykh, _configuration["sivykh"]).Wait();
+            _userManager.CreateAsync(tatarintsev, _configuration["tatarintsev"]).Wait();
         }
 
         private void SeedPacks()
