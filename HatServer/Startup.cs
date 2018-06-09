@@ -39,7 +39,7 @@ namespace HatServer
 
             services.AddIdentity<ServerUser, IdentityRole>(options =>
                 {
-                    options.Password.RequiredLength = 10;
+                    options.Password.RequiredLength = 5;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
