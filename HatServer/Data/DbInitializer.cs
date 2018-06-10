@@ -32,6 +32,10 @@ namespace HatServer.Data
             {
                 SeedUsers();
                 SeedPacks();
+
+                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
+                _context.SaveChanges();
+                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
             }
             finally
             {
@@ -45,11 +49,10 @@ namespace HatServer.Data
             var fomin = new ServerUser {UserName = "fomin"};
             var sivykh = new ServerUser {UserName = "sivykh"};
             var tatarintsev = new ServerUser {UserName = "tatarintsev"};
-            _userManager.CreateAsync(zhadko, _configuration["zhadko"].ToString()).Wait();
-            _userManager.CreateAsync(fomin, _configuration["fomin"].ToString()).Wait();
+            _userManager.CreateAsync(zhadko, _configuration["zhadko"]).Wait();
+            _userManager.CreateAsync(fomin, _configuration["fomin"]).Wait();
             _userManager.CreateAsync(sivykh, _configuration["sivykh"]).Wait();
             _userManager.CreateAsync(tatarintsev, _configuration["tatarintsev"]).Wait();
-            _context.SaveChanges();
         }
 
         private void SeedPacks()
@@ -59,9 +62,6 @@ namespace HatServer.Data
             var packs = MongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
 
             _context.Packs.AddRange(packs);
-            _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
-            _context.SaveChanges();
-            _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
         }
     }
 }
