@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using HatServer.DTO.Request;
+using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace HatServer.Controllers.Api
 
         // POST api/<controller>
         [HttpPost]
-        public async Task<object> Login([FromBody] LoginRequest model)
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
             if (!ModelState.IsValid)
             {
@@ -43,10 +44,11 @@ namespace HatServer.Controllers.Api
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.Single(r => r.UserName == model.Name);
-                return GenerateJwtToken(model.Name, appUser);
+                var token = GenerateJwtToken(model.Name, appUser);
+                return Ok(new {token});
             }
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return BadRequest(new ErrorResponse("INVALID_LOGIN_ATTEMPT"));
         }
 
         //[HttpPost]
@@ -69,10 +71,11 @@ namespace HatServer.Controllers.Api
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                return GenerateJwtToken(model.Name, user);
+                var token = GenerateJwtToken(model.Name, user);
+                return Ok(new {token});
             }
 
-            throw new ApplicationException("UNKNOWN_ERROR");
+            return BadRequest(new ErrorResponse("INVALID_LOGIN_ATTEMPT"));
         }
 
         private object GenerateJwtToken(string email, [NotNull] IdentityUser user)

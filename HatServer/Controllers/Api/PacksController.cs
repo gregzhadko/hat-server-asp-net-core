@@ -41,13 +41,13 @@ namespace HatServer.Controllers.Api
         {
             if (id <= 0)
             {
-                return BadRequest("Id should be greater than 0");
+                return BadRequest(new ErrorResponse("Id should be greater than 0"));
             }
 
             var pack = await _packRepository.GetFullInfoAsync(id);
             if (pack == null)
             {
-                return NotFound();
+                return BadRequest(new ErrorResponse($"Pack with id {id} wasn't found"));
             }
 
             var users = _userRepository.GetAll();
@@ -66,7 +66,7 @@ namespace HatServer.Controllers.Api
             var existing = await _packRepository.GetByNameAsync(item.Name);
             if (existing != null)
             {
-                return BadRequest($"Pack with name {item.Name} already exists");
+                return BadRequest(new ErrorResponse($"Pack with name {item.Name} already exists"));
             }
 
             await _packRepository.InsertAsync(item);
@@ -86,7 +86,7 @@ namespace HatServer.Controllers.Api
             var pack = await _packRepository.GetAsync(id);
             if (pack == null)
             {
-                return NotFound();
+                return BadRequest(new ErrorResponse($"Pack with id {id} wasn't found"));
             }
 
             pack.Name = name;
