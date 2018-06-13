@@ -101,6 +101,7 @@ namespace HatServer
             services.AddTransient<IValidator<Pack>, PackValidator>();
             services.AddTransient<IValidator<PostPhraseItemRequest>, PostPhraseItemRequestValidator>();
             services.AddTransient<IValidator<PutPhraseItemRequest>, PutPhraseItemRequestValidator>();
+            services.AddTransient<IValidator<PostReviewRequest>, PostReviewRequestValidator>();
             services.AddTransient<IValidator<RegisterRequest>, RegisterRequestValidator>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
         }

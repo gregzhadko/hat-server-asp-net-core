@@ -142,6 +142,31 @@ namespace HatServer.Controllers.Api
             return Ok(new BasePhraseItemResponse(phrase));
         }
 
+        [HttpPost]
+        [Route("{trackId}/review")]
+        public async Task<IActionResult> PostReview(int trackId, [FromBody] PostReviewRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userRepository.GetByNameAsync(request.Author);
+            if (user == null)
+            {
+                return BadRequest(new ErrorResponse($"User {request.Author} is not found"));
+            }
+
+            var phrase = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
+            if (phrase == null)
+            {
+                return BadRequest(new ErrorResponse($"There is no phrase with track id {trackId}"));
+            }
+
+            var newPhrase = await _phraseRepository.AddReviewAsync(phrase, user, request);
+            return Ok(new BasePhraseItemResponse(newPhrase));
+        }
+
         // DELETE api/<controller>/5
         [HttpDelete("{trackId:int}")]
         public async Task<IActionResult> Delete(int trackId, [FromBody] string author)

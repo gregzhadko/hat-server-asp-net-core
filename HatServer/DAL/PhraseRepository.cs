@@ -2,8 +2,10 @@
 using HatServer.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
+using HatServer.DTO.Request;
 using JetBrains.Annotations;
 using Model.Entities;
 
@@ -42,6 +44,34 @@ namespace HatServer.DAL
 
             ClosePhrase(phrase, userId);
             return Context.SaveChangesAsync();
+        }
+
+        [ItemNotNull]
+        public async Task<PhraseItem> AddReviewAsync([NotNull] PhraseItem phrase, [NotNull] ServerUser user, [NotNull] PostReviewRequest request)
+        {
+            var reviewState = new ReviewState {Comment = request.Comment, State = request.Status, UserId = user.Id};
+            var cloned = phrase.Clone();
+            cloned.Version++;
+            if (request.ClearReview)
+            {
+                cloned.ReviewStates.Clear();
+                cloned.ReviewStates.Add(reviewState);
+            }
+            else
+            {
+                var index = cloned.ReviewStates.FindIndex(r => r.UserId == user.Id);
+                if (index > 0)
+                {
+                    cloned.ReviewStates[index] = reviewState;
+                }
+                else
+                {
+                    cloned.ReviewStates.Add(reviewState);
+                }
+            }
+
+            await CloseAndInsertAsync(cloned, phrase, user.Id);
+            return cloned;
         }
 
         private void ClosePhrase([NotNull] PhraseItem phrase, [NotNull] string userId)

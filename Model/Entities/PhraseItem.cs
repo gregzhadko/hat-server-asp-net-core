@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using System.Linq;
 using JetBrains.Annotations;
 using Utilities;
 
@@ -59,6 +60,23 @@ namespace Model.Entities
             Phrase = Phrase.FormatPhrase();
             Description = Description.FormatDescription();
             return this;
+        }
+
+        [NotNull]
+        public PhraseItem Clone()
+        {
+            return new PhraseItem
+            {
+                TrackId = TrackId,
+                Complexity = Complexity,
+                Description = Description,
+                PackId = PackId,
+                Version = Version,
+                Phrase = Phrase,
+                CreatedById = CreatedById,
+                CreatedDate = CreatedDate,
+                ReviewStates = ReviewStates.Select(r => r.Clone()).ToList()
+            };
         }
     }
 }

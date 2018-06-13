@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using HatServer.DTO.Request;
 using JetBrains.Annotations;
 using Model.Entities;
 
@@ -12,5 +13,6 @@ namespace HatServer.DAL.Interfaces
         Task CloseAndInsertAsync([NotNull] PhraseItem newPhrase, [NotNull] PhraseItem oldPhrase, string userId);
         Task<PhraseItem> GetByNameExceptTrackIdAsync(string phrase, int trackId);
         Task DeleteAsync(PhraseItem phrase, string userId);
+        Task<PhraseItem> AddReviewAsync(PhraseItem phrase, ServerUser user, PostReviewRequest request);
     }
 }
