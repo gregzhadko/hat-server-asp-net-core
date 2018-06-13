@@ -8,7 +8,7 @@ using Model.Entities;
 
 namespace HatServer.DTO.Request
 {
-    public class PostReviewRequest
+    public sealed class PostReviewRequest
     {
         [UsedImplicitly]
         public string Author { get; set; }

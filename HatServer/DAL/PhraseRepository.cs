@@ -2,7 +2,6 @@
 using HatServer.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
@@ -28,7 +27,24 @@ namespace HatServer.DAL
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Task CloseAndInsertAsync(PhraseItem newPhrase, PhraseItem oldPhrase, [NotNull] string userId)
+        [ItemNotNull]
+        public async Task<PhraseItem> UpdatePhraseAsync([NotNull] PutPhraseItemRequest request, [NotNull] ServerUser user,
+            [NotNull] PhraseItem existingPhrase)
+        {
+            var cloned = existingPhrase.Clone(); //request.ToPhraseItem(user, existingPhrase).FormatPhrase();
+            cloned.Phrase = string.IsNullOrWhiteSpace(request.Phrase) ? cloned.Phrase : request.Phrase;
+            cloned.Complexity = request.Complexity < 0 || request.Complexity > 0 ? cloned.Complexity : request.Complexity;
+            cloned.Description = request.Description ?? cloned.Description;
+            cloned.Version++;
+
+            var reviewState = new ReviewState {Comment = request.Comment, State = State.Accept, UserId = user.Id};
+            UpdateReviewStates(cloned, reviewState, user.Id, request.ClearReview);
+
+            await CloseAndInsertAsync(cloned, existingPhrase, user.Id);
+            return cloned;
+        }
+
+        private Task CloseAndInsertAsync([NotNull] PhraseItem newPhrase, [NotNull] PhraseItem oldPhrase, [NotNull] string userId)
         {
             ClosePhrase(oldPhrase, userId);
             Entities.Add(newPhrase);
@@ -52,26 +68,31 @@ namespace HatServer.DAL
             var reviewState = new ReviewState {Comment = request.Comment, State = request.Status, UserId = user.Id};
             var cloned = phrase.Clone();
             cloned.Version++;
-            if (request.ClearReview)
-            {
-                cloned.ReviewStates.Clear();
-                cloned.ReviewStates.Add(reviewState);
-            }
-            else
-            {
-                var index = cloned.ReviewStates.FindIndex(r => r.UserId == user.Id);
-                if (index > 0)
-                {
-                    cloned.ReviewStates[index] = reviewState;
-                }
-                else
-                {
-                    cloned.ReviewStates.Add(reviewState);
-                }
-            }
+            UpdateReviewStates(cloned, reviewState, user.Id, request.ClearReview);
 
             await CloseAndInsertAsync(cloned, phrase, user.Id);
             return cloned;
+        }
+
+        private static void UpdateReviewStates([NotNull] PhraseItem phraseItem, ReviewState reviewState, string userId, bool clearReview)
+        {
+            if (clearReview)
+            {
+                phraseItem.ReviewStates.Clear();
+                phraseItem.ReviewStates.Add(reviewState);
+            }
+            else
+            {
+                var index = phraseItem.ReviewStates.FindIndex(r => r.UserId == userId);
+                if (index > 0)
+                {
+                    phraseItem.ReviewStates[index] = reviewState;
+                }
+                else
+                {
+                    phraseItem.ReviewStates.Add(reviewState);
+                }
+            }
         }
 
         private void ClosePhrase([NotNull] PhraseItem phrase, [NotNull] string userId)

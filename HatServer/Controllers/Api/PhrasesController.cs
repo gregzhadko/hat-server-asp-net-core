@@ -134,10 +134,7 @@ namespace HatServer.Controllers.Api
                 return BadRequest(new ErrorResponse($"The phrase with name {request.Phrase} exists in the pack {conflictedPhrase.Pack.Name}"));
             }
 
-            var phrase = request.ToPhraseItem(user, actual).FormatPhrase();
-
-            await _phraseRepository.CloseAndInsertAsync(phrase, actual, user.Id);
-            //await _phraseRepository.InsertAsync(phrase);
+            var phrase = await _phraseRepository.UpdatePhraseAsync(request, user, actual);
 
             return Ok(new BasePhraseItemResponse(phrase));
         }
