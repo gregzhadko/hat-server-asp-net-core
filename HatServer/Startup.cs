@@ -7,6 +7,7 @@ using HatServer.DAL;
 using HatServer.Data;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
+using HatServer.Middleware;
 using HatServer.Migrations;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -118,10 +119,12 @@ namespace HatServer
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseStaticFiles();
+            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 
             app.UseAuthentication();
 
