@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 
 namespace HatServer.DAL
 {
-    internal class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly ApplicationDbContext Context;
         protected readonly DbSet<T> Entities;
