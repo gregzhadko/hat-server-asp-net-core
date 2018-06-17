@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Policy;
 using HatServer.Data;
 using HatServer.DAL;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileSystemGlobbing.Internal.PatternContexts;
 using Model.Entities;
 using Xunit;
 
@@ -39,7 +35,6 @@ namespace FillerTests
                 Assert.InRange(savedPack.Id, 1, int.MaxValue);
             }
         }
-
 
         [Fact]
         public void Insert_WithExistingId_Failed()
@@ -193,6 +188,60 @@ namespace FillerTests
             {
                 var repo = new PackRepository(context);
                 Assert.Empty(repo.GetAll());
+            }
+        }
+        
+        [Fact]
+        public void GetPack_ByName_Success()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "GetPack_ByName_Success")
+                .Options;
+
+            var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
+
+            // Run the test against one instance of the context
+            using (var context = new ApplicationDbContext(options))
+            {
+                var repo = new PackRepository(context);
+                repo.InsertAsync(pack).GetAwaiter().GetResult();
+            }
+
+            // Use a separate instance of the context to verify correct data was saved to database
+            using (var context = new ApplicationDbContext(options))
+            {
+                var repo = new PackRepository(context);
+                var savedPack = repo.GetByNameAsync(pack.Name).GetAwaiter().GetResult();
+                Assert.Equal(pack.Id, savedPack.Id);
+                var randomPack = repo.GetByNameAsync("random name").GetAwaiter().GetResult();
+                Assert.Null(randomPack);
+            }
+        }
+        
+        [Fact]
+        public void GetPack_ById_Success()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "GetPack_ById_Success")
+                .Options;
+
+            var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
+
+            // Run the test against one instance of the context
+            using (var context = new ApplicationDbContext(options))
+            {    
+                var repo = new PackRepository(context);
+                repo.InsertAsync(pack).GetAwaiter().GetResult();
+            }
+
+            // Use a separate instance of the context to verify correct data was saved to database
+            using (var context = new ApplicationDbContext(options))
+            {
+                var repo = new PackRepository(context);
+                var savedPack = repo.GetAsync(pack.Id).GetAwaiter().GetResult();
+                Assert.Equal(pack.Id, savedPack.Id);
+                var randomPack = repo.GetAsync(int.MaxValue - 1).GetAwaiter().GetResult();
+                Assert.Null(randomPack);
             }
         }
     }
