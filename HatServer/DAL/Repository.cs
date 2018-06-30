@@ -29,6 +29,12 @@ namespace HatServer.DAL
             await Context.SaveChangesAsync();
         }
 
+        public virtual async Task InsertRangeAsync([NotNull] IEnumerable<T> entities)
+        {
+            await Entities.AddRangeAsync(entities);
+            await Context.SaveChangesAsync();
+        }
+
         public virtual Task UpdateAsync([NotNull] T entity)
         {
             return Context.SaveChangesAsync();
