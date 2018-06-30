@@ -13,9 +13,7 @@ namespace FillerTests
         [Fact]
         public void Insert_WithoutPhrase_Success()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "Insert_WithoutPhrase_Success")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Name = "Test Pack111", Description = "Test Description", Language = "ru"};
 
@@ -39,9 +37,7 @@ namespace FillerTests
         [Fact]
         public void Insert_WithExistingId_Failed()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "Insert_WithExistingId_Failed")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Id = 1, Name = "Test Pack", Description = "Test Description", Language = "ru"};
             var packDuplicated = new Pack {Id = 1, Name = "Test Pack1", Description = "Test Description1", Language = "ru"};
@@ -53,16 +49,13 @@ namespace FillerTests
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
                 Assert.Throws<InvalidOperationException>(() => repo.InsertAsync(packDuplicated).GetAwaiter().GetResult());
             }
-
         }
-        
+
         //TODO: Uncomment when we'll have a restriction for the two packs with the same name
 //        [Fact]
 //        public void Insert_WithExistingName_Failed()
 //        {
-//            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-//                .UseInMemoryDatabase(databaseName: "Insert_WithExistingName_Failed")
-//                .Options;
+//            var options = TestUtilities.GetDbContextOptions();
 //
 //            var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
 //            var packDuplicated = new Pack {Name = "Test Pack", Description = "Test Description1", Language = "ru"};
@@ -79,9 +72,7 @@ namespace FillerTests
         [Fact]
         public void Insert_WithExistingDescriptionAndLanguage_Success()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "Insert_WithExistingDescriptionAndLanguage_Success")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
             var packDuplicated = new Pack {Name = "Test Pack1", Description = "Test Description", Language = "ru"};
@@ -93,7 +84,7 @@ namespace FillerTests
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
                 repo.InsertAsync(packDuplicated).GetAwaiter().GetResult();
             }
-            
+
             // Use a separate instance of the context to verify correct data was saved to database
             using (var context = new ApplicationDbContext(options))
             {
@@ -110,15 +101,13 @@ namespace FillerTests
         [Fact]
         public void Edit_ExistingPack_Success()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "Edit_ExistingPack_Success")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
             const string newName = "new name";
             const string newDescription = "new description";
             const string newLanguage = "en";
-            
+
             // Run the test against one instance of the context
             using (var context = new ApplicationDbContext(options))
             {
@@ -140,13 +129,11 @@ namespace FillerTests
                 Assert.Equal(updatedPack.Description, pack.Description);
             }
         }
-        
+
         [Fact]
         public void Delete_Existing_Success()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "Delete_Existing_Success")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Name = "Test Pack111", Description = "Test Description", Language = "ru"};
 
@@ -165,13 +152,11 @@ namespace FillerTests
                 Assert.Empty(repo.GetAll());
             }
         }
-        
+
         [Fact]
         public void DeleteById_Existing_Success()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "DeleteById_Existing_Success")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Name = "Test Pack111", Description = "Test Description", Language = "ru"};
 
@@ -190,13 +175,11 @@ namespace FillerTests
                 Assert.Empty(repo.GetAll());
             }
         }
-        
+
         [Fact]
         public void GetPack_ByName_Success()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "GetPack_ByName_Success")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
 
@@ -217,19 +200,17 @@ namespace FillerTests
                 Assert.Null(randomPack);
             }
         }
-        
+
         [Fact]
         public void GetPack_ById_Success()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "GetPack_ById_Success")
-                .Options;
+            var options = TestUtilities.GetDbContextOptions();
 
             var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
 
             // Run the test against one instance of the context
             using (var context = new ApplicationDbContext(options))
-            {    
+            {
                 var repo = new PackRepository(context);
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
             }
@@ -245,4 +226,4 @@ namespace FillerTests
             }
         }
     }
-}    
+}
