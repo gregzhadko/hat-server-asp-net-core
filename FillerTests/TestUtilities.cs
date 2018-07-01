@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Bogus;
 using HatServer.Data;
 using HatServer.DAL;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Model.Entities;
@@ -45,6 +46,7 @@ namespace FillerTests
                     p.Phrase = f.Lorem.Words(f.Random.Number(1, 4)).Join(" ");
                     p.TrackId = f.UniqueIndex;
                     p.Version = 1;
+                    p.ReviewStates = GenerateReviewStates(users);
                 })
                 .Generate(packNumber * phrasesPerPack);
 
@@ -71,6 +73,28 @@ namespace FillerTests
             }
 
             return (packs, phrases, users);
+        }
+
+        [NotNull]
+        private static List<ReviewState> GenerateReviewStates([NotNull] IReadOnlyList<ServerUser> users)
+        {
+            var number = new Randomizer().Number(0, users.Count);
+
+            var result = new List<ReviewState>();
+            for (var i = 0; i < number; i++)
+            {
+                var i1 = i;
+                var reviewState = new Faker<ReviewState>()
+                    .Rules((f, r) =>
+                    {
+                        r.State = f.PickRandom<State>();
+                        r.Comment = f.Lorem.Text();
+                        r.UserId = users[i1].Id;
+                    });
+                result.Add(reviewState);
+            }
+
+            return result;
         }
     }
 }
