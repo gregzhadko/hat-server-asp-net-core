@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HatServer.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(FillerDbContext))]
     [Migration("20180609080140_Initialization")]
     sealed partial class Initialization
     {

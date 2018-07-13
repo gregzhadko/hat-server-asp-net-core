@@ -9,7 +9,7 @@ namespace HatServer.DAL
 {
     public sealed class UserRepository : Repository<ServerUser>, IUserRepository
     {
-        public UserRepository([NotNull] ApplicationDbContext context) : base(context)
+        public UserRepository([NotNull] FillerDbContext context) : base(context)
         {
         }
 

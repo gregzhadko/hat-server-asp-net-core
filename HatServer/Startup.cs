@@ -35,7 +35,7 @@ namespace HatServer
         [UsedImplicitly]
         public void ConfigureServices([NotNull] IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<FillerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ServerUser, IdentityRole>(options =>
@@ -46,7 +46,7 @@ namespace HatServer
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireDigit = false;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<FillerDbContext>()
                 .AddDefaultTokenProviders();
 
             AddRepositoriesToServices(services);
@@ -140,7 +140,7 @@ namespace HatServer
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                var context = serviceScope.ServiceProvider.GetService<FillerDbContext>();
 
                 //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
                 //var dbInitializer = new DbInitializer(context, userManager);

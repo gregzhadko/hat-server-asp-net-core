@@ -11,12 +11,12 @@ namespace HatServer.Data
     [UsedImplicitly]
     internal sealed class DbInitializer : IDbInitializer
     {
-        private ApplicationDbContext _context;
+        private FillerDbContext _context;
         private UserManager<ServerUser> _userManager;
         private IConfiguration _configuration;
 
         //This example just creates an Administrator role and one Admin users
-        public void Initialize(ApplicationDbContext context, UserManager<ServerUser> userManager, IConfiguration configuration)
+        public void Initialize(FillerDbContext context, UserManager<ServerUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;

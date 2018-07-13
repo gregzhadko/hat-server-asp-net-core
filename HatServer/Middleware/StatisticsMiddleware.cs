@@ -14,14 +14,16 @@ namespace HatServer.Middleware
         }
 
         [UsedImplicitly]
-        public async Task Invoke(HttpContext context /* other dependencies */)
+        public Task Invoke(HttpContext context /* other dependencies */)
         {
-            if (context.Request.Headers["saveStatistics"] == true)
+            var requestHeader = context.Request.Headers["SaveStatistics"];
+
+            if (requestHeader.Count > 0 && requestHeader[0] == "true")
             {
                 //save to bot something;
             }
 
-            await _next(context);
+            return _next(context);
         }
     }
 }

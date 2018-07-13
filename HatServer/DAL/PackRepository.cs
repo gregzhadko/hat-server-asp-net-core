@@ -9,7 +9,7 @@ namespace HatServer.DAL
 {
     public sealed class PackRepository : Repository<Pack>, IPackRepository
     {
-        public PackRepository([NotNull] ApplicationDbContext context) : base(context)
+        public PackRepository([NotNull] FillerDbContext context) : base(context)
         {
         }
 

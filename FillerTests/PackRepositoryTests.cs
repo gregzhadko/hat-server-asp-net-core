@@ -5,6 +5,7 @@ using Bogus;
 using HatServer.Data;
 using HatServer.DAL;
 using Model.Entities;
+using Utilities;
 using Xunit;
 
 namespace FillerTests
@@ -19,14 +20,14 @@ namespace FillerTests
             var pack = new Pack {Name = "Test Pack111", Description = "Test Description", Language = "ru"};
 
             // Run the test against one instance of the context
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
             }
 
             // Use a separate instance of the context to verify correct data was saved to database
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 var savedPack = repo.GetAll().FirstOrDefault(p => p.Name == pack.Name && p.Description == pack.Description);
@@ -44,7 +45,7 @@ namespace FillerTests
             var packDuplicated = new Pack {Id = 1, Name = "Test Pack1", Description = "Test Description1", Language = "ru"};
 
             // Run the test against one instance of the context
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
@@ -62,7 +63,7 @@ namespace FillerTests
 //            var packDuplicated = new Pack {Name = "Test Pack", Description = "Test Description1", Language = "ru"};
 //
 //            // Run the test against one instance of the context
-//            using (var context = new ApplicationDbContext(options))
+//            using (var context = new FillerDbContext(options))
 //            {
 //                var repo = new PackRepository(context);
 //                repo.InsertAsync(pack).GetAwaiter().GetResult();
@@ -79,7 +80,7 @@ namespace FillerTests
             var packDuplicated = new Pack {Name = "Test Pack1", Description = "Test Description", Language = "ru"};
 
             // Run the test against one instance of the context
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
@@ -87,7 +88,7 @@ namespace FillerTests
             }
 
             // Use a separate instance of the context to verify correct data was saved to database
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 var savedPack = repo.GetAll().FirstOrDefault(p => p.Name == pack.Name && p.Description == pack.Description);
@@ -110,7 +111,7 @@ namespace FillerTests
             const string newLanguage = "en";
 
             // Run the test against one instance of the context
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
@@ -120,7 +121,7 @@ namespace FillerTests
                 repo.UpdateAsync(pack);
             }
 
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
 
@@ -139,7 +140,7 @@ namespace FillerTests
             var pack = new Pack {Name = "Test Pack111", Description = "Test Description", Language = "ru"};
 
             // Run the test against one instance of the context
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 repo.InsertAsync(pack).GetAwaiter().GetResult();
@@ -147,7 +148,7 @@ namespace FillerTests
             }
 
             // Use a separate instance of the context to verify correct data was saved to database
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 Assert.Empty(repo.GetAll());
@@ -162,13 +163,13 @@ namespace FillerTests
             (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
 
             var pack = new Faker().PickRandom(data.packs);
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 new PackRepository(context).DeleteAsync(pack.Id).GetAwaiter().GetResult();
             }
 
             // Use a separate instance of the context to verify correct data was saved to database
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
                 var actual = repo.GetAsync(pack.Id).GetAwaiter().GetResult();
@@ -184,7 +185,7 @@ namespace FillerTests
             (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
 
             // Use a separate instance of the context to verify correct data was saved to database
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var pack = new Faker().PickRandom(data.packs);
                 var repo = new PackRepository(context);
@@ -203,7 +204,7 @@ namespace FillerTests
             (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
 
             // Use a separate instance of the context to verify correct data was saved to database
-            using (var context = new ApplicationDbContext(options))
+            using (var context = new FillerDbContext(options))
             {
                 var pack = new Faker().PickRandom(data.packs);
                 var repo = new PackRepository(context);

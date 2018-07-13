@@ -24,7 +24,7 @@ namespace HatServer.Migrations
             return !total.Except(applied).Any();
         }
 
-        public static void EnsureSeeded(this ApplicationDbContext context, UserManager<ServerUser> userManager)
+        public static void EnsureSeeded(this FillerDbContext context, UserManager<ServerUser> userManager)
         {
         }
     }

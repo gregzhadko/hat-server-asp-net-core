@@ -7,7 +7,7 @@ namespace HatServer.Data
 {
     internal interface IDbInitializer
     {
-        void Initialize([NotNull] ApplicationDbContext context, [NotNull] UserManager<ServerUser> userManager,
+        void Initialize([NotNull] FillerDbContext context, [NotNull] UserManager<ServerUser> userManager,
             [NotNull] IConfiguration configuration);
     }
 }

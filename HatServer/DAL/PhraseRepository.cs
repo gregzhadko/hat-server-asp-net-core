@@ -12,7 +12,7 @@ namespace HatServer.DAL
 {
     internal sealed class PhraseRepository : Repository<PhraseItem>, IPhraseRepository
     {
-        public PhraseRepository([NotNull] ApplicationDbContext context) : base(context)
+        public PhraseRepository([NotNull] FillerDbContext context) : base(context)
         {
         }
 
