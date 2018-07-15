@@ -13,6 +13,8 @@ namespace Model.Entities
 
         public int Version { get; set; }
 
+        public bool Free { get; set; }
+
         [Required]
         public string Language { get; set; }
 
