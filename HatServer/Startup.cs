@@ -153,9 +153,9 @@ namespace HatServer
                 {
                     fillerContext.Database.Migrate();
 
-                    //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    //var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
-                    //dbInitializer.Initialize(fillerContext, userManager, Configuration);
+                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                    var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
+                    dbInitializer.Initialize(fillerContext, userManager, Configuration);
                 }
 
                 var statisticsContext = serviceScope.ServiceProvider.GetService<StatisticsDbContext>();

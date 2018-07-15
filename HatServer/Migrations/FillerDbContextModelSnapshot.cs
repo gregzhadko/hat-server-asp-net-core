@@ -4,16 +4,14 @@ using HatServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HatServer.Migrations
 {
     [DbContext(typeof(FillerDbContext))]
-    [Migration("20180714194118_RemovingStatisticData")]
-    partial class RemovingStatisticData
+    partial class FillerDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,11 +137,15 @@ namespace HatServer.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<bool>("Free");
+
                     b.Property<string>("Language")
                         .IsRequired();
 
                     b.Property<string>("Name")
                         .IsRequired();
+
+                    b.Property<int>("Version");
 
                     b.HasKey("Id");
 

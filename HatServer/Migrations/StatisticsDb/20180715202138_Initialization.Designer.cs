@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HatServer.Migrations.StatisticsDb
 {
     [DbContext(typeof(StatisticsDbContext))]
-    [Migration("20180715201150_VersionAndFreePropertiesForPacks")]
-    partial class VersionAndFreePropertiesForPacks
+    [Migration("20180715202138_Initialization")]
+    partial class Initialization
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
