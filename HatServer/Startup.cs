@@ -38,6 +38,9 @@ namespace HatServer
             services.AddDbContext<FillerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDbContext<StatisticsDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentity<ServerUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 5;
@@ -140,19 +143,25 @@ namespace HatServer
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<FillerDbContext>();
+                var fillerContext = serviceScope.ServiceProvider.GetService<FillerDbContext>();
 
                 //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
                 //var dbInitializer = new DbInitializer(context, userManager);
                 //dbInitializer.Initialize();
 
-                if (!context.AllMigrationsApplied())
+                if (!fillerContext.AllMigrationsApplied())
                 {
-                    context.Database.Migrate();
+                    fillerContext.Database.Migrate();
 
-                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
-                    dbInitializer.Initialize(context, userManager, Configuration);
+                    //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                    //var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
+                    //dbInitializer.Initialize(fillerContext, userManager, Configuration);
+                }
+
+                var statisticsContext = serviceScope.ServiceProvider.GetService<StatisticsDbContext>();
+                if (!statisticsContext.AllMigrationsApplied())
+                {
+                    statisticsContext.Database.Migrate();
                 }
             }
         }

@@ -7,11 +7,9 @@ using JetBrains.Annotations;
 namespace Model.Entities
 {
     [DebuggerDisplay("{Id}, {Name}, {Description}")]
-    public sealed class Pack
+    public sealed class ProdPack
     {
         public int Id { get; set; }
-
-        public int Version { get; set; }
 
         [Required]
         public string Language { get; set; }
@@ -22,19 +20,9 @@ namespace Model.Entities
         [CanBeNull]
         public string Description { get; set; }
 
-        public IList<PhraseItem> Phrases { get; set; } = new List<PhraseItem>();
+        public IList<ProdPhraseItem> Phrases { get; set; } = new List<ProdPhraseItem>();
 
         [NotNull]
         public override string ToString() => $"{Id}. {Name}\t{Description}";
-    }
-
-    [UsedImplicitly]
-    public sealed class PackValidator : AbstractValidator<Pack>
-    {
-        public PackValidator()
-        {
-            RuleFor(p => p.Name).NotEmpty().Length(0, 20);
-            RuleFor(p => p.Language).NotEmpty();
-        }
     }
 }
