@@ -223,14 +223,12 @@ namespace HatServer.Migrations
                         name: "FK_ReviewStates_PhraseItems_PhraseItemId",
                         column: x => x.PhraseItemId,
                         principalTable: "PhraseItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ReviewStates_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

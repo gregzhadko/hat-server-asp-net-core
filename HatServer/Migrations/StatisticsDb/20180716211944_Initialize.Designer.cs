@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HatServer.Migrations.StatisticsDb
 {
     [DbContext(typeof(StatisticsDbContext))]
-    [Migration("20180715202138_Initialization")]
-    partial class Initialization
+    [Migration("20180716211944_Initialize")]
+    partial class Initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,69 +34,6 @@ namespace HatServer.Migrations.StatisticsDb
                     b.HasIndex("UserId");
 
                     b.ToTable("Games");
-                });
-
-            modelBuilder.Entity("Model.Entities.Pack", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<bool>("Free");
-
-                    b.Property<string>("Language")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<int>("Version");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pack");
-                });
-
-            modelBuilder.Entity("Model.Entities.PhraseItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClosedBy");
-
-                    b.Property<string>("ClosedById");
-
-                    b.Property<DateTime?>("ClosedDate");
-
-                    b.Property<double?>("Complexity");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("PackId");
-
-                    b.Property<string>("Phrase")
-                        .IsRequired();
-
-                    b.Property<int>("TrackId");
-
-                    b.Property<int>("Version")
-                        .IsConcurrencyToken();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("PackId");
-
-                    b.ToTable("PhraseItem");
                 });
 
             modelBuilder.Entity("Model.Entities.Player", b =>
@@ -159,30 +96,6 @@ namespace HatServer.Migrations.StatisticsDb
                     b.HasIndex("ProdPackId");
 
                     b.ToTable("ProdPhraseItems");
-                });
-
-            modelBuilder.Entity("Model.Entities.ReviewState", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comment");
-
-                    b.Property<int>("PhraseItemId");
-
-                    b.Property<int>("State");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhraseItemId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ReviewState");
                 });
 
             modelBuilder.Entity("Model.Entities.Round", b =>
@@ -253,44 +166,6 @@ namespace HatServer.Migrations.StatisticsDb
                     b.HasKey("Id");
 
                     b.ToTable("RoundPhraseStates");
-                });
-
-            modelBuilder.Entity("Model.Entities.ServerUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AccessFailedCount");
-
-                    b.Property<string>("ConcurrencyStamp");
-
-                    b.Property<string>("Email");
-
-                    b.Property<bool>("EmailConfirmed");
-
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail");
-
-                    b.Property<string>("NormalizedUserName");
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServerUser");
                 });
 
             modelBuilder.Entity("Model.Entities.Settings", b =>
@@ -381,19 +256,6 @@ namespace HatServer.Migrations.StatisticsDb
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Model.Entities.PhraseItem", b =>
-                {
-                    b.HasOne("Model.Entities.ServerUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Model.Entities.Pack", "Pack")
-                        .WithMany("Phrases")
-                        .HasForeignKey("PackId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Model.Entities.Player", b =>
                 {
                     b.HasOne("Model.Entities.Team", "Team")
@@ -407,19 +269,6 @@ namespace HatServer.Migrations.StatisticsDb
                     b.HasOne("Model.Entities.ProdPack", "ProdPack")
                         .WithMany("Phrases")
                         .HasForeignKey("ProdPackId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Model.Entities.ReviewState", b =>
-                {
-                    b.HasOne("Model.Entities.PhraseItem", "PhraseItem")
-                        .WithMany("ReviewStates")
-                        .HasForeignKey("PhraseItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Model.Entities.ServerUser", "User")
-                        .WithMany("ReviewStates")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -441,7 +290,7 @@ namespace HatServer.Migrations.StatisticsDb
 
             modelBuilder.Entity("Model.Entities.RoundPhrase", b =>
                 {
-                    b.HasOne("Model.Entities.PhraseItem", "PhraseItem")
+                    b.HasOne("Model.Entities.ProdPhraseItem", "PhraseItem")
                         .WithMany()
                         .HasForeignKey("PhraseId")
                         .OnDelete(DeleteBehavior.Cascade);

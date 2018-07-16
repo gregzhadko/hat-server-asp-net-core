@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HatServer.Migrations.StatisticsDb
 {
-    public partial class Initialization : Migration
+    public partial class Initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,23 +26,6 @@ namespace HatServer.Migrations.StatisticsDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GameUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pack",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Version = table.Column<int>(nullable: false),
-                    Free = table.Column<bool>(nullable: false),
-                    Language = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pack", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,31 +56,6 @@ namespace HatServer.Migrations.StatisticsDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RoundPhraseStates", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ServerUser",
-                columns: table => new
-                {
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
-                    Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServerUser", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,41 +115,6 @@ namespace HatServer.Migrations.StatisticsDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "PhraseItem",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Version = table.Column<int>(nullable: false),
-                    Phrase = table.Column<string>(nullable: false),
-                    Complexity = table.Column<double>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    PackId = table.Column<int>(nullable: false),
-                    TrackId = table.Column<int>(nullable: false),
-                    CreatedById = table.Column<string>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ClosedById = table.Column<string>(nullable: true),
-                    ClosedBy = table.Column<string>(nullable: true),
-                    ClosedDate = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PhraseItem", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PhraseItem_ServerUser_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "ServerUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PhraseItem_Pack_PackId",
-                        column: x => x.PackId,
-                        principalTable: "Pack",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Stages",
                 columns: table => new
                 {
@@ -228,34 +151,6 @@ namespace HatServer.Migrations.StatisticsDb
                         name: "FK_Teams_Games_GameId",
                         column: x => x.GameId,
                         principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ReviewState",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PhraseItemId = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: false),
-                    State = table.Column<int>(nullable: false),
-                    Comment = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReviewState", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReviewState_PhraseItem_PhraseItemId",
-                        column: x => x.PhraseItemId,
-                        principalTable: "PhraseItem",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ReviewState_ServerUser_UserId",
-                        column: x => x.UserId,
-                        principalTable: "ServerUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -331,9 +226,9 @@ namespace HatServer.Migrations.StatisticsDb
                 {
                     table.PrimaryKey("PK_RoundPhrases", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoundPhrases_PhraseItem_PhraseId",
+                        name: "FK_RoundPhrases_ProdPhraseItems_PhraseId",
                         column: x => x.PhraseId,
-                        principalTable: "PhraseItem",
+                        principalTable: "ProdPhraseItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -356,16 +251,6 @@ namespace HatServer.Migrations.StatisticsDb
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PhraseItem_CreatedById",
-                table: "PhraseItem",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PhraseItem_PackId",
-                table: "PhraseItem",
-                column: "PackId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Players_TeamId",
                 table: "Players",
                 column: "TeamId");
@@ -374,16 +259,6 @@ namespace HatServer.Migrations.StatisticsDb
                 name: "IX_ProdPhraseItems_ProdPackId",
                 table: "ProdPhraseItems",
                 column: "ProdPackId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReviewState_PhraseItemId",
-                table: "ReviewState",
-                column: "PhraseItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReviewState_UserId",
-                table: "ReviewState",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoundPhrases_PhraseId",
@@ -429,19 +304,10 @@ namespace HatServer.Migrations.StatisticsDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProdPhraseItems");
-
-            migrationBuilder.DropTable(
-                name: "ReviewState");
-
-            migrationBuilder.DropTable(
                 name: "RoundPhrases");
 
             migrationBuilder.DropTable(
-                name: "ProdPacks");
-
-            migrationBuilder.DropTable(
-                name: "PhraseItem");
+                name: "ProdPhraseItems");
 
             migrationBuilder.DropTable(
                 name: "Rounds");
@@ -450,10 +316,7 @@ namespace HatServer.Migrations.StatisticsDb
                 name: "RoundPhraseStates");
 
             migrationBuilder.DropTable(
-                name: "ServerUser");
-
-            migrationBuilder.DropTable(
-                name: "Pack");
+                name: "ProdPacks");
 
             migrationBuilder.DropTable(
                 name: "Players");
