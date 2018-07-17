@@ -12,6 +12,18 @@ namespace Model.Entities
     [DebuggerDisplay("{Phrase}, {Complexity}, {Description}")]
     public sealed class ProdPhraseItem
     {
+        public ProdPhraseItem()
+        {
+        }
+
+        public ProdPhraseItem([NotNull] PhraseItem phraseItem, [NotNull] Pack pack)
+        {
+            Phrase = phraseItem.Phrase;
+            Complexity = phraseItem.Complexity;
+            Description = phraseItem.Description;
+            ProdPackId = pack.Id;
+        }
+
         public int Id { get; set; }
 
         [Required]

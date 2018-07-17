@@ -17,6 +17,7 @@ namespace HatServer.Middleware
         }
 
         [UsedImplicitly]
+        // ReSharper disable once AsyncConverter.AsyncMethodNamingHighlighting
         public async Task Invoke(HttpContext context /* other dependencies */)
         {
             try
