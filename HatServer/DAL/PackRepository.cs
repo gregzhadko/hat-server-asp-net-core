@@ -7,7 +7,7 @@ using Model.Entities;
 
 namespace HatServer.DAL
 {
-    public sealed class PackRepository : Repository<Pack>, IPackRepository
+    public sealed class PackRepository : Repository<Pack, FillerDbContext>, IPackRepository
     {
         public PackRepository([NotNull] FillerDbContext context) : base(context)
         {

@@ -15,7 +15,7 @@ namespace FillerTests
         [Fact]
         public void Insert_WithoutPhrase_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
             var pack = new Pack {Name = "Test Pack111", Description = "Test Description", Language = "ru"};
 
@@ -39,7 +39,7 @@ namespace FillerTests
         [Fact]
         public void Insert_WithExistingId_Failed()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
             var pack = new Pack {Id = 1, Name = "Test Pack", Description = "Test Description", Language = "ru"};
             var packDuplicated = new Pack {Id = 1, Name = "Test Pack1", Description = "Test Description1", Language = "ru"};
@@ -74,7 +74,7 @@ namespace FillerTests
         [Fact]
         public void Insert_WithExistingDescriptionAndLanguage_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
             var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
             var packDuplicated = new Pack {Name = "Test Pack1", Description = "Test Description", Language = "ru"};
@@ -103,7 +103,7 @@ namespace FillerTests
         [Fact]
         public void Edit_ExistingPack_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
             var pack = new Pack {Name = "Test Pack", Description = "Test Description", Language = "ru"};
             const string newName = "new name";
@@ -135,7 +135,7 @@ namespace FillerTests
         [Fact]
         public void Delete_Existing_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
             var pack = new Pack {Name = "Test Pack111", Description = "Test Description", Language = "ru"};
 
@@ -158,9 +158,10 @@ namespace FillerTests
         [Fact]
         public void DeleteById_Existing_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
-            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
+            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData();
+            TestUtilities.Save(options, data.Item3, data.packs);
 
             var pack = new Faker().PickRandom(data.packs);
             using (var context = new FillerDbContext(options))
@@ -180,9 +181,10 @@ namespace FillerTests
         [Fact]
         public void GetPack_ByName_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
-            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
+            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData();
+            TestUtilities.Save(options, data.Item3, data.packs);
 
             // Use a separate instance of the context to verify correct data was saved to database
             using (var context = new FillerDbContext(options))
@@ -199,9 +201,10 @@ namespace FillerTests
         [Fact]
         public void GetPack_ById_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
-            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
+            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData();
+            TestUtilities.Save(options, data.Item3, data.packs);
 
             // Use a separate instance of the context to verify correct data was saved to database
             using (var context = new FillerDbContext(options))

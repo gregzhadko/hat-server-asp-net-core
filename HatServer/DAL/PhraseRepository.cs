@@ -10,7 +10,7 @@ using Model.Entities;
 
 namespace HatServer.DAL
 {
-    internal sealed class PhraseRepository : Repository<PhraseItem>, IPhraseRepository
+    internal sealed class PhraseRepository : Repository<PhraseItem, FillerDbContext>, IPhraseRepository
     {
         public PhraseRepository([NotNull] FillerDbContext context) : base(context)
         {

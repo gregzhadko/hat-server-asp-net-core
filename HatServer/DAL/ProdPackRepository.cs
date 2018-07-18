@@ -7,9 +7,9 @@ using Model.Entities;
 
 namespace HatServer.DAL
 {
-    public class ProdPackRepository : Repository<ProdPack>, IProdPackRepository
+    public class ProdPackRepository : Repository<ProdPack, StatisticsDbContext>, IProdPackRepository
     {
-        protected ProdPackRepository([NotNull] FillerDbContext context) : base(context)
+        public ProdPackRepository([NotNull] StatisticsDbContext context) : base(context)
         {
         }
 

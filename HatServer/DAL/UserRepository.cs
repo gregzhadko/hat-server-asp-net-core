@@ -7,7 +7,7 @@ using Model.Entities;
 
 namespace HatServer.DAL
 {
-    public sealed class UserRepository : Repository<ServerUser>, IUserRepository
+    public sealed class UserRepository : Repository<ServerUser, FillerDbContext>, IUserRepository
     {
         public UserRepository([NotNull] FillerDbContext context) : base(context)
         {

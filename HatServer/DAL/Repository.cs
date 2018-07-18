@@ -8,12 +8,12 @@ using JetBrains.Annotations;
 
 namespace HatServer.DAL
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T, TContext> : IRepository<T> where TContext : DbContext where T : class
     {
-        protected readonly FillerDbContext Context;
+        protected readonly TContext Context;
         protected readonly DbSet<T> Entities;
 
-        protected Repository([NotNull] FillerDbContext context)
+        protected Repository([NotNull] TContext context)
         {
             Context = context;
             Entities = context.Set<T>();

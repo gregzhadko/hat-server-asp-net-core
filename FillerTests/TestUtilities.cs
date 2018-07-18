@@ -13,16 +13,15 @@ namespace FillerTests
 {
     public static class TestUtilities
     {
-        public static DbContextOptions<FillerDbContext> GetDbContextOptions()
+        public static DbContextOptions<T> GetDbContextOptions<T>() where T : DbContext
         {
             var methodName = new StackTrace().GetFrame(1).GetMethod().Name;
-            var dbContextOptions = new DbContextOptionsBuilder<FillerDbContext>()
+            var dbContextOptions = new DbContextOptionsBuilder<T>()
                 .UseInMemoryDatabase(databaseName: methodName).Options;
             return dbContextOptions;
         }
 
-        public static (List<Pack>, List<PhraseItem>, List<ServerUser>) GeneratePackData(
-            DbContextOptions<FillerDbContext> options)
+        public static (List<Pack>, List<PhraseItem>, List<ServerUser>) GeneratePackData()
         {
             const int packNumber = 10;
             const int phrasesPerPack = 10;
@@ -63,6 +62,12 @@ namespace FillerTests
                 })
                 .Generate(packNumber);
 
+            return (packs, phrases, users);
+        }
+
+        public static void Save(DbContextOptions<FillerDbContext> options, [NotNull] IEnumerable<ServerUser> users,
+            [NotNull] IEnumerable<Pack> packs)
+        {
             using (var context = new FillerDbContext(options))
             {
                 var userRepository = new UserRepository(context);
@@ -71,8 +76,6 @@ namespace FillerTests
                 var repo = new PackRepository(context);
                 repo.InsertRangeAsync(packs).GetAwaiter().GetResult();
             }
-
-            return (packs, phrases, users);
         }
 
         [NotNull]

@@ -16,10 +16,11 @@ namespace FillerTests
         [Fact]
         public void GetAll_Success()
         {
-            var options = TestUtilities.GetDbContextOptions();
+            var options = TestUtilities.GetDbContextOptions<FillerDbContext>();
 
             (List<Pack> packs, List<PhraseItem> phrases, List<ServerUser> users) data =
-                TestUtilities.GeneratePackData(options);
+                TestUtilities.GeneratePackData();
+            TestUtilities.Save(options, data.Item3, data.packs);
         }
     }
 }
