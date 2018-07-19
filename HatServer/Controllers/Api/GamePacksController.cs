@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HatServer.Controllers.Api
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public sealed class GamePacksController : Controller
     {
