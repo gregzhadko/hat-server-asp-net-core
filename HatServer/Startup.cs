@@ -119,7 +119,7 @@ namespace HatServer
             }
             else
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 //app.UseExceptionHandler("/Home/Error");
             }
 

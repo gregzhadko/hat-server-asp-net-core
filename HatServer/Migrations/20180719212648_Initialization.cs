@@ -1,12 +1,10 @@
 ﻿using System;
-using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HatServer.Migrations
 {
-    [UsedImplicitly]
-    public sealed partial class Initialization : Migration
+    public partial class Initialization : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,7 +17,10 @@ namespace HatServer.Migrations
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
-                constraints: table => table.PrimaryKey("PK_AspNetRoles", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
@@ -41,7 +42,10 @@ namespace HatServer.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true)
                 },
-                constraints: table => table.PrimaryKey("PK_AspNetUsers", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "GameUsers",
@@ -58,7 +62,10 @@ namespace HatServer.Migrations
                     PushToken = table.Column<string>(nullable: true),
                     TimeStamp = table.Column<int>(nullable: false)
                 },
-                constraints: table => table.PrimaryKey("PK_GameUsers", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameUsers", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Packs",
@@ -70,7 +77,10 @@ namespace HatServer.Migrations
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true)
                 },
-                constraints: table => table.PrimaryKey("PK_Packs", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Packs", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "RoundPhraseStates",
@@ -80,7 +90,10 @@ namespace HatServer.Migrations
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 100, nullable: true)
                 },
-                constraints: table => table.PrimaryKey("PK_RoundPhraseStates", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoundPhraseStates", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Settings",
@@ -92,7 +105,10 @@ namespace HatServer.Migrations
                     RoundTime = table.Column<int>(nullable: false),
                     BadItalicSimulated = table.Column<bool>(nullable: false)
                 },
-                constraints: table => table.PrimaryKey("PK_Settings", x => x.Id));
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Settings", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
@@ -147,7 +163,7 @@ namespace HatServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new {x.LoginProvider, x.ProviderKey});
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -165,7 +181,7 @@ namespace HatServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new {x.UserId, x.RoleId});
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
@@ -191,7 +207,7 @@ namespace HatServer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new {x.UserId, x.LoginProvider, x.Name});
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -292,8 +308,7 @@ namespace HatServer.Migrations
                         name: "FK_ReviewStates_PhraseItems_PhraseItemId",
                         column: x => x.PhraseItemId,
                         principalTable: "PhraseItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ReviewStates_AspNetUsers_UserId",
                         column: x => x.UserId,
