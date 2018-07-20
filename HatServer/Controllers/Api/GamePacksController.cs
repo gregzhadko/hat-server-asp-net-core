@@ -7,6 +7,8 @@ using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Model.Entities;
+using Newtonsoft.Json;
 
 namespace HatServer.Controllers.Api
 {
@@ -16,6 +18,35 @@ namespace HatServer.Controllers.Api
     {
         private const string PacksFolder = "Packs";
 
+        // GET api/<controller>
+        [HttpGet("{id}", Name = "Get_All_Game_Packs")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = new List<GamePack>();
+            var files = Directory.GetFiles(PacksFolder, "*.json");
+            foreach (var file in files)
+            {
+                var text = System.IO.File.ReadAllText(file);
+                var pack = JsonConvert.DeserializeObject<GamePack>(text);
+                pack.Count = pack.Phrases.Length;
+                pack.Phrases = new GamePhrase[0];
+                result.Add(pack);
+            }
+
+            return Ok(result);
+
+//            var file = Directory.GetFiles(PacksFolder, "*.json")
+//                .FirstOrDefault(f => f.EndsWith($"{id}.json", StringComparison.Ordinal));
+//            if (file == null)
+//            {
+//                return BadRequest(new ErrorResponse($"Pack with id = {id} wasn't found"));
+//            }
+//
+//            var result = await System.IO.File.ReadAllTextAsync($"{file}");
+//            return Ok(result);
+        }
+
+        
         // GET api/<controller>/5
         [HttpGet("{id}", Name = "Get_Game_Packs")]
         public async Task<IActionResult> Get(int id)
