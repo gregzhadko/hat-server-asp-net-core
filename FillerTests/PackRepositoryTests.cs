@@ -5,7 +5,6 @@ using Bogus;
 using HatServer.Data;
 using HatServer.DAL;
 using Model.Entities;
-using Utilities;
 using Xunit;
 
 namespace FillerTests

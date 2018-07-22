@@ -15,7 +15,7 @@
         public long Version { get; set; }
 
         public bool Paid { get; set; }
-        
+
         public int Count { get; set; }
     }
 }

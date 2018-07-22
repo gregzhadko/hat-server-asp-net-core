@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DTO.Response;
-using JetBrains.Annotations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Model.Entities;
 using Newtonsoft.Json;
@@ -19,36 +17,24 @@ namespace HatServer.Controllers.Api
         private const string PacksFolder = "Packs";
 
         // GET api/<controller>
-        [HttpGet("{id}", Name = "Get_All_Game_Packs")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet]
+        public IActionResult GetAll()
         {
             var result = new List<GamePack>();
             var files = Directory.GetFiles(PacksFolder, "*.json");
-            foreach (var file in files)
+            foreach (var pack in files.Select(System.IO.File.ReadAllText)
+                .Select(JsonConvert.DeserializeObject<GamePack>))
             {
-                var text = System.IO.File.ReadAllText(file);
-                var pack = JsonConvert.DeserializeObject<GamePack>(text);
                 pack.Count = pack.Phrases.Length;
-                pack.Phrases = new GamePhrase[0];
+                pack.Phrases = null;
                 result.Add(pack);
             }
 
             return Ok(result);
-
-//            var file = Directory.GetFiles(PacksFolder, "*.json")
-//                .FirstOrDefault(f => f.EndsWith($"{id}.json", StringComparison.Ordinal));
-//            if (file == null)
-//            {
-//                return BadRequest(new ErrorResponse($"Pack with id = {id} wasn't found"));
-//            }
-//
-//            var result = await System.IO.File.ReadAllTextAsync($"{file}");
-//            return Ok(result);
         }
 
-        
         // GET api/<controller>/5
-        [HttpGet("{id}", Name = "Get_Game_Packs")]
+        [HttpGet("{id}", Name = "Get_Game_Pack")]
         public async Task<IActionResult> Get(int id)
         {
             var file = Directory.GetFiles(PacksFolder, "*.json")

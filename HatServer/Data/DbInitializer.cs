@@ -63,7 +63,6 @@ namespace HatServer.Data
 
             var packs = MongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
 
-
             _context.Packs.AddRange(packs);
         }
     }
