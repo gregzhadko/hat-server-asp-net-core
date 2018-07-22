@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using HatServer.DTO.Response;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace HatServer.Controllers.Api
         {
             var result = new List<GamePack>();
             var files = Directory.GetFiles(PacksFolder, "*.json");
-            foreach (var pack in files.Select(System.IO.File.ReadAllText)
+            foreach (var pack in files.Select(s => System.IO.File.ReadAllText(s, Encoding.UTF8))
                 .Select(JsonConvert.DeserializeObject<GamePack>))
             {
                 pack.Count = pack.Phrases.Length;
