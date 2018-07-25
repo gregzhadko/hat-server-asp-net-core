@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Alba.CsConsoleFormat" Version="1.0.0" />
+    <PackageReference Include="CompareNETObjects" Version="4.55.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>

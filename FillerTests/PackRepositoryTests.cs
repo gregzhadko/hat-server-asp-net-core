@@ -6,6 +6,7 @@ using HatServer.Data;
 using HatServer.DAL;
 using Model.Entities;
 using NUnit.Framework;
+using KellermanSoftware.CompareNetObjects;
 
 namespace FillerTests
 {
@@ -215,59 +216,25 @@ namespace FillerTests
             }
         }
 
-//        [Fact]
-//        public void GetFullInfoAsync_Existing_Success()
-//        {
-//            var options = TestUtilities.GetDbContextOptions();
-//            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
-//
-//            using (var context = new FillerDbContext(options))
-//            {
-//                var expected = new Faker().PickRandom(data.packs);
-//                var repo = new PackRepository(context);
-//                var actual = repo.GetFullInfoAsync(expected.Id).GetAwaiter().GetResult();
-//
-//                Assert.Equal(expected.Name, actual.Name);
-//                var expectedPhrases = expected.Phrases.OrderBy(p => p.Id).ToList();
-//                var actualPhrases = actual.Phrases.OrderBy(p => p.Id).ToList();
-//
-//                Assert.Equal(expectedPhrases, actualPhrases, );
-//
-//
-//            }
-//        }
+        [Test]
+        public void GetFullInfoAsync_Existing_Success()
+        {
+            var options = TestUtilities.GetDbContextOptions();
+            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
+
+            using (var context = new FillerDbContext(options))
+            {
+                var repo = new PackRepository(context);
+                var actualPacks = data.packs.Select(p => p.Id)
+                    .Select(id => repo.GetFullInfoAsync(id).GetAwaiter().GetResult()).ToList();
+
+                var compareLogic = new CompareLogic();
+                compareLogic.Config.MembersToIgnore.Add("User");
+                compareLogic.Config.MembersToIgnore.Add("CreatedBy");
+
+                var result = compareLogic.Compare(data.packs, actualPacks);
+                Assert.True(result.AreEqual, result.DifferencesString);
+            }
+        }
     }
-//
-//    public class PhraseItemsComparer : IEqualityComparer<PhraseItem>
-//    {
-//        public bool Equals(PhraseItem x, PhraseItem y)
-//        {
-//            if (ReferenceEquals(x, y))
-//            {
-//                return true;
-//            }
-//
-//            if (x == null)
-//            {
-//                return y == null;
-//            }
-//
-//            if (y == null)
-//            {
-//                return false;
-//            }
-//
-//            if (x.Phrase == y.Phrase && x.Description == y.Description && x.Complexity.Equals(y.Complexity) &&
-//                x.ClosedById == y.ClosedById && x.ClosedDate.Equals(y.ClosedDate) && x.CreatedById == y.CreatedById &&
-//                x.CreatedDate.Equals(y.CreatedDate) && x.PackId == y.PackId)
-//            {
-//
-//                return true;
-//            }
-//
-//            return false;
-//        }
-//
-//        public int GetHashCode(PhraseItem obj) => throw new NotImplementedException();
-//    }
 }
