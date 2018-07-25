@@ -5,13 +5,14 @@ using Bogus;
 using HatServer.Data;
 using HatServer.DAL;
 using Model.Entities;
-using Xunit;
+using NUnit.Framework;
 
 namespace FillerTests
 {
+    [TestFixture]
     public sealed class PackRepositoryTests
     {
-        [Fact]
+        [Test]
         public void Insert_WithoutPhrase_Success()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -31,11 +32,11 @@ namespace FillerTests
                 var repo = new PackRepository(context);
                 var savedPack = repo.GetAll().FirstOrDefault(p => p.Name == pack.Name && p.Description == pack.Description);
                 Assert.NotNull(savedPack);
-                Assert.InRange(savedPack.Id, 1, int.MaxValue);
+                Assert.GreaterOrEqual(savedPack.Id, 1);
             }
         }
 
-        [Fact]
+        [Test]
         public void Insert_WithExistingId_Failed()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -70,7 +71,7 @@ namespace FillerTests
 //            }
 //        }
 
-        [Fact]
+        [Test]
         public void Insert_WithExistingDescriptionAndLanguage_Success()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -94,12 +95,12 @@ namespace FillerTests
                 var savedPackDuplicated = repo.GetAll().FirstOrDefault(p => p.Name == packDuplicated.Name && p.Description == packDuplicated.Description);
                 Assert.NotNull(savedPack);
                 Assert.NotNull(savedPackDuplicated);
-                Assert.InRange(savedPack.Id, 1, int.MaxValue);
-                Assert.InRange(savedPackDuplicated.Id, 1, int.MaxValue);
+                Assert.GreaterOrEqual(savedPack.Id, 1);
+                Assert.GreaterOrEqual(savedPackDuplicated.Id, 1);
             }
         }
 
-        [Fact]
+        [Test]
         public void Edit_ExistingPack_Success()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -125,13 +126,13 @@ namespace FillerTests
                 var repo = new PackRepository(context);
 
                 var updatedPack = repo.GetAll().Single();
-                Assert.Equal(updatedPack.Name, pack.Name);
-                Assert.Equal(updatedPack.Language, pack.Language);
-                Assert.Equal(updatedPack.Description, pack.Description);
+                Assert.AreEqual(updatedPack.Name, pack.Name);
+                Assert.AreEqual(updatedPack.Language, pack.Language);
+                Assert.AreEqual(updatedPack.Description, pack.Description);
             }
         }
 
-        [Fact]
+        [Test]
         public void Delete_Existing_Success()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -150,11 +151,11 @@ namespace FillerTests
             using (var context = new FillerDbContext(options))
             {
                 var repo = new PackRepository(context);
-                Assert.Empty(repo.GetAll());
+                Assert.IsEmpty(repo.GetAll());
             }
         }
 
-        [Fact]
+        [Test]
         public void DeleteById_Existing_Success()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -176,7 +177,7 @@ namespace FillerTests
             }
         }
 
-        [Fact]
+        [Test]
         public void GetPack_ByName_Success()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -189,13 +190,13 @@ namespace FillerTests
                 var pack = new Faker().PickRandom(data.packs);
                 var repo = new PackRepository(context);
                 var savedPack = repo.GetByNameAsync(pack.Name).GetAwaiter().GetResult();
-                Assert.Equal(pack.Id, savedPack.Id);
+                Assert.AreEqual(pack.Id, savedPack.Id);
                 var randomPack = repo.GetByNameAsync("random name").GetAwaiter().GetResult();
                 Assert.Null(randomPack);
             }
         }
 
-        [Fact]
+        [Test]
         public void GetPack_ById_Success()
         {
             var options = TestUtilities.GetDbContextOptions();
@@ -208,65 +209,65 @@ namespace FillerTests
                 var pack = new Faker().PickRandom(data.packs);
                 var repo = new PackRepository(context);
                 var savedPack = repo.GetAsync(pack.Id).GetAwaiter().GetResult();
-                Assert.Equal(pack.Id, savedPack.Id);
+                Assert.AreEqual(pack.Id, savedPack.Id);
                 var randomPack = repo.GetAsync(int.MaxValue - 1).GetAwaiter().GetResult();
                 Assert.Null(randomPack);
             }
         }
 
-        [Fact]
-        public void GetFullInfoAsync_Existing_Success()
-        {
-            var options = TestUtilities.GetDbContextOptions();
-            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
-
-            using (var context = new FillerDbContext(options))
-            {
-                var expected = new Faker().PickRandom(data.packs);
-                var repo = new PackRepository(context);
-                var actual = repo.GetFullInfoAsync(expected.Id).GetAwaiter().GetResult();
-
-                Assert.Equal(expected.Name, actual.Name);
-                var expectedPhrases = expected.Phrases.OrderBy(p => p.Id).ToList();
-                var actualPhrases = actual.Phrases.OrderBy(p => p.Id).ToList();
-
-                Assert.Equal(expectedPhrases, actualPhrases, );
-
-
-            }
-        }
+//        [Fact]
+//        public void GetFullInfoAsync_Existing_Success()
+//        {
+//            var options = TestUtilities.GetDbContextOptions();
+//            (List<Pack> packs, List<PhraseItem>, List<ServerUser>) data = TestUtilities.GeneratePackData(options);
+//
+//            using (var context = new FillerDbContext(options))
+//            {
+//                var expected = new Faker().PickRandom(data.packs);
+//                var repo = new PackRepository(context);
+//                var actual = repo.GetFullInfoAsync(expected.Id).GetAwaiter().GetResult();
+//
+//                Assert.Equal(expected.Name, actual.Name);
+//                var expectedPhrases = expected.Phrases.OrderBy(p => p.Id).ToList();
+//                var actualPhrases = actual.Phrases.OrderBy(p => p.Id).ToList();
+//
+//                Assert.Equal(expectedPhrases, actualPhrases, );
+//
+//
+//            }
+//        }
     }
-
-    public class PhraseItemsComparer : IEqualityComparer<PhraseItem>
-    {
-        public bool Equals(PhraseItem x, PhraseItem y)
-        {
-            if (ReferenceEquals(x, y))
-            {
-                return true;
-            }
-
-            if (x == null)
-            {
-                return y == null;
-            }
-
-            if (y == null)
-            {
-                return false;
-            }
-
-            if (x.Phrase == y.Phrase && x.Description == y.Description && x.Complexity.Equals(y.Complexity) &&
-                x.ClosedById == y.ClosedById && x.ClosedDate.Equals(y.ClosedDate) && x.CreatedById == y.CreatedById &&
-                x.CreatedDate.Equals(y.CreatedDate) && x.PackId == y.PackId)
-            {
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public int GetHashCode(PhraseItem obj) => throw new NotImplementedException();
-    }
+//
+//    public class PhraseItemsComparer : IEqualityComparer<PhraseItem>
+//    {
+//        public bool Equals(PhraseItem x, PhraseItem y)
+//        {
+//            if (ReferenceEquals(x, y))
+//            {
+//                return true;
+//            }
+//
+//            if (x == null)
+//            {
+//                return y == null;
+//            }
+//
+//            if (y == null)
+//            {
+//                return false;
+//            }
+//
+//            if (x.Phrase == y.Phrase && x.Description == y.Description && x.Complexity.Equals(y.Complexity) &&
+//                x.ClosedById == y.ClosedById && x.ClosedDate.Equals(y.ClosedDate) && x.CreatedById == y.CreatedById &&
+//                x.CreatedDate.Equals(y.CreatedDate) && x.PackId == y.PackId)
+//            {
+//
+//                return true;
+//            }
+//
+//            return false;
+//        }
+//
+//        public int GetHashCode(PhraseItem obj) => throw new NotImplementedException();
+//    }
 }
