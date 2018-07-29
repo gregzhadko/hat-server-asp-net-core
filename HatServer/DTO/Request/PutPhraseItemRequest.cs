@@ -27,6 +27,8 @@ namespace HatServer.DTO.Request
         [UsedImplicitly]
         public string Comment { get; set; }
 
+        public int Version { get; set; }
+
         [NotNull]
         internal PhraseItem ToPhraseItem([NotNull] ServerUser authorUser, [NotNull] PhraseItem existingPhrase)
         {
@@ -72,6 +74,7 @@ namespace HatServer.DTO.Request
         {
             RuleFor(p => p.Phrase).NotEmpty();
             RuleFor(p => p.Author).NotEmpty();
+            RuleFor(p => p.Version).NotEmpty();
 
             RuleFor(p => p.Complexity).InclusiveBetween(1, 5).When(p => p.Complexity != null);
         }

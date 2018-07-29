@@ -128,6 +128,12 @@ namespace HatServer.Controllers.Api
                 return BadRequest(new ErrorResponse($"There is no phrase with track id {trackId}"));
             }
 
+            if (actual.Version > request.Version)
+            {
+                var users = _userRepository.GetAll();
+                return BadRequest(new ErrorResponse($"The phrase has a newer version: {actual}", new BasePhraseItemResponse(actual, users)));
+            }
+
             var conflictedPhrase = await _phraseRepository.GetByNameExceptTrackIdAsync(request.Phrase, trackId);
             if (conflictedPhrase != null)
             {
