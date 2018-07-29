@@ -84,7 +84,7 @@ namespace HatServer.DAL
             else
             {
                 var index = phraseItem.ReviewStates.FindIndex(r => r.UserId == userId);
-                if (index > 0)
+                if (index >= 0)
                 {
                     phraseItem.ReviewStates[index] = reviewState;
                 }

@@ -14,7 +14,8 @@ namespace HatServer.Middleware
         }
 
         [UsedImplicitly]
-        public Task Invoke(HttpContext context /* other dependencies */)
+        // ReSharper disable once AsyncConverter.AsyncMethodNamingHighlighting
+        public Task Invoke([NotNull] HttpContext context /* other dependencies */)
         {
             var requestHeader = context.Request.Headers["SaveStatistics"];
 
