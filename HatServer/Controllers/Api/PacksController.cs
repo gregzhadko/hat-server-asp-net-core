@@ -96,11 +96,5 @@ namespace HatServer.Controllers.Api
 
             return NoContent();
         }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

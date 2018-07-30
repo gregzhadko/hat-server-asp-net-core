@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(FillerDbContext))]
-    partial class FillerDbContextModelSnapshot : ModelSnapshot
+    class FillerDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
