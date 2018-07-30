@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using Utilities;
 
 namespace Model.Entities
@@ -15,6 +16,7 @@ namespace Model.Entities
         public int PhraseItemId { get; set; }
 
         [ForeignKey(nameof(UserId))]
+        [JsonIgnore]
         public ServerUser User { get; set; }
 
         [Required]

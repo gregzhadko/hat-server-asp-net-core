@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Linq;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using Utilities;
 
 namespace Model.Entities
@@ -40,6 +41,7 @@ namespace Model.Entities
         public string CreatedById { get; set; }
 
         [ForeignKey(nameof(CreatedById))]
+        [JsonIgnore]
         public ServerUser CreatedBy { get; set; }
 
         [Required]

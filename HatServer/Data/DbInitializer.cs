@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using JetBrains.Annotations;
 using OldServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Model.Entities;
+using Newtonsoft.Json;
 
 namespace HatServer.Data
 {
@@ -62,8 +66,20 @@ namespace HatServer.Data
             var users = _userManager.Users.ToList();
 
             var packs = MongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
+           
+            //SaveToFile(packs);
 
             _context.Packs.AddRange(packs);
+        }
+
+        private static void SaveToFile(List<Pack> packs)
+        {
+            var packString = JsonConvert.SerializeObject(packs, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                Formatting = Formatting.Indented
+            });
+            File.AppendAllText($"Backup\\{DateTime.Now:yyyy-MM-dd-hh-mm}.json", packString);
         }
     }
 }
