@@ -53,12 +53,10 @@ namespace HatServer.Data
             var fomin = new ServerUser {UserName = "fomin"};
             var sivykh = new ServerUser {UserName = "sivykh"};
             var tatarintsev = new ServerUser {UserName = "tatarintsev"};
-            //var stat = new ServerUser {UserName = "stat"};
             _userManager.CreateAsync(zhadko, _configuration["zhadko"]).Wait();
             _userManager.CreateAsync(fomin, _configuration["fomin"]).Wait();
             _userManager.CreateAsync(sivykh, _configuration["sivykh"]).Wait();
             _userManager.CreateAsync(tatarintsev, _configuration["tatarintsev"]).Wait();
-            //_userManager.CreateAsync(stat, _configuration["stat"]).Wait();
         }
 
         private void SeedPacks()

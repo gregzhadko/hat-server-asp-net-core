@@ -1,13 +1,37 @@
-﻿namespace Model.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using JetBrains.Annotations;
+
+namespace Model.Entities
 {
     public class GamePhrase
     {
+        public GamePhrase()
+        {
+        }
+
+        public GamePhrase([NotNull] PhraseItem phraseItem, [NotNull] Pack pack)
+        {
+            Phrase = phraseItem.Phrase;
+            Complexity = phraseItem.Complexity;
+            Description = phraseItem.Description;
+            ProdPackId = pack.Id;
+        }
+        
+        public int Id { get; set; }
+        
+        [Required]
         public string Phrase { get; set; }
 
-        public long Complexity { get; set; }
+        [Range(1, 5)]
+        public double? Complexity { get; set; }
 
         public string Description { get; set; }
+        
+        [Required]
+        public int ProdPackId { get; set; }
 
-        public string[] Tags { get; set; }
+        [ForeignKey(nameof(ProdPackId))]
+        public GamePack ProdPack { get; set; }
     }
 }

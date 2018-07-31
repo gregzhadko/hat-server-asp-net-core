@@ -10,7 +10,7 @@ namespace Model.Entities
         public RoundPhraseState State { get; set; }
 
         [ForeignKey("PhraseId")]
-        public PhraseItem PhraseItem { get; set; }
+        public GamePhrase PhraseItem { get; set; }
 
         public int PhraseId { get; set; }
 

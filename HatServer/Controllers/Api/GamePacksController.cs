@@ -26,7 +26,7 @@ namespace HatServer.Controllers.Api
             foreach (var pack in files.Select(s => System.IO.File.ReadAllText(s, Encoding.UTF8))
                 .Select(JsonConvert.DeserializeObject<GamePack>))
             {
-                pack.Count = pack.Phrases.Length;
+                pack.Count = pack.Phrases.Count;
                 pack.Phrases = null;
                 result.Add(pack);
             }

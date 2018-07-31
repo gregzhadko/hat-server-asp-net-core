@@ -37,6 +37,9 @@ namespace HatServer
         {
             services.AddDbContext<FillerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
+            services.AddDbContext<ProductionDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ServerUser, IdentityRole>(options =>
                 {
@@ -140,19 +143,25 @@ namespace HatServer
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<FillerDbContext>();
+                var fillerDbContext = serviceScope.ServiceProvider.GetService<FillerDbContext>();
 
                 //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
                 //var dbInitializer = new DbInitializer(context, userManager);
                 //dbInitializer.Initialize();
 
-                if (!context.AllMigrationsApplied())
+                if (!fillerDbContext.AllMigrationsApplied())
                 {
-                    context.Database.Migrate();
+                    fillerDbContext.Database.Migrate();
 
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
                     var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
-                    dbInitializer.Initialize(context, userManager, Configuration);
+                    dbInitializer.Initialize(fillerDbContext, userManager, Configuration);
+                }
+                
+                var productionDbContext = serviceScope.ServiceProvider.GetService<ProductionDbContext>();
+                if (!productionDbContext.AllMigrationsApplied())
+                {
+                    productionDbContext.Database.Migrate();
                 }
             }
         }
