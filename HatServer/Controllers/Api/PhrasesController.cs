@@ -131,7 +131,7 @@ namespace HatServer.Controllers.Api
             if (actual.Version > request.Version)
             {
                 var users = _userRepository.GetAll();
-                return BadRequest(new ErrorResponse("The phrase has a newer version", new BasePhraseItemResponse(actual, users)));
+                return Conflict(new ErrorResponse("The phrase has a newer version", new BasePhraseItemResponse(actual, users)));
             }
 
             var conflictedPhrase = await _phraseRepository.GetByNameExceptTrackIdAsync(request.Phrase, trackId);
