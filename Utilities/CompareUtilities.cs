@@ -33,6 +33,5 @@ namespace Utilities
 
             return Math.Abs(x.Value - y.Value) < tolerance;
         }
-        
     }
 }

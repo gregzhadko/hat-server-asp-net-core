@@ -102,9 +102,10 @@ namespace SpellChecker
                 case 'S':
                     SaveNewSkipWord(word, phrase, pack.Id);
                     break;
+                default:
+                    Console.WriteLine("Работаем Дальше!");
+                    break;
             }
-
-            Console.WriteLine("Работаем Дальше!");
         }
 
         private static bool SeveralLanguages([NotNull] string word)
