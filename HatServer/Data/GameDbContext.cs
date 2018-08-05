@@ -3,9 +3,9 @@ using Model.Entities;
 
 namespace HatServer.Data
 {
-    public class ProductionDbContext : DbContext
+    public class GameDbContext : DbContext
     {
-        public ProductionDbContext(DbContextOptions options)
+        public GameDbContext(DbContextOptions options)
             : base(options)
         {
         }

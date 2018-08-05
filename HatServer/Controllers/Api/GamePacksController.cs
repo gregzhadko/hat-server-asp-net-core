@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HatServer.DTO.Response;
 using Microsoft.AspNetCore.Mvc;
+using Model;
 using Model.Entities;
 using Newtonsoft.Json;
 
@@ -15,14 +16,12 @@ namespace HatServer.Controllers.Api
     [Route("api/[controller]")]
     public sealed class GamePacksController : Controller
     {
-        private const string PacksFolder = "Packs";
-
         // GET api/<controller>
         [HttpGet]
         public IActionResult GetAll()
         {
             var result = new List<GamePack>();
-            var files = Directory.GetFiles(PacksFolder, "*.json");
+            var files = Directory.GetFiles(Constants.PacksFolder, "*.json");
             foreach (var pack in files.Select(s => System.IO.File.ReadAllText(s, Encoding.UTF8))
                 .Select(JsonConvert.DeserializeObject<GamePack>))
             {
@@ -38,7 +37,7 @@ namespace HatServer.Controllers.Api
         [HttpGet("{id}", Name = "Get_Game_Pack")]
         public async Task<IActionResult> Get(int id)
         {
-            var file = Directory.GetFiles(PacksFolder, "*.json")
+            var file = Directory.GetFiles(Constants.PacksFolder, "*.json")
                 .FirstOrDefault(f => f.EndsWith($"{id}.json", StringComparison.Ordinal));
             if (file == null)
             {
@@ -53,7 +52,7 @@ namespace HatServer.Controllers.Api
         [HttpGet("{id}/icon", Name = "Get_icon")]
         public IActionResult GetIcon(int id)
         {
-            var file = Directory.GetFiles(PacksFolder, "*.pdf")
+            var file = Directory.GetFiles(Constants.PacksFolder, "*.pdf")
                 .FirstOrDefault(f => f.EndsWith($"{id}.pdf", StringComparison.Ordinal));
             if (file == null)
             {

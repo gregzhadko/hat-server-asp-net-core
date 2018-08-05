@@ -13,13 +13,12 @@ using Newtonsoft.Json;
 namespace HatServer.Data
 {
     [UsedImplicitly]
-    internal sealed class DbInitializer : IDbInitializer
+    internal sealed class FillerDbInitializer : IFillerDbInitializer
     {
         private FillerDbContext _context;
         private UserManager<ServerUser> _userManager;
         private IConfiguration _configuration;
 
-        //This example just creates an Administrator role and one Admin users
         public void Initialize(FillerDbContext context, UserManager<ServerUser> userManager, IConfiguration configuration)
         {
             _context = context;

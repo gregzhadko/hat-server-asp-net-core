@@ -38,7 +38,7 @@ namespace HatServer
             services.AddDbContext<FillerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
-            services.AddDbContext<ProductionDbContext>(options =>
+            services.AddDbContext<GameDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ServerUser, IdentityRole>(options =>
@@ -89,7 +89,7 @@ namespace HatServer
             AddValidatorsToService(services);
 
             // Add Database Initializer
-            services.AddScoped<IDbInitializer, DbInitializer>();
+            services.AddScoped<IFillerDbInitializer, FillerDbInitializer>();
         }
 
         private static void AddRepositoriesToServices(IServiceCollection services)
@@ -154,11 +154,11 @@ namespace HatServer
                     fillerDbContext.Database.Migrate();
 
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
+                    var dbInitializer = serviceScope.ServiceProvider.GetService<IFillerDbInitializer>();
                     dbInitializer.Initialize(fillerDbContext, userManager, Configuration);
                 }
                 
-                var productionDbContext = serviceScope.ServiceProvider.GetService<ProductionDbContext>();
+                var productionDbContext = serviceScope.ServiceProvider.GetService<GameDbContext>();
                 if (!productionDbContext.AllMigrationsApplied())
                 {
                     productionDbContext.Database.Migrate();
