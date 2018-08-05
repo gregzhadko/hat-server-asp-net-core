@@ -10,25 +10,14 @@
     <OutputPath>..\bin\Debug\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Migrations\20180319205241_AddPhraseState.cs" />
-    <Compile Remove="Migrations\20180319205241_AddPhraseState.Designer.cs" />
-    <Compile Remove="Migrations\20180319210803_AddPhraseState1.cs" />
-    <Compile Remove="Migrations\20180319210803_AddPhraseState1.Designer.cs" />
-    <Compile Remove="Migrations\20180319215540_AddSettings.cs" />
-    <Compile Remove="Migrations\20180319215540_AddSettings.Designer.cs" />
-    <Compile Remove="Migrations\20180319222138_AddRounds.cs" />
-    <Compile Remove="Migrations\20180319222138_AddRounds.Designer.cs" />
-    <Compile Remove="Migrations\20180319222609_Test.cs" />
-    <Compile Remove="Migrations\20180319222609_Test.Designer.cs" />
-    <Compile Remove="Migrations\20180319223220_Test.cs" />
-    <Compile Remove="Migrations\20180319223220_Test.Designer.cs" />
-    <Compile Remove="Migrations\20180319223400_BindPhrasesWithRounds.cs" />
-    <Compile Remove="Migrations\20180319223400_BindPhrasesWithRounds.Designer.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" PrivateAssets="All" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
