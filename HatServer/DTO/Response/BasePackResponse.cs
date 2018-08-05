@@ -14,7 +14,15 @@ namespace HatServer.DTO.Response
             Name = pack.Name;
             Version = 1;
             Description = pack.Description;
-            Phrases = pack.Phrases.Select(p => new BasePhraseItemResponse(p, users)).ToList();
+
+            if (pack.Phrases == null || pack.Phrases.Count == 0)
+            {
+                Phrases = null;
+            }
+            else
+            {
+                Phrases = pack.Phrases.Select(p => new BasePhraseItemResponse(p, users)).ToList();
+            }
         }
 
         [UsedImplicitly]
