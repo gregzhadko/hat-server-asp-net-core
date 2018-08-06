@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Model.Entities;
 
 namespace HatServer.DAL.Interfaces
@@ -7,5 +8,6 @@ namespace HatServer.DAL.Interfaces
     {
         Task<Pack> GetByNameAsync(string name);
         Task<Pack> GetFullInfoAsync(int id);
+        Task<List<Pack>> GetAllWithPhrases();
     }
 }

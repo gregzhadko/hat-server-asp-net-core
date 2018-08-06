@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using HatServer.Data;
 using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
@@ -26,6 +27,12 @@ namespace HatServer.DAL
         public Task<Pack> GetFullInfoAsync(int id)
         {
             return Entities.Include(p => p.Phrases).ThenInclude(p => p.ReviewStates).FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public Task<List<Pack>> GetAllWithPhrases()
+        {
+            var packs = Entities.Include(p => p.Phrases).ThenInclude(p => p.ReviewStates).ToListAsync();
+            return packs;
         }
     }
 }

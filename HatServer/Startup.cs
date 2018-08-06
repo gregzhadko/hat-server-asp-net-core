@@ -146,14 +146,14 @@ namespace HatServer
                 //var dbInitializer = new DbInitializer(context, userManager);
                 //dbInitializer.Initialize();
 
-                if (!context.AllMigrationsApplied())
-                {
-                    context.Database.Migrate();
+                //if (!context.AllMigrationsApplied())
+                //{
+                //    context.Database.Migrate();
 
-                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
-                    dbInitializer.Initialize(context, userManager, Configuration);
-                }
+                //    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                //    var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
+                //    dbInitializer.Initialize(context, userManager, Configuration);
+                //}
             }
         }
     }

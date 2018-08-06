@@ -27,12 +27,25 @@ namespace HatServer.Controllers.Api
         }
 
         // GET: api/<controller>
+        [ItemNotNull]
         [NotNull]
-        [HttpGet]
-        public List<BasePackResponse> GetAll()
+        [HttpGet("{loadPhrases?}")]
+        public async Task<List<BasePackResponse>> GetAll(bool? loadPhrases = null)
         {
-            var users = _userRepository.GetAll();
-            return _packRepository.GetAll().Select(p => new BasePackResponse(p, users)).ToList();
+            var users = _userRepository.GetAll().ToList();
+
+            IEnumerable<Pack> packs;
+
+            if (loadPhrases == true)
+            {
+                packs = await _packRepository.GetAllWithPhrases();
+            }
+            else
+            {
+                packs = _packRepository.GetAll();
+            }
+
+            return packs.Select(p => new BasePackResponse(p, users)).ToList();
         }
 
         // GET api/<controller>/5
@@ -50,7 +63,7 @@ namespace HatServer.Controllers.Api
                 return BadRequest(new ErrorResponse($"Pack with id {id} wasn't found"));
             }
 
-            var users = _userRepository.GetAll();
+            var users = _userRepository.GetAll().ToList();
             return Ok(new BasePackResponse(pack, users));
         }
 
@@ -76,7 +89,8 @@ namespace HatServer.Controllers.Api
         //TODO: check it and refactor
         // PUT api/<controller>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNameAndDescription(int id, [CanBeNull] [FromBody] string name, [CanBeNull] [FromBody] string description)
+        public async Task<IActionResult> UpdateNameAndDescription(int id, [CanBeNull] [FromBody] string name,
+            [CanBeNull] [FromBody] string description)
         {
             if (id == 0 || String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(description))
             {

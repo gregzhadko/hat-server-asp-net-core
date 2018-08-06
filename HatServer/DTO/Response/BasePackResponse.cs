@@ -7,7 +7,7 @@ namespace HatServer.DTO.Response
 {
     public sealed class BasePackResponse
     {
-        public BasePackResponse([NotNull] Pack pack, IEnumerable<ServerUser> users)
+        public BasePackResponse([NotNull] Pack pack, IList<ServerUser> users)
         {
             Id = pack.Id;
             Language = pack.Language;
