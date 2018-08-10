@@ -6,6 +6,7 @@ namespace Model.Entities
 {
     public class GamePhrase
     {
+        [UsedImplicitly]
         public GamePhrase()
         {
         }
@@ -15,11 +16,11 @@ namespace Model.Entities
             Phrase = phraseItem.Phrase;
             Complexity = phraseItem.Complexity;
             Description = phraseItem.Description;
-            ProdPackId = pack.Id;
+            GamePackId = pack.Id;
         }
-        
+
         public int Id { get; set; }
-        
+
         [Required]
         public string Phrase { get; set; }
 
@@ -27,11 +28,11 @@ namespace Model.Entities
         public double? Complexity { get; set; }
 
         public string Description { get; set; }
-        
-        [Required]
-        public int ProdPackId { get; set; }
 
-        [ForeignKey(nameof(ProdPackId))]
-        public GamePack ProdPack { get; set; }
+        [Required]
+        public int GamePackId { get; set; }
+
+        [ForeignKey(nameof(GamePackId))]
+        public GamePack GamePack { get; set; }
     }
 }

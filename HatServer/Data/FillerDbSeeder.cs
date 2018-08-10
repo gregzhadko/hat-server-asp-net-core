@@ -13,36 +13,33 @@ using Newtonsoft.Json;
 namespace HatServer.Data
 {
     [UsedImplicitly]
-    internal sealed class FillerDbInitializer : IFillerDbInitializer
+    internal sealed class FillerDbSeeder : IDbSeeder<FillerDbContext>
     {
-        private FillerDbContext _context;
-        private UserManager<ServerUser> _userManager;
-        private IConfiguration _configuration;
+        private readonly UserManager<ServerUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public void Initialize(FillerDbContext context, UserManager<ServerUser> userManager, IConfiguration configuration)
+        public FillerDbSeeder(UserManager<ServerUser> userManager, IConfiguration configuration)
         {
-            _context = context;
             _userManager = userManager;
             _configuration = configuration;
-            SeedData();
         }
 
-        private void SeedData()
+        public void Seed(FillerDbContext context)
         {
-            _context.Database.OpenConnection();
+            context.Database.OpenConnection();
 
             try
             {
                 SeedUsers();
-                SeedPacks();
+                SeedPacks(context);
 
-                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
-                _context.SaveChanges();
-                _context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
             }
             finally
             {
-                _context.Database.CloseConnection();
+                context.Database.CloseConnection();
             }
         }
 
@@ -58,7 +55,7 @@ namespace HatServer.Data
             _userManager.CreateAsync(tatarintsev, _configuration["tatarintsev"]).Wait();
         }
 
-        private void SeedPacks()
+        private void SeedPacks(FillerDbContext context)
         {
             var users = _userManager.Users.ToList();
 
@@ -66,7 +63,7 @@ namespace HatServer.Data
            
             //SaveToFile(packs);
 
-            _context.Packs.AddRange(packs);
+            context.Packs.AddRange(packs);
         }
 
         private static void SaveToFile(List<Pack> packs)

@@ -37,7 +37,7 @@ namespace HatServer
         {
             services.AddDbContext<FillerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
+
             services.AddDbContext<GameDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -80,7 +80,8 @@ namespace HatServer
                 .AddJsonOptions(
                     options =>
                     {
-                        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(true));
+                        options.SerializerSettings.Converters.Add(
+                            new Newtonsoft.Json.Converters.StringEnumConverter(true));
                         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     })
@@ -89,7 +90,7 @@ namespace HatServer
             AddValidatorsToService(services);
 
             // Add Database Initializer
-            services.AddScoped<IFillerDbInitializer, FillerDbInitializer>();
+            //services.AddScoped<IDbSeeder, FillerDbInitializer>();
         }
 
         private static void AddRepositoriesToServices(IServiceCollection services)
@@ -143,25 +144,27 @@ namespace HatServer
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var fillerDbContext = serviceScope.ServiceProvider.GetService<FillerDbContext>();
+//                var fillerDbContext = serviceScope.ServiceProvider.GetService<FillerDbContext>();
+//
+//                if (!fillerDbContext.AllMigrationsApplied())
+//                {
+//                    fillerDbContext.Database.Migrate();
+//
+//                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+//                    var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
+//                    fillerDbSeeder.Seed(fillerDbContext);
+//                }
 
-                //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                //var dbInitializer = new DbInitializer(context, userManager);
-                //dbInitializer.Initialize();
+                var gameDbContext = serviceScope.ServiceProvider.GetService<GameDbContext>();
 
-                if (!fillerDbContext.AllMigrationsApplied())
+//                var gameDbSeeder = new GameDbSeeder();
+//                gameDbSeeder.Seed(gameDbContext);
+
+                if (!gameDbContext.AllMigrationsApplied())
                 {
-                    fillerDbContext.Database.Migrate();
-
-                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var dbInitializer = serviceScope.ServiceProvider.GetService<IFillerDbInitializer>();
-                    dbInitializer.Initialize(fillerDbContext, userManager, Configuration);
-                }
-                
-                var productionDbContext = serviceScope.ServiceProvider.GetService<GameDbContext>();
-                if (!productionDbContext.AllMigrationsApplied())
-                {
-                    productionDbContext.Database.Migrate();
+                    gameDbContext.Database.Migrate();
+                    var gameDbSeeder = new GameDbSeeder();
+                    gameDbSeeder.Seed(gameDbContext);
                 }
             }
         }

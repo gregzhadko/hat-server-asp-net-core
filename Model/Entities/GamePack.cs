@@ -9,6 +9,11 @@ namespace Model.Entities
     [DebuggerDisplay("{Id}, {Name}, {Description}")]
     public class GamePack
     {
+        [UsedImplicitly]
+        public GamePack()
+        {
+        }
+
         public GamePack([NotNull] Pack pack)
         {
             Id = pack.Id;
@@ -19,7 +24,7 @@ namespace Model.Entities
             Version = pack.Version + 1;
             Phrases = pack.Phrases.Select(p => new GamePhrase(p, pack)).ToList();
         }
-        
+
         public int Id { get; set; }
 
         [Required]
@@ -38,7 +43,9 @@ namespace Model.Entities
         public bool Paid { get; set; }
 
         public int Count { get; set; }
-        
+
+        public byte[] Icon { get; set; }
+
         [NotNull]
         public override string ToString() => $"{Id}. {Name}\t{Description}";
     }
