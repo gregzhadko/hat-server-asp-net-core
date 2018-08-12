@@ -143,21 +143,18 @@ namespace HatServer
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-//                var fillerDbContext = serviceScope.ServiceProvider.GetService<FillerDbContext>();
-//
-//                if (!fillerDbContext.AllMigrationsApplied())
-//                {
-//                    fillerDbContext.Database.Migrate();
-//
-//                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-//                    var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
-//                    fillerDbSeeder.Seed(fillerDbContext);
-//                }
+                var fillerDbContext = serviceScope.ServiceProvider.GetService<FillerDbContext>();
+
+                if (!fillerDbContext.AllMigrationsApplied())
+                {
+                    fillerDbContext.Database.Migrate();
+
+                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                    var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
+                    fillerDbSeeder.Seed(fillerDbContext);
+                }
 
                 var gameDbContext = serviceScope.ServiceProvider.GetService<GameDbContext>();
-
-//                var gameDbSeeder = new GameDbSeeder();
-//                gameDbSeeder.Seed(gameDbContext);
 
                 if (!gameDbContext.AllMigrationsApplied())
                 {
