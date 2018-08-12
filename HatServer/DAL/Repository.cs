@@ -10,10 +10,10 @@ namespace HatServer.DAL
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly FillerDbContext Context;
+        protected readonly DbContext Context;
         protected readonly DbSet<T> Entities;
 
-        protected Repository([NotNull] FillerDbContext context)
+        protected Repository([NotNull] DbContext context)
         {
             Context = context;
             Entities = context.Set<T>();

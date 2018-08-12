@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HatServer.Migrations
 {
-    public partial class Initialization : Migration
+    public partial class FillerContextInitialization : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace HatServer.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(),
+                    Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
@@ -26,13 +26,13 @@ namespace HatServer.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    AccessFailedCount = table.Column<int>(),
-                    EmailConfirmed = table.Column<bool>(),
-                    LockoutEnabled = table.Column<bool>(),
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(),
-                    TwoFactorEnabled = table.Column<bool>(),
-                    Id = table.Column<string>(),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -48,33 +48,15 @@ namespace HatServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GameUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>()
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    DeviceId = table.Column<Guid>(),
-                    DeviceModel = table.Column<string>(nullable: true),
-                    Device = table.Column<string>(nullable: true),
-                    Os = table.Column<string>(nullable: true),
-                    OsVersion = table.Column<string>(nullable: true),
-                    Version = table.Column<string>(nullable: true),
-                    PushToken = table.Column<string>(nullable: true),
-                    TimeStamp = table.Column<int>()
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GameUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Packs",
                 columns: table => new
                 {
-                    Id = table.Column<int>()
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Language = table.Column<string>(),
-                    Name = table.Column<string>(),
+                    Version = table.Column<int>(nullable: false),
+                    Paid = table.Column<bool>(nullable: false),
+                    Language = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -83,40 +65,12 @@ namespace HatServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoundPhraseStates",
-                columns: table => new
-                {
-                    Id = table.Column<int>(),
-                    Name = table.Column<string>(maxLength: 100),
-                    Description = table.Column<string>(maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoundPhraseStates", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Settings",
-                columns: table => new
-                {
-                    Id = table.Column<int>()
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CanChangeWord = table.Column<bool>(),
-                    RoundTime = table.Column<int>(),
-                    BadItalicSimulated = table.Column<bool>()
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Settings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>()
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    RoleId = table.Column<string>(),
+                    RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -135,9 +89,9 @@ namespace HatServer.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>()
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(),
+                    UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -156,10 +110,10 @@ namespace HatServer.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(),
-                    ProviderKey = table.Column<string>(),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>()
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,8 +130,8 @@ namespace HatServer.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(),
-                    RoleId = table.Column<string>()
+                    UserId = table.Column<string>(nullable: false),
+                    RoleId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -200,9 +154,9 @@ namespace HatServer.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(),
-                    LoginProvider = table.Column<string>(),
-                    Name = table.Column<string>(),
+                    UserId = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -217,38 +171,19 @@ namespace HatServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games",
-                columns: table => new
-                {
-                    Id = table.Column<int>()
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>()
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Games", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Games_GameUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "GameUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PhraseItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>()
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Version = table.Column<int>(),
-                    Phrase = table.Column<string>(),
+                    Version = table.Column<int>(nullable: false),
+                    Phrase = table.Column<string>(nullable: false),
                     Complexity = table.Column<double>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    PackId = table.Column<int>(),
-                    TrackId = table.Column<int>(),
-                    CreatedById = table.Column<string>(),
-                    CreatedDate = table.Column<DateTime>(),
+                    PackId = table.Column<int>(nullable: false),
+                    TrackId = table.Column<int>(nullable: false),
+                    CreatedById = table.Column<string>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
                     ClosedById = table.Column<string>(nullable: true),
                     ClosedBy = table.Column<string>(nullable: true),
                     ClosedDate = table.Column<DateTime>(nullable: true)
@@ -271,34 +206,14 @@ namespace HatServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Teams",
-                columns: table => new
-                {
-                    Id = table.Column<int>()
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    GameId = table.Column<int>()
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teams", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Teams_Games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ReviewStates",
                 columns: table => new
                 {
-                    Id = table.Column<int>()
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    PhraseItemId = table.Column<int>(),
-                    UserId = table.Column<string>(),
-                    State = table.Column<int>(),
+                    PhraseItemId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    State = table.Column<int>(nullable: false),
                     Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -314,89 +229,6 @@ namespace HatServer.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Players",
-                columns: table => new
-                {
-                    Id = table.Column<int>()
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    TeamId = table.Column<int>()
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Players", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Players_Teams_TeamId",
-                        column: x => x.TeamId,
-                        principalTable: "Teams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Rounds",
-                columns: table => new
-                {
-                    Id = table.Column<int>()
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Timestamp = table.Column<int>(),
-                    RoundNumber = table.Column<int>(),
-                    Time = table.Column<int>(),
-                    SettingsId = table.Column<int>(),
-                    PlayerId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rounds", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rounds_Players_PlayerId",
-                        column: x => x.PlayerId,
-                        principalTable: "Players",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Rounds_Settings_SettingsId",
-                        column: x => x.SettingsId,
-                        principalTable: "Settings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoundPhrases",
-                columns: table => new
-                {
-                    Id = table.Column<int>()
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Time = table.Column<int>(),
-                    StateId = table.Column<int>(nullable: true),
-                    PhraseId = table.Column<int>(),
-                    RoundId = table.Column<int>()
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoundPhrases", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RoundPhrases_PhraseItems_PhraseId",
-                        column: x => x.PhraseId,
-                        principalTable: "PhraseItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RoundPhrases_Rounds_RoundId",
-                        column: x => x.RoundId,
-                        principalTable: "Rounds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_RoundPhrases_RoundPhraseStates_StateId",
-                        column: x => x.StateId,
-                        principalTable: "RoundPhraseStates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -439,11 +271,6 @@ namespace HatServer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_UserId",
-                table: "Games",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PhraseItems_CreatedById",
                 table: "PhraseItems",
                 column: "CreatedById");
@@ -454,11 +281,6 @@ namespace HatServer.Migrations
                 column: "PackId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Players_TeamId",
-                table: "Players",
-                column: "TeamId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ReviewStates_PhraseItemId",
                 table: "ReviewStates",
                 column: "PhraseItemId");
@@ -467,36 +289,6 @@ namespace HatServer.Migrations
                 name: "IX_ReviewStates_UserId",
                 table: "ReviewStates",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoundPhrases_PhraseId",
-                table: "RoundPhrases",
-                column: "PhraseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoundPhrases_RoundId",
-                table: "RoundPhrases",
-                column: "RoundId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RoundPhrases_StateId",
-                table: "RoundPhrases",
-                column: "StateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rounds_PlayerId",
-                table: "Rounds",
-                column: "PlayerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rounds_SettingsId",
-                table: "Rounds",
-                column: "SettingsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Teams_GameId",
-                table: "Teams",
-                column: "GameId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -520,40 +312,16 @@ namespace HatServer.Migrations
                 name: "ReviewStates");
 
             migrationBuilder.DropTable(
-                name: "RoundPhrases");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "PhraseItems");
 
             migrationBuilder.DropTable(
-                name: "Rounds");
-
-            migrationBuilder.DropTable(
-                name: "RoundPhraseStates");
-
-            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Packs");
-
-            migrationBuilder.DropTable(
-                name: "Players");
-
-            migrationBuilder.DropTable(
-                name: "Settings");
-
-            migrationBuilder.DropTable(
-                name: "Teams");
-
-            migrationBuilder.DropTable(
-                name: "Games");
-
-            migrationBuilder.DropTable(
-                name: "GameUsers");
         }
     }
 }

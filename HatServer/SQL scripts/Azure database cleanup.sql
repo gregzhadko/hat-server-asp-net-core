@@ -55,3 +55,6 @@ BEGIN
     SELECT @name = (SELECT TOP 1 [name] FROM sysobjects WHERE [type] = 'U' AND category = 0 AND [name] > @name ORDER BY [name])
 END
 GO
+
+PRINT 'Done!'
+GO

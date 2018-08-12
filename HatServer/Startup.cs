@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using HatServer.DAL;
@@ -38,6 +39,11 @@ namespace HatServer
             services.AddDbContext<FillerDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDbContext<GameDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddAutoMapper();
+            
             services.AddIdentity<ServerUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 5;
@@ -77,7 +83,8 @@ namespace HatServer
                 .AddJsonOptions(
                     options =>
                     {
-                        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(true));
+                        options.SerializerSettings.Converters.Add(
+                            new Newtonsoft.Json.Converters.StringEnumConverter(true));
                         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     })
@@ -86,7 +93,7 @@ namespace HatServer
             AddValidatorsToService(services);
 
             // Add Database Initializer
-            services.AddScoped<IDbInitializer, DbInitializer>();
+            //services.AddScoped<IDbSeeder, FillerDbInitializer>();
         }
 
         private static void AddRepositoriesToServices(IServiceCollection services)
@@ -95,6 +102,8 @@ namespace HatServer
             services.AddScoped(typeof(IPackRepository), typeof(PackRepository));
             services.AddScoped(typeof(IPhraseRepository), typeof(PhraseRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+            services.AddScoped(typeof(IGamePackRepository), typeof(GamePackRepository));
+            services.AddScoped(typeof(IDownloadedPacksInfoRepository), typeof(DownloadedPacksInfoRepository));
         }
 
         private static void AddValidatorsToService(IServiceCollection services)
@@ -125,7 +134,6 @@ namespace HatServer
 
             app.UseStaticFiles();
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
-            app.UseMiddleware(typeof(StatisticsMiddleware));
 
             app.UseAuthentication();
 
@@ -140,20 +148,25 @@ namespace HatServer
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<FillerDbContext>();
+                var fillerDbContext = serviceScope.ServiceProvider.GetService<FillerDbContext>();
 
-                //var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                //var dbInitializer = new DbInitializer(context, userManager);
-                //dbInitializer.Initialize();
+                if (!fillerDbContext.AllMigrationsApplied())
+                {
+                    fillerDbContext.Database.Migrate();
 
-                //if (!context.AllMigrationsApplied())
-                //{
-                //    context.Database.Migrate();
+                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
+                    var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
+                    fillerDbSeeder.Seed(fillerDbContext);
+                }
 
-                //    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                //    var dbInitializer = serviceScope.ServiceProvider.GetService<IDbInitializer>();
-                //    dbInitializer.Initialize(context, userManager, Configuration);
-                //}
+                var gameDbContext = serviceScope.ServiceProvider.GetService<GameDbContext>();
+
+                if (!gameDbContext.AllMigrationsApplied())
+                {
+                    gameDbContext.Database.Migrate();
+                    var gameDbSeeder = new GameDbSeeder();
+                    gameDbSeeder.Seed(gameDbContext);
+                }
             }
         }
     }
