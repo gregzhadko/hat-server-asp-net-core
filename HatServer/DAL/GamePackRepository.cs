@@ -9,6 +9,5 @@ namespace HatServer.DAL
         protected GamePackRepository([NotNull] FillerDbContext context) : base(context)
         {
         }
-        
     }
 }

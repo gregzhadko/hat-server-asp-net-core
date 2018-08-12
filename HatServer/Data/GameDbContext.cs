@@ -9,6 +9,8 @@ namespace HatServer.Data
             : base(options)
         {
         }
+        
+        public DownloadedPacksInfo DownloadedPacksInfo { get; set; }
 
         public GamePack GamePack { get; set; }
 

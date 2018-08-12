@@ -129,7 +129,6 @@ namespace HatServer
 
             app.UseStaticFiles();
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
-            app.UseMiddleware(typeof(StatisticsMiddleware));
 
             app.UseAuthentication();
 
