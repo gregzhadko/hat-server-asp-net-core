@@ -6,7 +6,8 @@ namespace HatServer.Data
 {
     public sealed class FillerDbContext : IdentityDbContext<ServerUser>
     {
-        public FillerDbContext(DbContextOptions options)
+        // ReSharper disable once SuggestBaseTypeForParameter (Requires for migrations generations)
+        public FillerDbContext(DbContextOptions<FillerDbContext> options)
             : base(options)
         {
         }

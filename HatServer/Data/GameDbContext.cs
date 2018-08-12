@@ -5,16 +5,17 @@ namespace HatServer.Data
 {
     public class GameDbContext : DbContext
     {
-        public GameDbContext(DbContextOptions options)
+        // ReSharper disable once SuggestBaseTypeForParameter (Requires for migrations generations)
+        public GameDbContext(DbContextOptions<GameDbContext> options)
             : base(options)
         {
         }
         
-        public DownloadedPacksInfo DownloadedPacksInfo { get; set; }
+        public DbSet<DownloadedPacksInfo> DownloadedPacksInfos { get; set; }
 
-        public GamePack GamePack { get; set; }
+        public DbSet<GamePack> GamePacks { get; set; }
 
-        public GamePhrase GamePhrase { get; set; }
+        public DbSet<GamePhrase> GamePhrases { get; set; }
         
         public DbSet<Game> Games { get; set; }
 

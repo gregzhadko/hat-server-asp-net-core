@@ -6,6 +6,8 @@ namespace Model.Entities
 {
     public class DownloadedPacksInfo
     {
+        public int Id { get; set; }
+        
         [Required]
         public Guid GadgetId { get; set; }
         
