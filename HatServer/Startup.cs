@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using HatServer.DAL;
@@ -41,6 +42,8 @@ namespace HatServer
             services.AddDbContext<GameDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAutoMapper();
+            
             services.AddIdentity<ServerUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 5;
@@ -99,6 +102,7 @@ namespace HatServer
             services.AddScoped(typeof(IPackRepository), typeof(PackRepository));
             services.AddScoped(typeof(IPhraseRepository), typeof(PhraseRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+            services.AddScoped(typeof(IGamePackRepository), typeof(GamePackRepository));
         }
 
         private static void AddValidatorsToService(IServiceCollection services)

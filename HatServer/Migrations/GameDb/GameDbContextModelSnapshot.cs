@@ -59,8 +59,6 @@ namespace HatServer.Migrations.GameDb
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Count");
-
                     b.Property<string>("Description");
 
                     b.Property<string>("Language")
