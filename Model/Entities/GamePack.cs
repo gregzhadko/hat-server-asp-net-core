@@ -42,8 +42,6 @@ namespace Model.Entities
 
         public bool Paid { get; set; }
 
-        public int Count { get; set; }
-
         public GamePackIcon GamePackIcon { get; set; } = new GamePackIcon();
         
         [NotNull]

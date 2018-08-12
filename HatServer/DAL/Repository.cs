@@ -13,7 +13,7 @@ namespace HatServer.DAL
         protected readonly DbContext Context;
         protected readonly DbSet<T> Entities;
 
-        protected Repository([NotNull] FillerDbContext context)
+        protected Repository([NotNull] DbContext context)
         {
             Context = context;
             Entities = context.Set<T>();
