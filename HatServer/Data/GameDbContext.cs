@@ -14,6 +14,8 @@ namespace HatServer.Data
         public DbSet<DownloadedPacksInfo> DownloadedPacksInfos { get; set; }
 
         public DbSet<GamePack> GamePacks { get; set; }
+        
+        public DbSet<GamePackIcon> GamePackIcons { get; set; }
 
         public DbSet<GamePhrase> GamePhrases { get; set; }
         

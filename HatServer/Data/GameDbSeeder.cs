@@ -25,7 +25,7 @@ namespace HatServer.Data
                 {
                     var pack = JsonConvert.DeserializeObject<GamePack>(packFile);
                     var iconFile = iconFiles.First(i => i == $@"Packs\pack_icon_{pack.Id}.pdf");
-                    pack.Icon = File.ReadAllBytes(iconFile);
+                    pack.GamePackIcon.Icon = File.ReadAllBytes(iconFile);
                     packs.Add(pack);
                 }
                 

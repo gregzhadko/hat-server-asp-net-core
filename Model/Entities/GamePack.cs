@@ -44,8 +44,8 @@ namespace Model.Entities
 
         public int Count { get; set; }
 
-        public byte[] Icon { get; set; }
-
+        public GamePackIcon GamePackIcon { get; set; } = new GamePackIcon();
+        
         [NotNull]
         public override string ToString() => $"{Id}. {Name}\t{Description}";
     }
