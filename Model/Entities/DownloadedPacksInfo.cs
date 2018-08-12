@@ -9,7 +9,7 @@ namespace Model.Entities
         public int Id { get; set; }
         
         [Required]
-        public Guid GadgetId { get; set; }
+        public Guid DeviceId { get; set; }
         
         [ForeignKey(nameof(GamePackId))]
         public GamePack GamePack { get; set; }

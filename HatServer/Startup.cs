@@ -103,6 +103,7 @@ namespace HatServer
             services.AddScoped(typeof(IPhraseRepository), typeof(PhraseRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped(typeof(IGamePackRepository), typeof(GamePackRepository));
+            services.AddScoped(typeof(IDownloadedPacksInfoRepository), typeof(DownloadedPacksInfoRepository));
         }
 
         private static void AddValidatorsToService(IServiceCollection services)

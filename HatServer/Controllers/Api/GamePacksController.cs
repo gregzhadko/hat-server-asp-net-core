@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
 using Microsoft.AspNetCore.Mvc;
-using Model;
 using Model.Entities;
-using Newtonsoft.Json;
 
 namespace HatServer.Controllers.Api
 {
@@ -21,13 +15,16 @@ namespace HatServer.Controllers.Api
     {
         private readonly IMapper _mapper;
         private readonly IGamePackRepository _gamePackRepository;
+        private readonly IDownloadedPacksInfoRepository _downloadedPacksInfoRepository;
 
-        public GamePacksController(IMapper mapper, IGamePackRepository gamePackRepository)
+        public GamePacksController(IMapper mapper, IGamePackRepository gamePackRepository,
+            IDownloadedPacksInfoRepository downloadedPacksInfoRepository)
         {
             _mapper = mapper;
             _gamePackRepository = gamePackRepository;
+            _downloadedPacksInfoRepository = downloadedPacksInfoRepository;
         }
-        
+
         // GET api/<controller>
         [HttpGet]
         public IActionResult GetAll()
@@ -51,12 +48,18 @@ namespace HatServer.Controllers.Api
 
         // GET api/<controller>/5
         [HttpGet("{id}", Name = "Get_Game_Pack")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id, [FromHeader]string deviceId)
         {
             var pack = await _gamePackRepository.GetAsync(id);
             if (pack == null)
             {
                 return BadRequest(new ErrorResponse($"Pack with id = {id} wasn't found"));
+            }
+
+            if (!String.IsNullOrWhiteSpace(deviceId))
+            {
+                var downloadedInfo = new DownloadedPacksInfo{DownloadedTime = DateTime.UtcNow, DeviceId = new Guid(deviceId), GamePackId = id};
+                await _downloadedPacksInfoRepository.InsertAsync(downloadedInfo);
             }
 
             var response = _mapper.Map<GamePackResponse>(pack);
