@@ -43,7 +43,7 @@ namespace HatServer
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddAutoMapper();
-            
+
             services.AddIdentity<ServerUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 5;
@@ -164,9 +164,10 @@ namespace HatServer
                 if (!gameDbContext.AllMigrationsApplied())
                 {
                     gameDbContext.Database.Migrate();
-                    var gameDbSeeder = new GameDbSeeder();
-                    //gameDbSeeder.Seed(gameDbContext);
                 }
+
+                var gameDbSeeder = new GameDbSeeder();
+                gameDbSeeder.Seed(gameDbContext);
             }
         }
     }
