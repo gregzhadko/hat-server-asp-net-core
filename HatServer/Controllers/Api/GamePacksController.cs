@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
+using HatServer.Tools;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Model.Entities;
 
 namespace HatServer.Controllers.Api
@@ -13,13 +15,15 @@ namespace HatServer.Controllers.Api
     [Route("api/[controller]")]
     public sealed class GamePacksController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IGamePackRepository _gamePackRepository;
         private readonly IDownloadedPacksInfoRepository _downloadedPacksInfoRepository;
 
-        public GamePacksController(IMapper mapper, IGamePackRepository gamePackRepository,
+        public GamePacksController(IConfiguration configuration, IMapper mapper, IGamePackRepository gamePackRepository,
             IDownloadedPacksInfoRepository downloadedPacksInfoRepository)
         {
+            _configuration = configuration;
             _mapper = mapper;
             _gamePackRepository = gamePackRepository;
             _downloadedPacksInfoRepository = downloadedPacksInfoRepository;
@@ -58,6 +62,11 @@ namespace HatServer.Controllers.Api
 
             if (!String.IsNullOrWhiteSpace(deviceId))
             {
+                var notifier = new BotNotifier(_configuration, _downloadedPacksInfoRepository);
+#pragma warning disable 4014
+                notifier.SendDownloadedNotificationAsync(pack);
+#pragma warning restore 4014
+                
                 var downloadedInfo = new DownloadedPacksInfo{DownloadedTime = DateTime.UtcNow, DeviceId = new Guid(deviceId), GamePackId = id};
                 await _downloadedPacksInfoRepository.InsertAsync(downloadedInfo);
             }

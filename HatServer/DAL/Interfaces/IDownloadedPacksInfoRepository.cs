@@ -1,8 +1,11 @@
-﻿using Model.Entities;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Model.Entities;
 
 namespace HatServer.DAL.Interfaces
 {
     public interface IDownloadedPacksInfoRepository : IRepository<DownloadedPacksInfo>
     {
+        Task<List<DownloadedPacksInfo>> GetDailyDownloadsForPack(int packId);
     }
 }
