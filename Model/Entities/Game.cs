@@ -10,9 +10,9 @@ namespace Model.Entities
         public List<Team> Teams { get; set; }
         //public List<Stage> Stages { get; set; }
 
-        [ForeignKey("UserId")]
-        public User User { get; set; }
+        [ForeignKey("DeviceInfoId")]
+        public DeviceInfo DeviceInfo { get; set; }
 
-        public int UserId { get; set; }
+        public int DeviceInfoId { get; set; }
     }
 }
