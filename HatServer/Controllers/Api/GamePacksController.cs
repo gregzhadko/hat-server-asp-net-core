@@ -62,10 +62,10 @@ namespace HatServer.Controllers.Api
 
             if (!String.IsNullOrWhiteSpace(deviceId))
             {
-                var notifier = new BotNotifier(_configuration, _downloadedPacksInfoRepository);
-#pragma warning disable 4014
-                notifier.SendDownloadedNotificationAsync(pack);
-#pragma warning restore 4014
+//                var notifier = new BotNotifier(_configuration, _downloadedPacksInfoRepository);
+//#pragma warning disable 4014
+//                notifier.SendDownloadedNotificationAsync(pack);
+//#pragma warning restore 4014
                 
                 var downloadedInfo = new DownloadedPacksInfo{DownloadedTime = DateTime.UtcNow, DeviceId = new Guid(deviceId), GamePackId = id};
                 await _downloadedPacksInfoRepository.InsertAsync(downloadedInfo);
@@ -92,7 +92,7 @@ namespace HatServer.Controllers.Api
             var icon = await _gamePackRepository.GetPackIcon(id);
             if (icon == null)
             {
-                return BadRequest(new ErrorResponse($"Pack with id = {id} wasn't found"));
+                return NotFound(new ErrorResponse($"Icon with id = {id} wasn't found"));
             }
 
             return File(icon.Icon, "application/file", "pack_icon_{id}.pdf");
