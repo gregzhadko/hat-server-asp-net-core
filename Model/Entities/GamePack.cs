@@ -42,8 +42,11 @@ namespace Model.Entities
 
         public bool Paid { get; set; }
 
-        public GamePackIcon GamePackIcon { get; set; } = new GamePackIcon();
+        public int GamePackIconId { get; set; }
         
+        public GamePackIcon GamePackIcon { get; set; }
+
+
         [NotNull]
         public override string ToString() => $"{Id}. {Name}\t{Description}";
     }
