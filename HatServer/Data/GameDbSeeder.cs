@@ -19,25 +19,31 @@ namespace HatServer.Data
                 context.Database.OpenConnection();
                 var packs = new List<GamePack>();
 
-                var exitstingPacks = context.GamePacks.ToList();
+                var exitstingPacks = context.GamePacks.Include(p => p.GamePackIcon).ToList();
             
                 var packFiles = Directory.GetFiles(Constants.PacksFolder, "*.json");
                 var iconFiles = Directory.GetFiles(Constants.PacksFolder, "*.pdf");
                 foreach (var packFile in packFiles.Select(s => File.ReadAllText(s, Encoding.UTF8)))
                 {
                     var pack = JsonConvert.DeserializeObject<GamePack>(packFile);
-                    if (exitstingPacks.Select(p => p.Id).Contains(pack.Id))
-                    {
-                        continue;
-                    }
-                    
                     var iconFile = iconFiles.FirstOrDefault(i => i == $@"Packs\pack_icon_{pack.Id}.pdf");
-                    if (iconFile == null)
+
+                    var existingPack = exitstingPacks.FirstOrDefault(p => p.Id == pack.Id);
+                    if (existingPack != null)
                     {
+                        if (existingPack.GamePackIcon == null && iconFile != null)
+                        {
+                            var existingPackIcon = new GamePackIcon {Icon = File.ReadAllBytes(iconFile), GamePackId = existingPack.Id};
+                            context.Add(existingPackIcon);
+                        } 
+                        
                         continue;
                     }
-                    
-                    pack.GamePackIcon.Icon = File.ReadAllBytes(iconFile);
+
+                    if (iconFile != null)
+                    {
+                        pack.GamePackIcon = new GamePackIcon {Icon = File.ReadAllBytes(iconFile)};
+                    }
                     packs.Add(pack);
                 }
                 
