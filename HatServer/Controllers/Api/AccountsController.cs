@@ -36,7 +36,7 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.ParseErrors());
             }
 
             var result = await _signInManager.PasswordSignInAsync(model.Name, model.Password, false, false);
@@ -58,7 +58,7 @@ namespace HatServer.Controllers.Api
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.ParseErrors());
             }
 
             var user = new ServerUser

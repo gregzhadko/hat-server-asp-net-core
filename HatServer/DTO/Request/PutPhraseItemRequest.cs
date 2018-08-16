@@ -74,7 +74,7 @@ namespace HatServer.DTO.Request
         {
             RuleFor(p => p.Phrase).NotEmpty();
             RuleFor(p => p.Author).NotEmpty();
-            RuleFor(p => p.Version).NotEmpty();
+            RuleFor(p => p.Version).GreaterThanOrEqualTo(0);
 
             RuleFor(p => p.Complexity).InclusiveBetween(1, 5).When(p => p.Complexity != null);
         }

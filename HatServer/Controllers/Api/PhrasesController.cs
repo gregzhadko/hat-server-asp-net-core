@@ -76,7 +76,7 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.ParseErrors());
             }
 
             var pack = await _packRepository.GetAsync(request.PackId);
@@ -113,7 +113,7 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.ParseErrors());
             }
 
             var user = await _userRepository.GetByNameAsync(request.Author);
@@ -151,7 +151,7 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.ParseErrors());
             }
 
             var user = await _userRepository.GetByNameAsync(request.Author);

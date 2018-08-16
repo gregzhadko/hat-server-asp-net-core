@@ -73,7 +73,7 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState.ParseErrors());
             }
 
             var existing = await _packRepository.GetByNameAsync(item.Name);
