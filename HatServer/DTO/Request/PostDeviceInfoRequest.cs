@@ -1,14 +1,9 @@
 ﻿using System;
-using JetBrains.Annotations;
 
-namespace Model.Entities
+namespace HatServer.DTO.Request
 {
-    public class DeviceInfo
+    public class PostDeviceInfoRequest
     {
-        [UsedImplicitly]
-        public DeviceInfo(){}
-        
-        public int Id { get; set; }
         public Guid DeviceId { get; set; }
         public string DeviceModel { get; set; }
         public string Device { get; set; }

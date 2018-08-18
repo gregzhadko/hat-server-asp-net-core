@@ -13,7 +13,8 @@ namespace HatServer.DAL
         protected readonly DbContext Context;
         protected readonly DbSet<T> Entities;
 
-        protected Repository([NotNull] DbContext context)
+        // ReSharper disable once MemberCanBeProtected.Global
+        public Repository([NotNull] DbContext context)
         {
             Context = context;
             Entities = context.Set<T>();
