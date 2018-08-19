@@ -35,6 +35,6 @@ namespace HatServer.Data
 
         public DbSet<Team> Teams { get; set; }
 
-        public DbSet<DeviceInfo> GameUsers { get; set; }
+        public DbSet<DeviceInfo> DeviceInfos { get; set; }
     }
 }
