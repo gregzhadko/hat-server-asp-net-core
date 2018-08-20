@@ -11,8 +11,10 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Model.Entities;
+using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api
 {
@@ -22,12 +24,15 @@ namespace HatServer.Controllers.Api
         private readonly SignInManager<ServerUser> _signInManager;
         private readonly UserManager<ServerUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AccountsController> _logger;
 
-        public AccountsController(UserManager<ServerUser> userManager, SignInManager<ServerUser> signInManager, IConfiguration configuration)
+        public AccountsController(UserManager<ServerUser> userManager, SignInManager<ServerUser> signInManager,
+            IConfiguration configuration, ILogger<AccountsController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _logger = logger;
         }
 
         // POST api/<controller>
@@ -36,7 +41,7 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.ParseErrors());
+                return HandleAndReturnBadRequest(ModelState, _logger);
             }
 
             var result = await _signInManager.PasswordSignInAsync(model.Name, model.Password, false, false);
@@ -48,7 +53,7 @@ namespace HatServer.Controllers.Api
                 return Ok(new {token});
             }
 
-            return BadRequest(new ErrorResponse("INVALID_LOGIN_ATTEMPT"));
+            return HandleAndReturnBadRequest("INVALID_LOGIN_ATTEMPT", _logger);
         }
 
         //[HttpPost]
@@ -58,7 +63,7 @@ namespace HatServer.Controllers.Api
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.ParseErrors());
+                return HandleAndReturnBadRequest(ModelState, _logger);
             }
 
             var user = new ServerUser
@@ -75,7 +80,7 @@ namespace HatServer.Controllers.Api
                 return Ok(new {token});
             }
 
-            return BadRequest(new ErrorResponse("INVALID_LOGIN_ATTEMPT"));
+            return HandleAndReturnBadRequest("INVALID_LOGIN_ATTEMPT", _logger);
         }
 
         private object GenerateJwtToken(string email, [NotNull] IdentityUser user)

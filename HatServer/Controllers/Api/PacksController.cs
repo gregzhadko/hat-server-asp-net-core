@@ -7,7 +7,9 @@ using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Model.Entities;
+using static HatServer.Tools.BadRequestFactory;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,11 +21,13 @@ namespace HatServer.Controllers.Api
     {
         private readonly IPackRepository _packRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<PacksController> _logger;
 
-        public PacksController(IPackRepository packRepository, IUserRepository userRepository)
+        public PacksController(IPackRepository packRepository, IUserRepository userRepository, ILogger<PacksController> logger)
         {
             _packRepository = packRepository;
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         // GET: api/<controller>
@@ -54,13 +58,13 @@ namespace HatServer.Controllers.Api
         {
             if (id <= 0)
             {
-                return BadRequest(new ErrorResponse("Id should be greater than 0"));
+                return HandleAndReturnBadRequest("Id should be greater than 0", _logger);
             }
 
             var pack = await _packRepository.GetFullInfoAsync(id);
             if (pack == null)
             {
-                return BadRequest(new ErrorResponse($"Pack with id {id} wasn't found"));
+                return HandleAndReturnBadRequest($"Pack with id {id} wasn't found", _logger);
             }
 
             var users = _userRepository.GetAll().ToList();
@@ -73,13 +77,13 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.ParseErrors());
+                return HandleAndReturnBadRequest(ModelState, _logger);
             }
 
             var existing = await _packRepository.GetByNameAsync(item.Name);
             if (existing != null)
             {
-                return BadRequest(new ErrorResponse($"Pack with name {item.Name} already exists"));
+                return HandleAndReturnBadRequest($"Pack with name {item.Name} already exists", _logger);
             }
 
             await _packRepository.InsertAsync(item);
@@ -88,27 +92,27 @@ namespace HatServer.Controllers.Api
 
         //TODO: check it and refactor
         // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateNameAndDescription(int id, [CanBeNull] [FromBody] string name,
-            [CanBeNull] [FromBody] string description)
-        {
-            if (id == 0 || String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(description))
-            {
-                return BadRequest();
-            }
-
-            var pack = await _packRepository.GetAsync(id);
-            if (pack == null)
-            {
-                return BadRequest(new ErrorResponse($"Pack with id {id} wasn't found"));
-            }
-
-            pack.Name = name;
-            pack.Description = description;
-
-            await _packRepository.UpdateAsync(pack);
-
-            return NoContent();
-        }
+//        [HttpPut("{id}")]
+//        public async Task<IActionResult> UpdateNameAndDescription(int id, [CanBeNull] [FromBody] string name,
+//            [CanBeNull] [FromBody] string description)
+//        {
+//            if (id == 0 || String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(description))
+//            {
+//                return BadRequest();
+//            }
+//
+//            var pack = await _packRepository.GetAsync(id);
+//            if (pack == null)
+//            {
+//                return HandleAndReturnBadRequest($"Pack with id {id} wasn't found"));
+//            }
+//
+//            pack.Name = name;
+//            pack.Description = description;
+//
+//            await _packRepository.UpdateAsync(pack);
+//
+//            return NoContent();
+//        }
     }
 }

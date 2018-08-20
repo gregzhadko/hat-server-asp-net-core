@@ -3,7 +3,9 @@ using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Model.Entities;
+using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api.Analytics
 {
@@ -12,11 +14,13 @@ namespace HatServer.Controllers.Api.Analytics
     {
         private readonly IDeviceInfoRepository _repository;
         private readonly IMapper _mapper;
+        private readonly ILogger<DeviceInfoController> _logger;
 
-        public DeviceInfoController(IDeviceInfoRepository repository, IMapper mapper)
+        public DeviceInfoController(IDeviceInfoRepository repository, IMapper mapper, ILogger<DeviceInfoController> logger)
         {
             _repository = repository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -24,7 +28,7 @@ namespace HatServer.Controllers.Api.Analytics
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.ParseErrors());
+                return HandleAndReturnBadRequest(ModelState, _logger);
             }
 
             var info = _mapper.Map<DeviceInfo>(request);

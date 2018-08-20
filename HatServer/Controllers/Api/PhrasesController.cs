@@ -7,6 +7,8 @@ using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using static HatServer.Tools.BadRequestFactory;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,12 +21,15 @@ namespace HatServer.Controllers.Api
         private readonly IPhraseRepository _phraseRepository;
         private readonly IPackRepository _packRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ILogger<PhrasesController> _logger;
 
-        public PhrasesController(IPhraseRepository phraseRepository, IPackRepository packRepository, IUserRepository userRepository)
+        public PhrasesController(IPhraseRepository phraseRepository, IPackRepository packRepository,
+            IUserRepository userRepository, ILogger<PhrasesController> logger)
         {
             _phraseRepository = phraseRepository;
             _packRepository = packRepository;
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         // GET: api/<controller>
@@ -41,13 +46,13 @@ namespace HatServer.Controllers.Api
         {
             if (trackId <= 0)
             {
-                return BadRequest(new ErrorResponse("TrackId should be greater than 0"));
+                return HandleAndReturnBadRequest("TrackId should be greater than 0", _logger);
             }
 
             var phrase = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
             if (phrase == null)
             {
-                return BadRequest(new ErrorResponse($"Phrase with trackId {trackId} wasn't found"));
+                return HandleAndReturnBadRequest($"Phrase with trackId {trackId} wasn't found", _logger);
             }
 
             return Ok(new BasePhraseItemResponse(phrase));
@@ -58,13 +63,13 @@ namespace HatServer.Controllers.Api
         {
             if (string.IsNullOrWhiteSpace(phrase))
             {
-                return BadRequest(new ErrorResponse("Phrase cannot be empty"));
+                return HandleAndReturnBadRequest("Phrase cannot be empty", _logger);
             }
 
             var phraseItem = await _phraseRepository.GetByNameAsync(phrase);
             if (phraseItem == null)
             {
-                return BadRequest(new ErrorResponse($"Phrase {phrase} wasn't found"));
+                return HandleAndReturnBadRequest($"Phrase {phrase} wasn't found", _logger);
             }
 
             return Ok(new BasePhraseItemResponse(phraseItem));
@@ -76,19 +81,19 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.ParseErrors());
+                return HandleAndReturnBadRequest(ModelState, _logger);
             }
 
             var pack = await _packRepository.GetAsync(request.PackId);
             if (pack == null)
             {
-                return BadRequest(new ErrorResponse($"Pack with id {request.PackId} wasn't found"));
+                return HandleAndReturnBadRequest($"Pack with id {request.PackId} wasn't found", _logger);
             }
 
             var user = await _userRepository.GetByNameAsync(request.Author);
             if (user == null)
             {
-                return BadRequest(new ErrorResponse($"User with name {request.Author} wasn't found"));
+                return HandleAndReturnBadRequest($"User with name {request.Author} wasn't found", _logger);
             }
 
             var phrase = request.ToPhraseItem(user).FormatPhrase();
@@ -96,7 +101,8 @@ namespace HatServer.Controllers.Api
             var existing = await _phraseRepository.GetByNameAsync(phrase.Phrase);
             if (existing != null)
             {
-                return BadRequest(new ErrorResponse($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}"));
+                return BadRequest(
+                    new ErrorResponse($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}"));
             }
 
             var trackId = await _phraseRepository.GetMaxTrackIdAsync();
@@ -113,31 +119,33 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.ParseErrors());
+                return HandleAndReturnBadRequest(ModelState, _logger);
             }
 
             var user = await _userRepository.GetByNameAsync(request.Author);
             if (user == null)
             {
-                return BadRequest(new ErrorResponse($"User {request.Author} is not found"));
+                return HandleAndReturnBadRequest($"User {request.Author} is not found", _logger);
             }
 
             var actual = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
             if (actual == null)
             {
-                return BadRequest(new ErrorResponse($"There is no phrase with track id {trackId}"));
+                return HandleAndReturnBadRequest($"There is no phrase with track id {trackId}", _logger);
             }
 
             if (actual.Version > request.Version)
             {
                 var users = _userRepository.GetAll();
-                return Conflict(new ErrorResponse("The phrase has a newer version", new BasePhraseItemResponse(actual, users)));
+                return Conflict(new ErrorResponse("The phrase has a newer version",
+                    new BasePhraseItemResponse(actual, users)));
             }
 
             var conflictedPhrase = await _phraseRepository.GetByNameExceptTrackIdAsync(request.Phrase, trackId);
             if (conflictedPhrase != null)
             {
-                return BadRequest(new ErrorResponse($"The phrase with name {request.Phrase} exists in the pack {conflictedPhrase.Pack.Name}"));
+                return HandleAndReturnBadRequest(
+                    $"The phrase with name {request.Phrase} exists in the pack {conflictedPhrase.Pack.Name}", _logger);
             }
 
             var phrase = await _phraseRepository.UpdatePhraseAsync(request, user, actual);
@@ -151,19 +159,19 @@ namespace HatServer.Controllers.Api
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState.ParseErrors());
+                return HandleAndReturnBadRequest(ModelState, _logger);
             }
 
             var user = await _userRepository.GetByNameAsync(request.Author);
             if (user == null)
             {
-                return BadRequest(new ErrorResponse($"User {request.Author} is not found"));
+                return HandleAndReturnBadRequest($"User {request.Author} is not found", _logger);
             }
 
             var phrase = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
             if (phrase == null)
             {
-                return BadRequest(new ErrorResponse($"There is no phrase with track id {trackId}"));
+                return HandleAndReturnBadRequest($"There is no phrase with track id {trackId}", _logger);
             }
 
             var newPhrase = await _phraseRepository.AddReviewAsync(phrase, user, request);
@@ -176,19 +184,19 @@ namespace HatServer.Controllers.Api
         {
             if (trackId < 0)
             {
-                return BadRequest(new ErrorResponse("Track id cannot be less than 0"));
+                return HandleAndReturnBadRequest("Track id cannot be less than 0", _logger);
             }
 
             var user = await _userRepository.GetByNameAsync(author);
             if (user == null)
             {
-                return BadRequest(new ErrorResponse($"There is no user with name {author}"));
+                return HandleAndReturnBadRequest($"There is no user with name {author}", _logger);
             }
 
             var phrase = await _phraseRepository.GetLatestByTrackIdAsync(trackId);
             if (phrase == null)
             {
-                return BadRequest(new ErrorResponse($"There is no phrase with trackId '{trackId}'"));
+                return HandleAndReturnBadRequest($"There is no phrase with trackId '{trackId}'", _logger);
             }
 
             await _phraseRepository.DeleteAsync(phrase, user.Id);

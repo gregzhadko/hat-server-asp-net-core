@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace HatServer.Middleware
@@ -10,10 +11,12 @@ namespace HatServer.Middleware
     public sealed class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         [UsedImplicitly]
@@ -30,7 +33,7 @@ namespace HatServer.Middleware
             }
         }
 
-        private static Task HandleExceptionAsync([NotNull] HttpContext context, [NotNull] Exception exception)
+        private Task HandleExceptionAsync([NotNull] HttpContext context, [NotNull] Exception exception)
         {
             var code = HttpStatusCode.InternalServerError; // 500 if unexpected
 
@@ -42,6 +45,7 @@ namespace HatServer.Middleware
             var result = JsonConvert.SerializeObject(new {error = exception.Message});
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
+            _logger.LogError(result);
             return context.Response.WriteAsync(result);
         }
     }

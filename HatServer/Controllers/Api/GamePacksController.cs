@@ -6,8 +6,9 @@ using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
 using HatServer.Tools;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Model.Entities;
+using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api
 {
@@ -15,18 +16,18 @@ namespace HatServer.Controllers.Api
     [Route("api/[controller]")]
     public sealed class GamePacksController : Controller
     {
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IGamePackRepository _gamePackRepository;
         private readonly IDownloadedPacksInfoRepository _downloadedPacksInfoRepository;
+        private readonly ILogger<GamePacksController> _logger;
 
-        public GamePacksController(IConfiguration configuration, IMapper mapper, IGamePackRepository gamePackRepository,
-            IDownloadedPacksInfoRepository downloadedPacksInfoRepository)
+        public GamePacksController(IMapper mapper, IGamePackRepository gamePackRepository,
+            IDownloadedPacksInfoRepository downloadedPacksInfoRepository, ILogger<GamePacksController> logger)
         {
-            _configuration = configuration;
             _mapper = mapper;
             _gamePackRepository = gamePackRepository;
             _downloadedPacksInfoRepository = downloadedPacksInfoRepository;
+            _logger = logger;
         }
 
         // GET api/<controller>
@@ -57,7 +58,7 @@ namespace HatServer.Controllers.Api
             var pack = await _gamePackRepository.GetAsync(id);
             if (pack == null)
             {
-                return BadRequest(new ErrorResponse($"Pack with id = {id} wasn't found"));
+                return HandleAndReturnBadRequest($"Pack with id = {id} wasn't found", _logger);
             }
 
             if (!String.IsNullOrWhiteSpace(deviceId))
@@ -78,7 +79,7 @@ namespace HatServer.Controllers.Api
 //                .FirstOrDefault(f => f.EndsWith($"{id}.json", StringComparison.Ordinal));
 //            if (file == null)
 //            {
-//                return BadRequest(new ErrorResponse($"Pack with id = {id} wasn't found"));
+//                return HandleAndReturnBadRequest($"Pack with id = {id} wasn't found"));
 //            }
 //
 //            var result = await System.IO.File.ReadAllTextAsync($"{file}");
@@ -101,7 +102,7 @@ namespace HatServer.Controllers.Api
 //                .FirstOrDefault(f => f.EndsWith($"pack_icon_{id}.pdf", StringComparison.Ordinal));
 //            if (file == null)
 //            {
-//                return BadRequest(new ErrorResponse($"Pack with id = {id} wasn't found"));
+//                return HandleAndReturnBadRequest($"Pack with id = {id} wasn't found"));
 //            }
 //
 //            var fileStream = new FileStream(file, FileMode.Open);
