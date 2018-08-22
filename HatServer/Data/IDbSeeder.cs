@@ -1,8 +1,4 @@
-﻿using JetBrains.Annotations;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Model.Entities;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace HatServer.Data
 {

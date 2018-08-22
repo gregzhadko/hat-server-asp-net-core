@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace HatServer.DTO.Response
+﻿namespace HatServer.DTO.Response
 {
     public class GamePackEmptyResponse
     {
