@@ -13,7 +13,7 @@ namespace UtilitiesTests
         [TestCase("Нью-Йорк", ExpectedResult = 1)]
         [TestCase("Лос-Анджелес Нью-Йорк", ExpectedResult = 2)]
         [TestCase("Лос-Анджелес Нью-Йорк Нью-Йорк", ExpectedResult = 3)]
-        public int GetWordsFromString_WordsWithHypens_CorrectNumberOfWords(string original)
+        public int GetWordsFromString_WordsWithHyphens_CorrectNumberOfWords(string original)
         {
             var words = StringUtilities.GetWordsFromString(original);
             return words.Count();

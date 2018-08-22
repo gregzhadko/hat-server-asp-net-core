@@ -1,24 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JetBrains.Annotations;
+using Microsoft.EntityFrameworkCore;
 using Model.Entities;
 
 namespace HatServer.Data
 {
-    public class GameDbContext : DbContext
+    public sealed class GameDbContext : DbContext
     {
         // ReSharper disable once SuggestBaseTypeForParameter (Requires for migrations generations)
-        public GameDbContext(DbContextOptions<GameDbContext> options)
+        public GameDbContext([NotNull] DbContextOptions<GameDbContext> options)
             : base(options)
         {
         }
-        
+
         public DbSet<DownloadedPacksInfo> DownloadedPacksInfos { get; set; }
 
         public DbSet<GamePack> GamePacks { get; set; }
-        
+
         public DbSet<GamePackIcon> GamePackIcons { get; set; }
 
         public DbSet<GamePhrase> GamePhrases { get; set; }
-        
+
         public DbSet<Game> Games { get; set; }
 
         public DbSet<Stage> Stages { get; set; }

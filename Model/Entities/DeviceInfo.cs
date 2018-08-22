@@ -7,7 +7,7 @@ namespace Model.Entities
     {
         [UsedImplicitly]
         public DeviceInfo(){}
-        
+
         public int Id { get; set; }
         public Guid DeviceId { get; set; }
         public string DeviceModel { get; set; }

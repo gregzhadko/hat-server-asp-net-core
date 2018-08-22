@@ -9,12 +9,13 @@ using Model.Entities;
 
 namespace HatServer.DAL
 {
-    public class GamePackRepository : Repository<GamePack>, IGamePackRepository
+    public sealed class GamePackRepository : Repository<GamePack>, IGamePackRepository
     {
         public GamePackRepository([NotNull] GameDbContext context) : base(context)
         {
         }
 
+        [NotNull]
         public override IEnumerable<GamePack> GetAll()
         {
             return Entities.Include(p => p.Phrases).ToList();

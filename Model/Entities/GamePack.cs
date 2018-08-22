@@ -43,7 +43,7 @@ namespace Model.Entities
         public bool Paid { get; set; }
 
         public int GamePackIconId { get; set; }
-        
+
         public GamePackIcon GamePackIcon { get; set; }
 
 

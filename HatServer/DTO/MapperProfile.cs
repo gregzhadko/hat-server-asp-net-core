@@ -5,7 +5,7 @@ using Model.Entities;
 
 namespace HatServer.DTO
 {
-    public class MapperProfile : Profile 
+    public class MapperProfile : Profile
     {
         public MapperProfile()
         {

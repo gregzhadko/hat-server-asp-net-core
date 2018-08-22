@@ -2,7 +2,7 @@
 
 namespace HatServer.Data
 {
-    internal interface IDbSeeder<in T> where T : DbContext 
+    internal interface IDbSeeder<in T> where T : DbContext
     {
         void Seed(T context);
     }

@@ -10,6 +10,7 @@ namespace HatServer.Tools
 {
     public class BadRequestFactory
     {
+        [NotNull]
         public static BadRequestObjectResult HandleAndReturnBadRequest<T>(string message, ILogger<T> logger)
         {
             logger.LogWarning(message);
@@ -17,7 +18,8 @@ namespace HatServer.Tools
             return new BadRequestObjectResult(errorResponse);
         }
 
-        public static BadRequestObjectResult HandleAndReturnBadRequest<T>(ModelStateDictionary modelState, ILogger<T> logger)
+        [NotNull]
+        public static BadRequestObjectResult HandleAndReturnBadRequest<T>([NotNull] ModelStateDictionary modelState, ILogger<T> logger)
         {
             return HandleAndReturnBadRequest(ParseModelState(modelState), logger);
         }

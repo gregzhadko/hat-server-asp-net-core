@@ -24,7 +24,7 @@ namespace HatServer.Data
             _configuration = configuration;
         }
 
-        public void Seed(FillerDbContext context)
+        public void Seed([NotNull] FillerDbContext context)
         {
             context.Database.OpenConnection();
 
@@ -55,12 +55,12 @@ namespace HatServer.Data
             _userManager.CreateAsync(tatarintsev, _configuration["tatarintsev"]).Wait();
         }
 
-        private void SeedPacks(FillerDbContext context)
+        private void SeedPacks([NotNull] FillerDbContext context)
         {
             var users = _userManager.Users.ToList();
 
             var packs = MongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
-           
+
             //SaveToFile(packs);
 
             context.Packs.AddRange(packs);

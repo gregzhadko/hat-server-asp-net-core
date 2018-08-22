@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Model.Entities;
 
@@ -18,7 +19,7 @@ namespace HatServer.Tools
             _downloadedPacksInfoRepository = downloadedPacksInfoRepository;
         }
 
-        public async Task SendDownloadedNotificationAsync(GamePack pack)
+        public async Task SendDownloadedNotificationAsync([NotNull] GamePack pack)
         {
             var client = new HttpClient();
 

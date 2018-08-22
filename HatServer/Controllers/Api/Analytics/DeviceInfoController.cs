@@ -33,7 +33,7 @@ namespace HatServer.Controllers.Api.Analytics
 
             var info = _mapper.Map<DeviceInfo>(request);
             await _repository.InsertAsync(info);
-            
+
             return Ok();
         }
     }

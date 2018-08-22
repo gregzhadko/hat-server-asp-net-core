@@ -10,11 +10,11 @@ namespace Model.Entities
     public sealed class Pack
     {
         public int Id { get; set; }
-        
+
         [Required]
         public int Version { get; set; }
-        
-        [Required] 
+
+        [Required]
         public bool Paid { get; set; }
 
         [Required]

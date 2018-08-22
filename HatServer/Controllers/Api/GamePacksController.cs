@@ -36,7 +36,7 @@ namespace HatServer.Controllers.Api
             var packs = _gamePackRepository.GetAll();
             var result = _mapper.Map<IList<GamePackEmptyResponse>>(packs);
             return Ok(result);
-            
+
 //            var result = new List<GamePack>();
 //            var files = Directory.GetFiles(Constants.PacksFolder, "*.json");
 //            foreach (var pack in files.Select(s => System.IO.File.ReadAllText(s, Encoding.UTF8))
@@ -52,7 +52,7 @@ namespace HatServer.Controllers.Api
 
         // GET api/<controller>/5
         [HttpGet("{id}", Name = "Get_Game_Pack")]
-        public async Task<IActionResult> Get(int id, [FromHeader]string deviceId)
+        public async Task<IActionResult> Get(int id, [FromHeader] string deviceId)
         {
             var pack = await _gamePackRepository.GetAsync(id);
             if (pack == null)
@@ -66,14 +66,14 @@ namespace HatServer.Controllers.Api
 //#pragma warning disable 4014
 //                notifier.SendDownloadedNotificationAsync(pack);
 //#pragma warning restore 4014
-                
+
                 var downloadedInfo = new DownloadedPacksInfo{DownloadedTime = DateTime.UtcNow, DeviceId = new Guid(deviceId), GamePackId = id};
                 await _downloadedPacksInfoRepository.InsertAsync(downloadedInfo);
             }
 
             var response = _mapper.Map<GamePackResponse>(pack);
             return Ok(response);
-            
+
 //            var file = Directory.GetFiles(Constants.PacksFolder, "*.json")
 //                .FirstOrDefault(f => f.EndsWith($"{id}.json", StringComparison.Ordinal));
 //            if (file == null)

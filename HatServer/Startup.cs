@@ -136,7 +136,7 @@ namespace HatServer
                 //app.UseExceptionHandler("/Home/Error");
             }
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging")); 
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             loggerFactory.AddAzureWebAppDiagnostics();
@@ -164,7 +164,7 @@ namespace HatServer
                     fillerDbContext.Database.Migrate();
 
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
+                    //var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
                     //fillerDbSeeder.Seed(fillerDbContext);
                 }
 
