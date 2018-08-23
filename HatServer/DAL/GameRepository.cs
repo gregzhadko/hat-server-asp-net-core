@@ -7,7 +7,7 @@ namespace HatServer.DAL
 {
     public class GameRepository : Repository<Game>, IGameRepository
     {
-        protected GameRepository([NotNull] GameDbContext context) : base(context)
+        public GameRepository([NotNull] GameDbContext context) : base(context)
         {
         }
     }

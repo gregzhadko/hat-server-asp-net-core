@@ -31,7 +31,6 @@ namespace HatServer.Tools
             foreach (var modelError in modelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))
             {
                 errorResult.Append(modelError);
-                errorResult.Append(". ");
             }
 
             return errorResult.ToString();

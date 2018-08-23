@@ -10,8 +10,6 @@ using Microsoft.Extensions.Logging;
 using Model.Entities;
 using static HatServer.Tools.BadRequestFactory;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace HatServer.Controllers.Api
 {
     [Authorize]

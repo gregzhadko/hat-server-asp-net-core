@@ -8,6 +8,8 @@ namespace Model.Entities
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public int InGameId { get; set; }
+
         [ForeignKey("GameId")]
         public Game Game { get; set; }
 
