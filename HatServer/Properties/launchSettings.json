@@ -11,7 +11,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:44305/api/phrases/10",
+      "launchUrl": "https://localhost:44305/DownloadedPacks",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
