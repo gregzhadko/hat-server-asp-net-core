@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using HatServer.DTO.Request;
 using HatServer.DTO.Response;
@@ -19,7 +20,8 @@ namespace HatServer.DTO
                 .ForMember(dest => dest.Count, x => x.MapFrom(g => g.Phrases.Count));
 
             //DTO to Entity
-            CreateMap<PostDeviceInfoRequest, DeviceInfo>();
+            CreateMap<PostDeviceInfoRequest, DeviceInfo>()
+                .ForMember(dest => dest.DeviceGuid, s => s.MapFrom(d => d.DeviceId));
 
             CreateMap<PlayerDTO, Player>().ForMember(dest => dest.InGameId, s => s.MapFrom(p => p.Id));
             CreateMap<TeamDTO, Team>().ForMember(dest => dest.InGameId, s => s.MapFrom(t => t.Id));

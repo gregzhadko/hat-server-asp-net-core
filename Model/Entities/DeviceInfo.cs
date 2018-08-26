@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 
 namespace Model.Entities
@@ -8,8 +10,9 @@ namespace Model.Entities
         [UsedImplicitly]
         public DeviceInfo(){}
 
+        [Key]
         public int Id { get; set; }
-        public Guid DeviceId { get; set; }
+        public Guid DeviceGuid { get; set; }
         public string DeviceModel { get; set; }
         public string Device { get; set; }
         public string OsName { get; set; }
@@ -17,5 +20,7 @@ namespace Model.Entities
         public string Version { get; set; }
         public string PushToken { get; set; }
         public int TimeStamp { get; set; }
+
+        public List<Game> Games { get; set; }
     }
-}
+}    
