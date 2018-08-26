@@ -1,6 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
-using HatServer.DAL;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using Microsoft.AspNetCore.Mvc;

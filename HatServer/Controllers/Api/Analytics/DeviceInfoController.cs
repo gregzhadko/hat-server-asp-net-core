@@ -12,15 +12,18 @@ namespace HatServer.Controllers.Api.Analytics
     [Route("api/analytics/info")]
     public class DeviceInfoController : Controller
     {
-        private readonly IDeviceInfoRepository _repository;
+        private readonly IDeviceInfoRepository _deviceInfoRepository;
+        private readonly IGameRepository _gameRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<DeviceInfoController> _logger;
 
-        public DeviceInfoController(IDeviceInfoRepository repository, IMapper mapper, ILogger<DeviceInfoController> logger)
+        public DeviceInfoController(IDeviceInfoRepository deviceInfoRepository, IMapper mapper,
+            ILogger<DeviceInfoController> logger, IGameRepository gameRepository)
         {
-            _repository = repository;
+            _deviceInfoRepository = deviceInfoRepository;
             _mapper = mapper;
             _logger = logger;
+            _gameRepository = gameRepository;
         }
 
         [HttpPost]
@@ -32,8 +35,9 @@ namespace HatServer.Controllers.Api.Analytics
             }
 
             var info = _mapper.Map<DeviceInfo>(request);
-            await _repository.InsertAsync(info);
+            await _deviceInfoRepository.InsertAsync(info);
 
+            await _gameRepository.AssignDeviceToUnassignedGamesAsync(info);
             return Ok();
         }
     }

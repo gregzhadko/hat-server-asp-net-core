@@ -18,5 +18,7 @@ namespace Model.Entities
         public Round Round { get; set; }
 
         public int RoundId { get; set; }
+
+        public int InGameId { get; set; }
     }
 }

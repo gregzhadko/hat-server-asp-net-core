@@ -21,8 +21,6 @@ namespace Model.Entities
 
         public int Id { get; set; }
 
-        public int InGameId { get; set; }
-
         [Required]
         public string Phrase { get; set; }
 

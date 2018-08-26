@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace HatServer.DTO.Request
+﻿namespace HatServer.DTO.Request
 {
     public class PostGameRequest
     {
         public int Round { get; set; }
         public string Id { get; set; }
-        public PhraseDTO[] Words { get; set; }
+        public GamePhraseDTO[] Words { get; set; }
         public string DeviceId { get; set; }
-        public TeamDTO[] TeamsDTO { get; set; }
+        public TeamDTO[] Teams { get; set; }
         public int Timestamp { get; set; }
         public int Stage { get; set; }
     }
 
-    public class PhraseDTO
+    public class GamePhraseDTO
     {
         public string Word { get; set; }
         public int Id { get; set; }
@@ -26,7 +23,7 @@ namespace HatServer.DTO.Request
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public PlayerDTO[] PlayersDTO { get; set; }
+        public PlayerDTO[] Players { get; set; }
     }
 
     public class PlayerDTO

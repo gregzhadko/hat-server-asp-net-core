@@ -11,7 +11,7 @@ namespace Model.Entities
 
         public Guid DeviceInfoGuid { get; set; }
 
-        public int DeviceInfoId { get; set; }
+        public int? DeviceInfoId { get; set; }
         
         [ForeignKey("DeviceInfoId")]
         public DeviceInfo DeviceInfo { get; set; }
