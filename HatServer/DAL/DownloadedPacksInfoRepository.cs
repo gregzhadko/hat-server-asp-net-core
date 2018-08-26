@@ -10,7 +10,7 @@ using Model.Entities;
 
 namespace HatServer.DAL
 {
-    public class DownloadedPacksInfoRepository : Repository<DownloadedPacksInfo>, IDownloadedPacksInfoRepository
+    public sealed class DownloadedPacksInfoRepository : Repository<DownloadedPacksInfo>, IDownloadedPacksInfoRepository
     {
         public DownloadedPacksInfoRepository([NotNull] GameDbContext context) : base(context)
         {
@@ -19,6 +19,16 @@ namespace HatServer.DAL
         public Task<List<DownloadedPacksInfo>> GetDailyDownloadsForPack(int packId)
         {
             return Entities.Where(d => d.GamePackId == packId && d.DownloadedTime.Date == DateTime.Today).ToListAsync();
+        }
+
+        public override IEnumerable<DownloadedPacksInfo> GetAll()
+        {
+            return Entities.Include(d => d.GamePack);
+        }
+
+        public override Task<DownloadedPacksInfo> GetAsync(int id)
+        {
+            return Entities.Include(d => d.GamePack).FirstOrDefaultAsync();
         }
     }
 }
