@@ -18,7 +18,7 @@ namespace HatServer.Controllers
         // GET: DownloadedPacksInfos
         public IActionResult Index()
         {
-            var infos = _repository.GetAll().ToList();
+            var infos = _repository.GetAll().OrderByDescending(i => i.DownloadedTime).ToList();
             return View(infos);
         }
 
