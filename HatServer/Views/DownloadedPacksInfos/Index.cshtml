@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.DeviceId)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GamePack.Paid)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,6 +41,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DeviceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GamePack.Paid)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
