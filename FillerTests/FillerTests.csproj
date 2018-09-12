@@ -4,7 +4,7 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="23.0.2" />
+    <PackageReference Include="Bogus" Version="23.0.3" />
     <PackageReference Include="CompareNETObjects" Version="4.55.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
