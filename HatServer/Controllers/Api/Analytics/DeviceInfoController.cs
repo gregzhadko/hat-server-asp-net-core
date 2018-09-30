@@ -37,7 +37,6 @@ namespace HatServer.Controllers.Api.Analytics
             var info = _mapper.Map<DeviceInfo>(request);
             await _deviceInfoRepository.InsertAsync(info);
 
-            await _gameRepository.AssignDeviceToUnassignedGamesAsync(info);
             return Ok();
         }
     }

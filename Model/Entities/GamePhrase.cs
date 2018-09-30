@@ -4,6 +4,9 @@ using JetBrains.Annotations;
 
 namespace Model.Entities
 {
+    /// <summary>
+    /// Represents data of a phrase which is a part of the loaded pack which is prepared for a game
+    /// </summary>
     public class GamePhrase
     {
         [UsedImplicitly]

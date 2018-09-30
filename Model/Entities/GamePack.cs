@@ -6,6 +6,9 @@ using JetBrains.Annotations;
 
 namespace Model.Entities
 {
+    /// <summary>
+    /// Represents Pack data prepared for a real game in device
+    /// </summary>
     [DebuggerDisplay("{Id}, {Name}, {Description}")]
     public class GamePack
     {

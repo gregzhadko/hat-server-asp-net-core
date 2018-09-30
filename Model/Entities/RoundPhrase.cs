@@ -5,20 +5,16 @@ namespace Model.Entities
     public class RoundPhrase
     {
         public int Id { get; set; }
+        
+        public RoundPhraseStateEnum State { get; set; }
+
+        public int WordId { get; set; }
+        
         public int Time { get; set; }
-
-        public RoundPhraseState State { get; set; }
-
-        [ForeignKey("PhraseId")]
-        public GamePhrase PhraseItem { get; set; }
-
-        public int PhraseId { get; set; }
 
         [ForeignKey("RoundId")]
         public Round Round { get; set; }
 
         public int RoundId { get; set; }
-
-        public int InGameId { get; set; }
     }
 }

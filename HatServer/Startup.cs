@@ -165,8 +165,8 @@ namespace HatServer
                     fillerDbContext.Database.Migrate();
 
                     var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    //var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
-                    //fillerDbSeeder.Seed(fillerDbContext);
+                    var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
+                    fillerDbSeeder.Seed(fillerDbContext);
                 }
 
                 var gameDbContext = serviceScope.ServiceProvider.GetService<GameDbContext>();

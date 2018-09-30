@@ -15,7 +15,10 @@ namespace Model.Entities
         Skipped,
 
         [Description("Deleted")]
-        Deleted
+        Deleted,
+        
+        [Description("Unguessed")]
+        Unguessed
     }
 
     public sealed class RoundPhraseState
@@ -45,6 +48,6 @@ namespace Model.Entities
         [NotNull]
         public static implicit operator RoundPhraseState(RoundPhraseStateEnum @enum) => new RoundPhraseState(@enum);
 
-        public static implicit operator RoundPhraseStateEnum([NotNull] RoundPhraseState faculty) => (RoundPhraseStateEnum)faculty.Id;
+        public static implicit operator RoundPhraseStateEnum([NotNull] RoundPhraseState state) => (RoundPhraseStateEnum)state.Id;
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HatServer.Tools
 {
-    public class BadRequestFactory
+    public static class BadRequestFactory
     {
         [NotNull]
         public static BadRequestObjectResult HandleAndReturnBadRequest<T>(string message, ILogger<T> logger)

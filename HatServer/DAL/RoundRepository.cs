@@ -7,7 +7,7 @@ namespace HatServer.DAL
 {
     public class RoundRepository : Repository<Round>, IRoundRepository
     {
-        protected RoundRepository([NotNull] GameDbContext context) : base(context)
+        public RoundRepository([NotNull] GameDbContext context) : base(context)
         {
         }
     }

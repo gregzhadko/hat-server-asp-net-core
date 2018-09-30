@@ -20,7 +20,5 @@ namespace Model.Entities
         public string Version { get; set; }
         public string PushToken { get; set; }
         public int TimeStamp { get; set; }
-
-        public List<Game> Games { get; set; }
     }
 }    

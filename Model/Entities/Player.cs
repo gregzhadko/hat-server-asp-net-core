@@ -14,7 +14,5 @@ namespace Model.Entities
         public Team Team { get; set; }
 
         public int TeamId { get; set; }
-
-        public List<Round> Rounds { get; set; }
     }
 }
