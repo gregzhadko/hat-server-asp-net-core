@@ -10,6 +10,7 @@ using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using HatServer.Middleware;
 using HatServer.Migrations;
+using HatServer.Tools;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -57,6 +58,8 @@ namespace HatServer
                 .AddDefaultTokenProviders();
 
             AddRepositoriesToServices(services);
+            
+            services.AddHttpClient<BotNotifier>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services

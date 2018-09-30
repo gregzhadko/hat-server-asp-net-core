@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
+using HatServer.Tools;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
@@ -52,7 +53,7 @@ namespace HatServer.Controllers.Api
 
         // GET api/<controller>/5
         [HttpGet("{id}", Name = "Get_Game_Pack")]
-        public async Task<IActionResult> Get(int id, [FromHeader] string deviceId)
+        public async Task<IActionResult> Get(int id, [FromHeader] string deviceId, [FromServices]BotNotifier botNotifier)
         {
             var pack = await _gamePackRepository.GetAsync(id);
             if (pack == null)
@@ -62,7 +63,9 @@ namespace HatServer.Controllers.Api
 
             if (!String.IsNullOrWhiteSpace(deviceId))
             {
-//                var notifier = new BotNotifier(_configuration, _downloadedPacksInfoRepository);
+
+                await botNotifier.SendDownloadedNotificationAsync(pack);
+
 //#pragma warning disable 4014
 //                notifier.SendDownloadedNotificationAsync(pack);
 //#pragma warning restore 4014

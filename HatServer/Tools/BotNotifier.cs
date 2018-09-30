@@ -4,32 +4,40 @@ using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Model.Entities;
 
 namespace HatServer.Tools
 {
     public class BotNotifier
     {
-        private readonly IConfiguration _configuration;
-        private readonly IDownloadedPacksInfoRepository _downloadedPacksInfoRepository;
+        private readonly HttpClient _client;
+        private readonly ILogger<BotNotifier> _logger;
+        private IConfiguration _configuration;
 
-        public BotNotifier(IConfiguration configuration, IDownloadedPacksInfoRepository downloadedPacksInfoRepository)
+        public BotNotifier(HttpClient client, ILogger<BotNotifier> logger, IConfiguration configuration)
         {
+            _client = client;
+            _logger = logger;
             _configuration = configuration;
-            _downloadedPacksInfoRepository = downloadedPacksInfoRepository;
         }
 
         public async Task SendDownloadedNotificationAsync([NotNull] GamePack pack)
         {
-            var client = new HttpClient();
+            try
+            {
+                var baseUrl = _configuration["botMessageUrl"];
+                var uriString = pack.Paid
+                    ? String.Format($"{baseUrl}&parse_mode=Markdown", $"*{pack.Name}*")
+                    : String.Format(baseUrl, $"{pack.Name}");
 
-            var downloadedToday = await _downloadedPacksInfoRepository.GetDailyDownloadsForPack(pack.Id);
-
-            var uriString = pack.Paid
-                ? String.Format(_configuration["botMessageUrl"] + "&parse_mode=Markdown", $"*{pack.Name}* ({downloadedToday.Count + 1})")
-                : String.Format(_configuration["botMessageUrl"], $"{pack.Name} ({downloadedToday.Count + 1})");
-
-            await client.GetAsync(uriString);
+                var response = await _client.GetAsync(uriString);
+                response.EnsureSuccessStatusCode();
+            }
+            catch(Exception ex)
+            {
+                 _logger.LogError(ex, "Cannot sent notification to telegram");
+            }
         }
     }
 }
