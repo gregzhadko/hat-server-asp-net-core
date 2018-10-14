@@ -20,5 +20,12 @@ namespace HatServer.Controllers.Api
             var response = await _oldServerService.GetPacksAsync();
             return Ok(response);
         }
+        
+        [HttpGet("{packId}")]
+        public async Task<IActionResult> GetPack(int packId)
+        {
+            var response = await _oldServerService.GetPackAsync(packId);
+            return Ok(response);
+        }
     }
 }

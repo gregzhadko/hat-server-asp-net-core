@@ -10,6 +10,7 @@ namespace HatServer.Services
     public interface IOldServerService
     {
         Task<string> GetPacksAsync();
+        Task<string> GetPackAsync(int packId);
     }
 
     [UsedImplicitly]
@@ -29,6 +30,11 @@ namespace HatServer.Services
         public async Task<string> GetPacksAsync()
         {
             return await GetResponseAsync("getPacks", 8081);
+        }
+
+        public async Task<string> GetPackAsync(int packId)
+        {
+            return await GetResponseAsync($"getPack?id={packId}", 8081);
         }
 
         private async Task<string> GetResponseAsync(string requestUriString, int port)
