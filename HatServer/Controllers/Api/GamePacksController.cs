@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
-using HatServer.Tools;
+using HatServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
@@ -53,7 +53,7 @@ namespace HatServer.Controllers.Api
 
         // GET api/<controller>/5
         [HttpGet("{id}", Name = "Get_Game_Pack")]
-        public async Task<IActionResult> Get(int id, [FromHeader] string deviceId, [FromServices]BotNotifier botNotifier)
+        public async Task<IActionResult> Get(int id, [FromHeader] string deviceId, [FromServices]IBotNotifier botNotifier)
         {
             var pack = await _gamePackRepository.GetAsync(id);
             if (pack == null)

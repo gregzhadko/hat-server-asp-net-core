@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
 
-namespace HatServer.Tools
+namespace HatServer.Services
 {
-    public class BotNotifier
+    public interface IBotNotifier
+    {
+        Task SendDownloadedNotificationAsync([NotNull] GamePack pack);
+    }
+
+    [UsedImplicitly]
+    public class BotNotifier : IBotNotifier
     {
         private readonly HttpClient _client;
         private readonly ILogger<BotNotifier> _logger;
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public BotNotifier(HttpClient client, ILogger<BotNotifier> logger, IConfiguration configuration)
         {
@@ -22,7 +27,7 @@ namespace HatServer.Tools
             _configuration = configuration;
         }
 
-        public async Task SendDownloadedNotificationAsync([NotNull] GamePack pack)
+        public async Task SendDownloadedNotificationAsync(GamePack pack)
         {
             try
             {

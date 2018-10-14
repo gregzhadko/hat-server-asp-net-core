@@ -126,10 +126,8 @@ namespace OldServer
                 var packs = await GetAllPacksInfoAsync().ConfigureAwait(false);
                 var trackId = 0;
                 var result = new List<Pack>();
-                //TODO: remove OrderBy (it was done for testing purposes)
                 foreach (var packInfo in packs
-                    .Where(p => !string.IsNullOrEmpty(p.Name))
-                    .OrderBy(p => p.Id))
+                    .Where(p => !string.IsNullOrEmpty(p.Name)))
                 {
                     var pack = await GetPackAsync(packInfo.Id, users, trackId);
                     Console.WriteLine($"Downloaded {pack.Id.ToString()}, {pack.Name}, Words: {pack.Phrases.Count} {pack.Description}");
