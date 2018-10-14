@@ -23,7 +23,7 @@ namespace ConsoleMigration
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            await RunSpellCheckerAsync();
+            //await RunSpellCheckerAsync();
 
             //await DeleteWordsInPackAsync(15);
             //await LoadPhrasesAsync(15, @"D:\sport.txt");
@@ -37,65 +37,65 @@ namespace ConsoleMigration
             Console.ReadKey();
         }
 
-        [NotNull]
-        private static Task ManuallyDescriptionUpdatingAsync(int packId)
-        {
-            var definitionUpdate = new DescriptionUpdaterManager();
-            return definitionUpdate.RunManualUpdatingAsync(packId);
-        }
+//        [NotNull]
+//        private static Task ManuallyDescriptionUpdatingAsync(int packId)
+//        {
+//            var definitionUpdate = new DescriptionUpdaterManager();
+//            return definitionUpdate.RunManualUpdatingAsync(packId);
+//        }
 
-        private static async Task DeleteWordsInPackAsync(int packId)
-        {
-            var pack = await MongoServiceClient.GetPackAsync(packId);
-            foreach (var phrase in pack.Phrases)
-            {
-                Console.WriteLine($"Removing of phrase {phrase.Phrase}");
-                await MongoServiceClient.DeletePhraseAsync(packId, phrase.Phrase);
-            }
+//        private static async Task DeleteWordsInPackAsync(int packId)
+//        {
+//            var pack = await MongoServiceClient.GetPackAsync(packId);
+//            foreach (var phrase in pack.Phrases)
+//            {
+//                Console.WriteLine($"Removing of phrase {phrase.Phrase}");
+//                await MongoServiceClient.DeletePhraseAsync(packId, phrase.Phrase);
+//            }
+//
+//            ConsoleUtilities.WriteGreenLine("Removing of phrases is completed");
+//        }
+//
+//        private static async Task FormatAllAsync(int packId)
+//        {
+//            var pack = await MongoServiceClient.GetPackAsync(packId);
+//            foreach (var phrase in pack.Phrases)
+//            {
+//                Console.WriteLine($"{phrase.Phrase}");
+//                var newPhrase = phrase.Phrase.FormatPhrase();
+//                var newDescription = phrase.Description.FormatDescription();
+//                await MongoServiceClient.EditPhraseAsync(packId, phrase,
+//                    new PhraseItem {Phrase = newPhrase, Description = newDescription, Complexity = phrase.Complexity});
+//
+//                if (newPhrase != phrase.Phrase)
+//                {
+//                    ConsoleUtilities.WriteRedLine($"{phrase.Phrase}     ->      {newPhrase}");
+//                }
+//
+//                if (newDescription != phrase.Description)
+//                {
+//                    ConsoleUtilities.WriteRedLine($"{phrase.Description}");
+//                    Console.WriteLine("|");
+//                    ConsoleUtilities.WriteRedLine($"{newDescription}");
+//                }
+//            }
+//        }
+//
+//        private static async Task RunSpellCheckerAsync()
+//        {
+//            var settings = File.ReadLines("Settings.txt").ToList();
+//            var service = new OxfordService(settings[2], settings[3]);
+//            var packs = await MongoServiceClient.GetAllPacksAsync();
+//            var spellChecker = new SpellChecker.SpellChecker(packs, service);
+//            spellChecker.Run();
+//        }
 
-            ConsoleUtilities.WriteGreenLine("Removing of phrases is completed");
-        }
-
-        private static async Task FormatAllAsync(int packId)
-        {
-            var pack = await MongoServiceClient.GetPackAsync(packId);
-            foreach (var phrase in pack.Phrases)
-            {
-                Console.WriteLine($"{phrase.Phrase}");
-                var newPhrase = phrase.Phrase.FormatPhrase();
-                var newDescription = phrase.Description.FormatDescription();
-                await MongoServiceClient.EditPhraseAsync(packId, phrase,
-                    new PhraseItem {Phrase = newPhrase, Description = newDescription, Complexity = phrase.Complexity});
-
-                if (newPhrase != phrase.Phrase)
-                {
-                    ConsoleUtilities.WriteRedLine($"{phrase.Phrase}     ->      {newPhrase}");
-                }
-
-                if (newDescription != phrase.Description)
-                {
-                    ConsoleUtilities.WriteRedLine($"{phrase.Description}");
-                    Console.WriteLine("|");
-                    ConsoleUtilities.WriteRedLine($"{newDescription}");
-                }
-            }
-        }
-
-        private static async Task RunSpellCheckerAsync()
-        {
-            var settings = File.ReadLines("Settings.txt").ToList();
-            var service = new OxfordService(settings[2], settings[3]);
-            var packs = await MongoServiceClient.GetAllPacksAsync();
-            var spellChecker = new SpellChecker.SpellChecker(packs, service);
-            spellChecker.Run();
-        }
-
-        [NotNull]
-        private static Task LoadDescriptionsAsync(int packId)
-        {
-            var service = new DescriptionUpdaterManager();
-            return service.UpdateDescriptionsAsync(packId, 1, filter: p => string.IsNullOrWhiteSpace(p.Description));
-        }
+//        [NotNull]
+//        private static Task LoadDescriptionsAsync(int packId)
+//        {
+//            var service = new DescriptionUpdaterManager();
+//            return service.UpdateDescriptionsAsync(packId, 1, filter: p => string.IsNullOrWhiteSpace(p.Description));
+//        }
 
         /// <summary>
         /// Loads phrases to the pack from file
@@ -131,20 +131,20 @@ namespace ConsoleMigration
             _translatorWrapper = new YandexTranslateSdk {ApiKey = File.ReadLines("Settings.txt").ToArray()[1]};
         }
 
-        private static async Task TranslatePackAsync(int packId)
-        {
-            var pack = await MongoServiceClient.GetPackAsync(packId);
-            var finalList = new List<(string, string)>();
-
-            foreach (var phrase in pack.Phrases)
-            {
-                var translated = await TranslateAsync(phrase.Phrase);
-                finalList.Add((phrase.Phrase, translated));
-                ConsoleUtilities.WriteGreenLine($"{phrase.Phrase}\t\t{translated}");
-            }
-
-            finalList.ToList().ForEach(action: i => Console.WriteLine("{0,-30}{1,30}", i.Item1, i.Item2));
-        }
+//        private static async Task TranslatePackAsync(int packId)
+//        {
+//            var pack = await MongoServiceClient.GetPackAsync(packId);
+//            var finalList = new List<(string, string)>();
+//
+//            foreach (var phrase in pack.Phrases)
+//            {
+//                var translated = await TranslateAsync(phrase.Phrase);
+//                finalList.Add((phrase.Phrase, translated));
+//                ConsoleUtilities.WriteGreenLine($"{phrase.Phrase}\t\t{translated}");
+//            }
+//
+//            finalList.ToList().ForEach(action: i => Console.WriteLine("{0,-30}{1,30}", i.Item1, i.Item2));
+//        }
 
         private static Task<string> TranslateAsync(string text) => _translatorWrapper.TranslateText(text, "ru-en");
     }

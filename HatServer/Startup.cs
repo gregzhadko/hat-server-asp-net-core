@@ -20,9 +20,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Model.Entities;
+using OldServer;
 
 namespace HatServer
 {
@@ -45,6 +47,8 @@ namespace HatServer
             services.AddDbContext<GameDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<FillerDbSeeder>();
+
             services.AddAutoMapper();
 
             services.AddIdentity<ServerUser, IdentityRole>(options =>
@@ -62,6 +66,7 @@ namespace HatServer
             
             services.AddHttpClient<IBotNotifier, BotNotifier>();
             services.AddHttpClient<IOldServerService, OldServerService>();
+            services.AddHttpClient<IMongoServiceClient, MongoServiceClient>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
             services
@@ -169,8 +174,7 @@ namespace HatServer
                 {
                     fillerDbContext.Database.Migrate();
 
-                    var userManager = serviceScope.ServiceProvider.GetService<UserManager<ServerUser>>();
-                    var fillerDbSeeder = new FillerDbSeeder(userManager, Configuration);
+                    var fillerDbSeeder = serviceScope.ServiceProvider.GetService<FillerDbSeeder>(); //new FillerDbSeeder(userManager, Configuration);
                     fillerDbSeeder.Seed(fillerDbContext);
                 }
 

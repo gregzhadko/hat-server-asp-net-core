@@ -17,11 +17,13 @@ namespace HatServer.Data
     {
         private readonly UserManager<ServerUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IMongoServiceClient _mongoServiceClient;
 
-        public FillerDbSeeder(UserManager<ServerUser> userManager, IConfiguration configuration)
+        public FillerDbSeeder(UserManager<ServerUser> userManager, IConfiguration configuration, IMongoServiceClient mongoServiceClient)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _mongoServiceClient = mongoServiceClient;
         }
 
         public void Seed([NotNull] FillerDbContext context)
@@ -59,7 +61,7 @@ namespace HatServer.Data
         {
             var users = _userManager.Users.ToList();
 
-            var packs = MongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
+            var packs = _mongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
 
             //SaveToFile(packs);
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Configuration;
 using Model.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,8 +13,22 @@ using Utilities;
 
 namespace OldServer
 {
-    public static class MongoServiceClient
+    public interface IMongoServiceClient
     {
+        Task<List<Pack>> GetAllPacksAsync([CanBeNull] List<ServerUser> users = null);
+    }
+
+    public class MongoServiceClient : IMongoServiceClient
+    {
+        private readonly HttpClient _client;
+        private readonly IConfiguration _configuration;
+
+        public MongoServiceClient(HttpClient client, IConfiguration configuration)
+        {
+            _client = client;
+            _configuration = configuration;
+        }
+        
         [UsedImplicitly]
         [NotNull]
         public static Task AddPhraseAsync(int packId, [NotNull] PhraseItem phrase) => GetResponseAsync(
@@ -94,9 +109,11 @@ namespace OldServer
         }
 
         [ItemNotNull]
-        private static async Task<List<Pack>> GetAllPacksInfoAsync()
+        private async Task<List<Pack>> GetAllPacksInfoAsync()
         {
-            var response = await GetResponseAsync("getPacks", 8081).ConfigureAwait(false);
+            //var response = await GetResponseAsync("getPacks", 8081).ConfigureAwait(false); //Access without proxy
+            var url = $"{_configuration["BaseUrl"]}/api/OldServer";
+            var response = await _client.GetStringAsync(url); 
             var jObjectPacks = JObject.Parse(response)["packs"].Children().ToList();
             var packs = new List<Pack>();
             foreach (var jToken in jObjectPacks)
@@ -119,7 +136,7 @@ namespace OldServer
         }
 
         [ItemCanBeNull]
-        public static async Task<List<Pack>> GetAllPacksAsync([CanBeNull] List<ServerUser> users = null)
+        public async Task<List<Pack>> GetAllPacksAsync(List<ServerUser> users = null)
         {
             try
             {
@@ -155,9 +172,10 @@ namespace OldServer
             return trackId;
         }
 
-        public static async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null, int trackId = 1)
+        public async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null, int trackId = 1)
         {
-            var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
+            //var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false); //Access without proxy
+            var response = await _client.GetStringAsync($"{_configuration["BaseUrl"]}/api/OldServer/{id}");
             return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users, trackId));
         }
     }
