@@ -11,6 +11,7 @@ namespace HatServer.Services
     {
         Task<string> GetPacksAsync();
         Task<string> GetPackAsync(int packId);
+        Task<string> GetResponseAsync(string requestUriString, int port);
     }
 
     [UsedImplicitly]
@@ -37,7 +38,7 @@ namespace HatServer.Services
             return await GetResponseAsync($"getPack?id={packId}", 8081);
         }
 
-        private async Task<string> GetResponseAsync(string requestUriString, int port)
+        public async Task<string> GetResponseAsync(string requestUriString, int port)
         {
             var url = _configuration["OldServerUrl"];
             var finalUrl = $"{url}:{port}/{requestUriString}";

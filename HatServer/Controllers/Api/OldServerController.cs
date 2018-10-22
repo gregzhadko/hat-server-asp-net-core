@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using HatServer.Services;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HatServer.Controllers.Api
@@ -13,19 +15,22 @@ namespace HatServer.Controllers.Api
         {
             _oldServerService = oldServerService;
         }
-        
-        [HttpGet]
-        public async Task<IActionResult> GetPacks()
+
+        [Route("{*url}")]
+        public async Task<IActionResult> Index()
         {
-            var response = await _oldServerService.GetPacksAsync();
-            return Ok(response);
-        }
-        
-        [HttpGet("{packId}")]
-        public async Task<IActionResult> GetPack(int packId)
-        {
-            var response = await _oldServerService.GetPackAsync(packId);
-            return Ok(response);
+            const string subUri = "/api/oldserver/";
+            var uri = HttpContext.Request.GetDisplayUrl();
+            var request = uri.Substring(uri.LastIndexOf(subUri, StringComparison.OrdinalIgnoreCase) + subUri.Length);
+            var indexOfSlash = request.IndexOf("/", StringComparison.OrdinalIgnoreCase);
+            if (indexOfSlash > 0 && Int32.TryParse(request.Substring(0, indexOfSlash), out int port))
+            {
+                request = request.Substring(indexOfSlash + 1);
+                
+                return Ok(await _oldServerService.GetResponseAsync(request, port));
+            }
+
+            return Ok(await _oldServerService.GetResponseAsync(request, 8081));
         }
     }
 }
