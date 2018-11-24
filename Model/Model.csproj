@@ -8,8 +8,8 @@
     <None Remove="DTO\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.0.100" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.100" />
+    <PackageReference Include="FluentValidation" Version="8.0.101" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.0.101" />
     <PackageReference Include="FluentValidation.WebAPI" Version="7.6.104" />
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.3" />
