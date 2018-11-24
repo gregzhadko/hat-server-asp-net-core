@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using AutoMapper;
 using HatServer.DTO.Request;
 using HatServer.DTO.Response;
@@ -32,7 +31,7 @@ namespace HatServer.DTO
                 .ForMember(dest => dest.InGameId, s => s.MapFrom(g => g.Id))
                 .ForMember(dest => dest.StartDate, s => s.MapFrom(g => g.Timestamp.ToDateTime()))
                 .ForMember(dest => dest.DeviceId, s => s.MapFrom(g => new Guid(g.DeviceId)))
-                .ForMember(dest => dest.Id, s => s.UseValue(0))
+                .ForMember(dest => dest.Id, s => s.MapFrom(src => 0))
                 .AfterMap((_, game) =>
                 {
                     game.Teams.ForEach(t => t.Game = game);
@@ -40,33 +39,33 @@ namespace HatServer.DTO
                 });
 
             CreateMap<GamePhraseDTO, InGamePhrase>()
-                .ForMember(dest => dest.Id, s => s.UseValue(0))
+                .ForMember(dest => dest.Id, s => s.MapFrom(src => 0))
                 .ForMember(dest => dest.InGameId, s => s.MapFrom(g => g.Id));
 
             CreateMap<TeamDTO, Team>()
                 .ForMember(dest => dest.InGameId, s => s.MapFrom(t => t.Id))
-                .ForMember(dest => dest.Id, s => s.UseValue(0))
+                .ForMember(dest => dest.Id, s => s.MapFrom(src => 0))
                 .AfterMap((_, team) => team.Players.ForEach(t => t.Team = team));
 
             CreateMap<PlayerDTO, Player>()
                 .ForMember(dest => dest.InGameId, s => s.MapFrom(p => p.Id))
-                .ForMember(dest => dest.Id, s => s.UseValue(0));
+                .ForMember(dest => dest.Id, s => s.MapFrom(src => 0));
 
             CreateMap<PostRoundRequest, Round>()
-                .ForMember(dest => dest.Id, s => s.UseValue(0))
+                .ForMember(dest => dest.Id, s => s.MapFrom(src => 0))
                 .ForMember(dest => dest.DeviceId, s => s.MapFrom(r => new Guid(r.DeviceId)))
                 .ForMember(dest => dest.StartTime, s => s.MapFrom(r => r.Timestamp.ToDateTime()))
                 .AfterMap((_, round) => round.Words.ForEach(w => w.Round = round));
 
             CreateMap<RoundPhraseDTO, RoundPhrase>()
-                .ForMember(dest => dest.Id, s => s.UseValue(0))
+                .ForMember(dest => dest.Id, s => s.MapFrom(src => 0))
                 .ForMember(dest => dest.State,
                     s => s.MapFrom(r => Enum.Parse(typeof(RoundPhraseStateEnum), r.State.ReplaceFirstCharToUpper())));
             //.ForMember(dest => dest.State, s => s.MapFrom(p => p.State))
             //.ForMember(dest => dest.RoundId, s => s.MapFrom(p => p.WordId))
 
             CreateMap<SettingsDTO, Settings>()
-                .ForMember(dest => dest.Id, s => s.UseValue(0));
+                .ForMember(dest => dest.Id, s => s.MapFrom(src => 0));
 
             #endregion
 
