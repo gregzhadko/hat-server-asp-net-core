@@ -19,7 +19,7 @@ namespace ConsoleMigration
         private static YandexTranslateSdk _translatorWrapper;
 
         // ReSharper disable once AsyncConverter.AsyncMethodNamingHighlighting
-        public static async Task Main()
+        public static void Main()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
