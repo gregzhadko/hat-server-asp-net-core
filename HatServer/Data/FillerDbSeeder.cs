@@ -36,7 +36,9 @@ namespace HatServer.Data
                 SeedPacks(context);
 
                 context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
+                //context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Tracks ON");
                 context.SaveChanges();
+                //context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Tracks OFF");
                 context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
             }
             finally

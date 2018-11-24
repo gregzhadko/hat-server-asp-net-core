@@ -36,6 +36,9 @@ namespace Model.Entities
 
         [Required]
         public int TrackId { get; set; }
+        
+        [ForeignKey(nameof(TrackId))]
+        public Track Track { get; set; }
 
         [Required]
         public string CreatedById { get; set; }

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HatServer.Migrations
 {
     [DbContext(typeof(FillerDbContext))]
-    [Migration("20180812201600_FillerContextInitialization")]
-    partial class FillerContextInitialization
+    [Migration("20181019183113_InitFiller")]
+    partial class InitFiller
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -191,6 +191,8 @@ namespace HatServer.Migrations
 
                     b.HasIndex("PackId");
 
+                    b.HasIndex("TrackId");
+
                     b.ToTable("PhraseItems");
                 });
 
@@ -269,6 +271,17 @@ namespace HatServer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Model.Entities.Track", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tracks");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -324,6 +337,11 @@ namespace HatServer.Migrations
                     b.HasOne("Model.Entities.Pack", "Pack")
                         .WithMany("Phrases")
                         .HasForeignKey("PackId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Model.Entities.Track", "Track")
+                        .WithMany("PhraseItems")
+                        .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

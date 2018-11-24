@@ -13,10 +13,13 @@ namespace HatServer.Data
         }
 
         public DbSet<ServerUser> ServerUsers { get; set; }
+        
         public DbSet<ReviewState> ReviewStates { get; set; }
 
         public DbSet<PhraseItem> PhraseItems { get; set; }
 
         public DbSet<Pack> Packs { get; set; }
+
+        public DbSet<Track> Tracks { get; set; }
     }
 }

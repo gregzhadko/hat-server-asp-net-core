@@ -44,7 +44,7 @@ namespace FillerTests
                     p.CreatedDate = f.Date.Past();
                     p.Description = f.Lorem.Text();
                     p.Phrase = f.Lorem.Words(f.Random.Number(1, 4)).Join(" ");
-                    p.TrackId = f.UniqueIndex;
+                    p.Track = new Track();
                     p.Version = 1;
                     p.ReviewStates = GenerateReviewStates(users);
                 })

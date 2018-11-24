@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Model.Entities
@@ -6,5 +7,7 @@ namespace Model.Entities
     {
         [Key]
         public int Id { get; set; }
+
+        public List<PhraseItem> PhraseItems { get; set; }
     }
 }

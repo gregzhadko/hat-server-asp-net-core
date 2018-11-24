@@ -62,7 +62,7 @@ namespace OldServer
                     Description = phraseItem["description"].Value<string>(),
                     CreatedDate = DateTime.Now,
                     CreatedBy = defaultUser,
-                    TrackId = _trackId++
+                    Track = new Track() {Id = _trackId},
                 };
 
                 ReadReviewers(phraseItem, phrase);

@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Model.Entities;
 using static HatServer.Tools.BadRequestFactory;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -106,7 +107,7 @@ namespace HatServer.Controllers.Api
             }
 
             var trackId = await _phraseRepository.GetMaxTrackIdAsync();
-            phrase.TrackId = trackId + 1;
+            phrase.Track = new Track();
 
             await _phraseRepository.InsertAsync(phrase);
 
