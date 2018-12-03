@@ -34,12 +34,6 @@ namespace HatServer.Data
             {
                 SeedUsers();
                 SeedPacks(context);
-
-                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
-                //context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Tracks ON");
-                context.SaveChanges();
-                //context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Tracks OFF");
-                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
             }
             finally
             {
@@ -66,8 +60,24 @@ namespace HatServer.Data
             var packs = _mongoServiceClient.GetAllPacksAsync(users).GetAwaiter().GetResult();
 
             //SaveToFile(packs);
+            var trackIds = packs.SelectMany(p => p.Phrases).Select(p => p.TrackId).ToList();
+            var minTrackId = trackIds.Min();
+            var maxTrackId = trackIds.Max();
+
+            context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Tracks ON");
+            for (int i = minTrackId; i <= maxTrackId; i++)
+            {
+                context.Tracks.Add(new Track {Id = i});
+            }
+
+            context.SaveChanges();
+            context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Tracks OFF");
 
             context.Packs.AddRange(packs);
+            context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs ON");
+            
+            context.SaveChanges();
+            context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
         }
 
         private static void SaveToFile(List<Pack> packs)

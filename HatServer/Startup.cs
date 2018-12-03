@@ -173,7 +173,6 @@ namespace HatServer
                 if (!fillerDbContext.AllMigrationsApplied())
                 {
                     fillerDbContext.Database.Migrate();
-
                     var fillerDbSeeder = serviceScope.ServiceProvider.GetService<FillerDbSeeder>(); //new FillerDbSeeder(userManager, Configuration);
                     fillerDbSeeder.Seed(fillerDbContext);
                 }
@@ -186,7 +185,7 @@ namespace HatServer
                 }
 
                 var gameDbSeeder = new GameDbSeeder();
-                gameDbSeeder.Seed(gameDbContext);
+                //gameDbSeeder.Seed(gameDbContext);
             }
         }
     }

@@ -20,8 +20,12 @@ namespace OldServer
 
     public class MongoServiceClient : IMongoServiceClient
     {
+        //private const bool IsOldServer = true;
+        private const bool ReadFromFile = false;
+        
         private readonly HttpClient _client;
         private readonly IConfiguration _configuration;
+        private string _backupPath = "Backup";
 
         public MongoServiceClient(HttpClient client, IConfiguration configuration)
         {
@@ -111,9 +115,11 @@ namespace OldServer
         [ItemNotNull]
         private async Task<List<Pack>> GetAllPacksInfoAsync()
         {
-            //var response = await GetResponseAsync("getPacks", 8081).ConfigureAwait(false); //Access without proxy
-            var url = $"{_configuration["BaseUrl"]}/api/OldServer";
-            var response = await _client.GetStringAsync(url); 
+            var response = ReadFromFile
+                ? File.ReadAllText($"{_backupPath}\\getpacks.json")
+                : await GetResponseAsync("getPacks", 8081).ConfigureAwait(false);
+                //: await _client.GetStringAsync($"{_configuration["BaseUrl"]}/api/OldServer");
+
             var jObjectPacks = JObject.Parse(response)["packs"].Children().ToList();
             var packs = new List<Pack>();
             foreach (var jToken in jObjectPacks)
@@ -174,8 +180,10 @@ namespace OldServer
 
         public async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null, int trackId = 1)
         {
-            //var response = await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false); //Access without proxy
-            var response = await _client.GetStringAsync($"{_configuration["BaseUrl"]}/api/OldServer/{id}");
+            var response = ReadFromFile
+                ? File.ReadAllText($"{_backupPath}\\pack{id}.json")
+                : await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
+                //: await _client.GetStringAsync($"{_configuration["BaseUrl"]}/api/OldServer/{id}");
             return JsonConvert.DeserializeObject<Pack>(response, new JsonToPhraseItemConverter(users, trackId));
         }
     }
