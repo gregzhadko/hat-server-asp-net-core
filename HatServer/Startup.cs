@@ -11,7 +11,6 @@ using HatServer.DTO.Request;
 using HatServer.Middleware;
 using HatServer.Migrations;
 using HatServer.Services;
-using HatServer.Tools;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -20,10 +19,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Model.Entities;
+using Newtonsoft.Json.Serialization;
 using OldServer;
 
 namespace HatServer
