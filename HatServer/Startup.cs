@@ -94,7 +94,7 @@ namespace HatServer
                     options =>
                     {
                         options.SerializerSettings.Converters.Add(
-                            new Newtonsoft.Json.Converters.StringEnumConverter(true));
+                            new Newtonsoft.Json.Converters.StringEnumConverter(new CamelCaseNamingStrategy()));
                         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                     })
@@ -172,8 +172,8 @@ namespace HatServer
                 if (!fillerDbContext.AllMigrationsApplied())
                 {
                     fillerDbContext.Database.Migrate();
-                    var fillerDbSeeder = serviceScope.ServiceProvider.GetService<FillerDbSeeder>(); //new FillerDbSeeder(userManager, Configuration);
-                    fillerDbSeeder.Seed(fillerDbContext);
+                    //var fillerDbSeeder = serviceScope.ServiceProvider.GetService<FillerDbSeeder>();
+                    //fillerDbSeeder.Seed(fillerDbContext);
                 }
 
                 var gameDbContext = serviceScope.ServiceProvider.GetService<GameDbContext>();
@@ -183,7 +183,7 @@ namespace HatServer
                     gameDbContext.Database.Migrate();
                 }
 
-                var gameDbSeeder = new GameDbSeeder();
+                //var gameDbSeeder = new GameDbSeeder();
                 //gameDbSeeder.Seed(gameDbContext);
             }
         }
