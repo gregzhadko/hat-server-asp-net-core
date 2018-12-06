@@ -106,7 +106,7 @@ namespace HatServer.Controllers.Api
                     new ErrorResponse($"Phrase {request.Phrase} already exists in pack {existing.Pack.Name}"));
             }
 
-            var trackId = await _phraseRepository.GetMaxTrackIdAsync();
+            //var trackId = await _phraseRepository.GetMaxTrackIdAsync();
             phrase.Track = new Track();
 
             await _phraseRepository.InsertAsync(phrase);
@@ -134,8 +134,8 @@ namespace HatServer.Controllers.Api
             {
                 return HandleAndReturnBadRequest($"There is no phrase with track id {trackId}", _logger);
             }
-
-            if (actual.Version > request.Version)
+            
+            if (actual.Version >= request.Version)
             {
                 var users = _userRepository.GetAll();
                 return Conflict(new ErrorResponse("The phrase has a newer version",
