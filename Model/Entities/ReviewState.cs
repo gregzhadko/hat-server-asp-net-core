@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -8,6 +9,11 @@ namespace Model.Entities
 {
     public sealed class ReviewState : ICloneable<ReviewState>
     {
+        public ReviewState()
+        {
+            DateTime = DateTime.UtcNow;
+        }
+        
         public int Id { get; set; }
 
         [ForeignKey(nameof(PhraseItemId))]
@@ -26,6 +32,8 @@ namespace Model.Entities
         public State State { get; set; }
 
         public string Comment { get; set; }
+        
+        public DateTime DateTime { get; private set; }
 
         [NotNull]
         public ReviewState Clone()
