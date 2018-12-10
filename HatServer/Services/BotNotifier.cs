@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
@@ -10,12 +14,16 @@ namespace HatServer.Services
 {
     public interface IBotNotifier
     {
-        Task SendDownloadedNotificationAsync([NotNull] GamePack pack);
+        Task SendPackDownloadedNotificationAsync([NotNull] GamePack pack);
+        Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(List<DownloadedPacksInfo> downloadedPacks);
     }
 
     [UsedImplicitly]
     public class BotNotifier : IBotNotifier
     {
+        private const string NewLine = "%0A";
+        private const string Space = "%20";
+        
         private readonly HttpClient _client;
         private readonly ILogger<BotNotifier> _logger;
         private readonly IConfiguration _configuration;
@@ -27,7 +35,7 @@ namespace HatServer.Services
             _configuration = configuration;
         }
 
-        public async Task SendDownloadedNotificationAsync(GamePack pack)
+        public async Task SendPackDownloadedNotificationAsync(GamePack pack)
         {
             try
             {
@@ -42,6 +50,31 @@ namespace HatServer.Services
             catch(Exception ex)
             {
                  _logger.LogError(ex, "Cannot sent notification to telegram");
+            }
+        }
+
+        public async Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(
+            List<DownloadedPacksInfo> downloadedPacks)
+        {
+            var groupedPacks = downloadedPacks.GroupBy(p => p.GamePackId);
+            
+            try
+            {
+                var baseUrl = _configuration["botMessageUrl"];
+                var message = new StringBuilder();
+                foreach (var pack in groupedPacks)
+                {
+                    message.Append($"{pack.First().GamePack.Name}{Space}{pack.Count()}{NewLine}");
+                }
+
+                var uriString = String.Format(baseUrl, $"{message}");
+                var response = await _client.GetAsync(uriString);
+                return response;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Cannot sent notification to telegram");
+                return new HttpResponseMessage(HttpStatusCode.BadGateway);
             }
         }
     }

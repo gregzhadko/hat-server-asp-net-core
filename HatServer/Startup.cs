@@ -180,11 +180,11 @@ namespace HatServer
 
                 if (!gameDbContext.AllMigrationsApplied())
                 {
-                    gameDbContext.Database.Migrate();
+                    //gameDbContext.Database.Migrate();
                 }
 
-                //var gameDbSeeder = new GameDbSeeder();
-                //gameDbSeeder.Seed(gameDbContext);
+                var gameDbSeeder = new GameDbSeeder();
+                gameDbSeeder.Seed(gameDbContext);
             }
         }
     }

@@ -21,6 +21,14 @@ namespace HatServer.DAL
             return Entities.Where(d => d.GamePackId == packId && d.DownloadedTime.Date == DateTime.Today).ToListAsync();
         }
 
+        public Task<List<DownloadedPacksInfo>> GetDownloadsForLastHoursAsync(int hoursNumber)
+        {
+            return Entities
+                .Where(d => d.DownloadedTime.Date > DateTime.Now.AddHours(-hoursNumber))
+                .Include(d => d.GamePack)
+                .ToListAsync();
+        }
+
         public override IEnumerable<DownloadedPacksInfo> GetAll()
         {
             return Entities.Include(d => d.GamePack);

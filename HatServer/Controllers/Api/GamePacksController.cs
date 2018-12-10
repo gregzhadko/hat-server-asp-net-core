@@ -64,11 +64,8 @@ namespace HatServer.Controllers.Api
             if (!String.IsNullOrWhiteSpace(deviceId))
             {
 
-                await botNotifier.SendDownloadedNotificationAsync(pack);
-
-//#pragma warning disable 4014
-//                notifier.SendDownloadedNotificationAsync(pack);
-//#pragma warning restore 4014
+                //It works, but it sends the notification immediately. It is turned off for now.
+                //await botNotifier.SendPackDownloadedNotificationAsync(pack);
 
                 var downloadedInfo = new DownloadedPacksInfo{DownloadedTime = DateTime.UtcNow, DeviceId = new Guid(deviceId), GamePackId = id};
                 await _downloadedPacksInfoRepository.InsertAsync(downloadedInfo);
