@@ -7,8 +7,8 @@ namespace Model.Entities
     {
         public int Id { get; set; }
 
-        public string GameId { get; set; }
-
+        public string GameGUID { get; set; }
+        
         public int RoundNumber { get; set; }
 
         public int PlayerId { get; set; }
