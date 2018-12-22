@@ -22,7 +22,9 @@ namespace HatServer.Services
     public class BotNotifier : IBotNotifier
     {
         private const string NewLine = "%0A";
+        private const string Comma = "%2c";
         private const string Space = "%20";
+        
         
         private readonly HttpClient _client;
         private readonly ILogger<BotNotifier> _logger;
@@ -53,18 +55,30 @@ namespace HatServer.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(
-            List<DownloadedPacksInfo> downloadedPacks)
+        public async Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(List<DownloadedPacksInfo> downloadedPacks)
         {
-            var groupedPacks = downloadedPacks.GroupBy(p => p.GamePackId);
+            var groupedPacks = downloadedPacks.GroupBy(p => p.GamePackId).ToList();
+            var longestPackName = groupedPacks.Select(g => g.First().GamePack.Name).Max(t => t.Length);
             
             try
             {
                 var baseUrl = _configuration["botMessageUrl"];
                 var message = new StringBuilder();
-                foreach (var pack in groupedPacks)
+                foreach (var groupedPack in groupedPacks)
                 {
-                    message.Append($"{pack.First().GamePack.Name}{Space}{pack.Count()}{NewLine}");
+                    var pack = groupedPack.First();
+                    var packName = pack.GamePack.Name;
+                    var formattedPackName = pack.GamePack.Paid ? $"*{packName}*" : $"{packName}";
+                    message.Append(formattedPackName);
+//                    var length = packName.Length;
+//                    while (length < longestPackName + 5)
+//                    {
+//                        message.Append(Space);
+//                        length++;
+//                    }
+//                    message.Append($"{groupedPack.Count()}{NewLine}");
+
+                    message.Append($"{Comma}{Space}{Space}{groupedPack.Count()}{NewLine}");
                 }
 
                 var uriString = String.Format(baseUrl, $"{message}");
