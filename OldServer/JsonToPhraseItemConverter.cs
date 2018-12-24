@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using Model;
 using Model.Entities;
 using Newtonsoft.Json;

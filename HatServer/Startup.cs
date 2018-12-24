@@ -132,7 +132,7 @@ namespace HatServer
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [UsedImplicitly]
-        public void Configure([NotNull] IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure([NotNull] IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -145,11 +145,6 @@ namespace HatServer
                 //app.UseDeveloperExceptionPage();
                 //app.UseExceptionHandler("/Home/Error");
             }
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            loggerFactory.AddAzureWebAppDiagnostics();
 
             app.UseStaticFiles();
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
