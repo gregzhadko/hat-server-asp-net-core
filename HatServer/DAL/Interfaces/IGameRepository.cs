@@ -4,5 +4,6 @@ namespace HatServer.DAL.Interfaces
 {
     public interface IGameRepository : IRepository<Game>
     {
+        Game GetGameByGuid(string roundGameGUID);
     }
 }

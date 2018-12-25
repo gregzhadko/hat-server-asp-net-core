@@ -1,4 +1,5 @@
-﻿using HatServer.Data;
+﻿using System.Linq;
+using HatServer.Data;
 using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
 using Model.Entities;
@@ -9,6 +10,11 @@ namespace HatServer.DAL
     {
         public GameRepository([NotNull] GameDbContext context) : base(context)
         {
+        }
+
+        public Game GetGameByGuid(string roundGameGUID)
+        {
+            return Entities.FirstOrDefault(g => g.InGameId == roundGameGUID);
         }
     }
 }

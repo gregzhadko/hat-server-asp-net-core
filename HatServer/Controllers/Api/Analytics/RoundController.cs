@@ -13,13 +13,15 @@ namespace HatServer.Controllers.Api.Analytics
     public class RoundController : Controller
     {
         private readonly IRoundRepository _roundRepository;
+        private readonly IGameRepository _gameRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<GameController> _logger;
 
-        public RoundController(IRoundRepository roundRepository, IMapper mapper, ILogger<GameController> logger)
+        public RoundController(IRoundRepository roundRepository, IGameRepository gameRepository,IMapper mapper, ILogger<GameController> logger)
         {
             _logger = logger;
             _roundRepository = roundRepository;
+            _gameRepository = gameRepository;
             _mapper = mapper;
         }
         
@@ -32,6 +34,13 @@ namespace HatServer.Controllers.Api.Analytics
             }
 
             var round = _mapper.Map<Round>(request);
+
+            var game = _gameRepository.GetGameByGuid(round.GameGUID);
+            if (game != null)
+            {
+                round.GameId = game.Id;
+            }
+            
             await _roundRepository.InsertAsync(round);
 
             return Ok();

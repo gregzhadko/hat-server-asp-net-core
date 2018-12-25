@@ -53,6 +53,7 @@ namespace HatServer.DTO
 
             CreateMap<PostRoundRequest, Round>()
                 .ForMember(dest => dest.Id, s => s.MapFrom(src => 0))
+                .ForMember(dest => dest.GameId, s => s.MapFrom(src => 0))
                 .ForMember(dest => dest.DeviceId, s => s.MapFrom(r => new Guid(r.DeviceId)))
                 .ForMember(dest => dest.StartTime, s => s.MapFrom(r => r.Timestamp.ToDateTime()))
                 .ForMember(dest => dest.GameGUID, s => s.MapFrom(r => r.GameId))
