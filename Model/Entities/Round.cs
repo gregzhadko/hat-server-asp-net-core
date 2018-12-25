@@ -9,6 +9,8 @@ namespace Model.Entities
 
         public string GameGUID { get; set; }
         
+        public int GameId { get; set; }
+        
         public int RoundNumber { get; set; }
 
         public int PlayerId { get; set; }
