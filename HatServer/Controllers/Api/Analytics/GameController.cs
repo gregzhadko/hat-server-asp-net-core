@@ -13,13 +13,15 @@ namespace HatServer.Controllers.Api.Analytics
     public sealed class GameController : Controller
     {
         private readonly IGameRepository _gameRepository;
+        private readonly IRoundRepository _roundRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<GameController> _logger;
 
-        public GameController(IGameRepository gameRepository, IMapper mapper, ILogger<GameController> logger)
+        public GameController(IGameRepository gameRepository, IRoundRepository roundRepository, IMapper mapper, ILogger<GameController> logger)
         {
             _logger = logger;
             _gameRepository = gameRepository;
+            _roundRepository = roundRepository;
             _mapper = mapper;
         }
 
@@ -33,7 +35,15 @@ namespace HatServer.Controllers.Api.Analytics
 
             var game = _mapper.Map<Game>(request);
             await _gameRepository.InsertAsync(game);
-
+            
+            var rounds = await _roundRepository.GetNotAttachedRoundsByGameGuidAsync(game.InGameId);
+            foreach (var round in rounds)
+            {
+                round.GameId = game.Id;
+            }
+            
+            await _roundRepository.SaveChangesAsync();
+            
             return Ok();
         }
     }
