@@ -33,33 +33,32 @@ namespace HatServer.Services
                 //.Where(g => g.Game.InGameId.Equals("FAEE87BF-599E-4BB5-8687-426F91EFE315_1544700985", StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
             
-            AnalyzeGames(fullGames);
-
-            return new CommonAnalytics
-            {
-                TotalGames = fullGames.Count,
-                RealGames = fullGames.Count(s => s.State == GameState.Real),
-                NoRounds = fullGames.Count(s => s.State == GameState.NoRounds),
-                FewAddedWords = fullGames.Count(s => s.State == GameState.FewAddedWords),
-                LowAverageTime = fullGames.Count(s => s.State == GameState.LowAverageTime),
-                FewPlayedRounds = fullGames.Count(s => s.State == GameState.FewPlayedRounds),
-                
-            };
+            return AnalyzeGames(fullGames);
         }
 
-        private static void AnalyzeGames(IEnumerable<FullGame> fullGames)
+        private static CommonAnalytics AnalyzeGames(IReadOnlyCollection<FullGame> fullGames)
         {
+            var analytics = new CommonAnalytics {TotalGames = fullGames.Count};
             foreach (var fullGame in fullGames)
             {
+                if (fullGame.Rounds.Count == 0)
+                {
+                    fullGame.State = GameState.NoRounds;
+                    analytics.NoRounds++;
+                    continue;
+                }
+                
                 if (fullGame.Game.Words.Count <= 10)
                 {
                     fullGame.State = GameState.FewAddedWords;
+                    analytics.FewAddedWords++;
                     continue;
                 }
 
-                if (fullGame.Game.Teams.SelectMany(t => t.Players).Count() > fullGame.Rounds.Count())
+                if (fullGame.Game.Teams.SelectMany(t => t.Players).Count() > fullGame.Rounds.Count)
                 {
                     fullGame.State = GameState.FewPlayedRounds;
+                    analytics.FewPlayedRounds++;
                     continue;
                 }
 
@@ -91,11 +90,15 @@ namespace HatServer.Services
                 if (averageTime < 2000)
                 {
                     fullGame.State = GameState.LowAverageTime;
+                    analytics.LowAverageTime++;
                     continue;
                 }
 
+                analytics.RealGames++;
                 fullGame.State = GameState.Real;
             }
+
+            return analytics;
         }
     }
 }

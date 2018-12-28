@@ -7,7 +7,7 @@ namespace Model
     public class FullGame
     {
         public Game Game { get; set; }
-        public IEnumerable<Round> Rounds { get; set; }
+        public List<Round> Rounds { get; set; }
 
         public GameState State { get; set; }
     }
