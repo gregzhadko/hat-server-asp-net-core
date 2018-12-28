@@ -64,6 +64,7 @@ namespace HatServer
                 .AddDefaultTokenProviders();
 
             AddRepositoriesToServices(services);
+            services.AddScoped<IAnalyticsBusinessLogic, AnalyticsBusinessLogic>();
             
             services.AddHttpClient<IBotNotifier, BotNotifier>();
             services.AddHttpClient<IOldServerService, OldServerService>();
