@@ -15,6 +15,11 @@ namespace HatServer.DAL
         {
         }
 
+        public override IEnumerable<Round> GetAll()
+        {
+            return Entities.Include(r => r.Words);
+        }
+
         public Task<List<Round>> GetNotAttachedRoundsByGameGuidAsync(string gameInGameId)
         {
             return Entities.Where(r => r.GameId == 0 && r.GameGUID == gameInGameId).ToListAsync();
