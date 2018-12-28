@@ -29,6 +29,8 @@ namespace HatServer
 {
     public sealed class Startup
     {
+        private const string ConnectionStringName = "AzureConnection";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,10 +43,10 @@ namespace HatServer
         public void ConfigureServices([NotNull] IServiceCollection services)
         {
             services.AddDbContext<FillerDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringName)));
 
             services.AddDbContext<GameDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringName)));
 
             services.AddScoped<FillerDbSeeder>();
 
@@ -87,7 +89,6 @@ namespace HatServer
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
-
 
             services.AddMvc()
                 .AddJsonOptions(
@@ -151,7 +152,7 @@ namespace HatServer
 
             app.UseAuthentication();
 
-            ApplyMigrationAndSeeding(app);
+            //ApplyMigrationAndSeeding(app);
 
             app.UseMvc(routes => routes.MapRoute(
                 name: "default",
@@ -175,11 +176,12 @@ namespace HatServer
 
                 if (!gameDbContext.AllMigrationsApplied())
                 {
-                    //gameDbContext.Database.Migrate();
+                    gameDbContext.Database.Migrate();
                 }
 
-                var gameDbSeeder = new GameDbSeeder();
-                gameDbSeeder.Seed(gameDbContext);
+                //TODO: Починить это!
+                //var gameDbSeeder = new GameDbSeeder();
+                //gameDbSeeder.Seed(gameDbContext);
             }
         }
     }
