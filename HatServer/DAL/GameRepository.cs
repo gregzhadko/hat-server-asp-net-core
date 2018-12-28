@@ -49,7 +49,7 @@ namespace HatServer.DAL
                     continue;
                 }
 
-                var rounds = group.Select(g => g);
+                var rounds = group.Select(g => g).ToList();
                 result.Add(new FullGame{Game = game, Rounds = rounds});
             }
 
