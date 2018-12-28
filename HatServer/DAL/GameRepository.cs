@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using HatServer.Data;
 using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
@@ -30,7 +31,7 @@ namespace HatServer.DAL
                 .Include(g => g.Teams).ThenInclude(t => t.Players);
         }
 
-        public List<FullGame> GetFullGames()
+        public IEnumerable<FullGame> GetFullGames()
         {
             var originalRounds = Context.Set<Round>().Include(r => r.Words).ToList();
             var groupedRounds = originalRounds.GroupBy(r => r.GameId).ToList();
@@ -54,6 +55,22 @@ namespace HatServer.DAL
             }
 
             return result;
+        }
+
+        public async Task<FullGame> GetFullGameAsync(int id)
+        {
+            var game = await Entities
+                .Include(g => g.Words)
+                .Include(g => g.Teams).ThenInclude(t => t.Players)
+                .FirstOrDefaultAsync(g => g.Id == id);
+
+            if (game == null)
+            {
+                return null;
+            }
+
+            var rounds = Context.Set<Round>().Where(r => r.GameId == id).Include(r => r.Words).ToList();
+            return new FullGame {Game = game, Rounds = rounds};
         }
     }
 }

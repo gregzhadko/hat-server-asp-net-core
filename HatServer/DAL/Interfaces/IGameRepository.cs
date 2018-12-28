@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Model;
 using Model.Entities;
 
@@ -8,6 +9,7 @@ namespace HatServer.DAL.Interfaces
     public interface IGameRepository : IRepository<Game>
     {
         Game GetGameByGuid(string roundGameGUID);
-        List<FullGame> GetFullGames();
+        IEnumerable<FullGame> GetFullGames();
+        Task<FullGame> GetFullGameAsync(int id);
     }
 }
