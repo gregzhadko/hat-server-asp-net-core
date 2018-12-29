@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Utilities;
 
 namespace Model.Entities
 {
@@ -19,5 +20,6 @@ namespace Model.Entities
         public string Version { get; set; }
         public string PushToken { get; set; }
         public int TimeStamp { get; set; }
+        public DateTime DateTime => TimeStamp.ToDateTime();
     }
 }    

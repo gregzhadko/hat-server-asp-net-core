@@ -1,4 +1,5 @@
-﻿using HatServer.Data;
+﻿using System.Linq;
+using HatServer.Data;
 using HatServer.DAL.Interfaces;
 using JetBrains.Annotations;
 using Model.Entities;

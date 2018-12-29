@@ -1,10 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
+using MoreLinq;
+using Utilities;
 using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api.Analytics
@@ -39,6 +42,13 @@ namespace HatServer.Controllers.Api.Analytics
             await _deviceInfoRepository.InsertAsync(info);
 
             return Ok();
+        }
+
+        [HttpGet("unique")]
+        public IActionResult GetDistinctDevicesInfos()
+        {
+            return Ok(_deviceInfoRepository.GetAll().ToList().OrderBy(d => d.TimeStamp)
+                .DistinctBy(d => d.DeviceGuid).OrderByDescending(d => d.TimeStamp).ToList());
         }
     }
 }

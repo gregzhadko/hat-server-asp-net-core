@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Model.Entities.DeviceInfo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DeviceGuid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeviceModel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Device)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OsName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OsVersion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Version)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeStamp)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeviceGuid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeviceModel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Device)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OsName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OsVersion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Version)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
