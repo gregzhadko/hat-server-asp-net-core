@@ -1,0 +1,35 @@
+@model System.Collections.Generic.IEnumerable<HatServer.Controllers.DateDeviceInfo>
+
+@{
+    ViewBag.Title = "Drune";
+    Layout = "_Layout";
+}
+
+<h2>Drune</h2>
+
+
+<table class="table" width="500">
+    <thead>
+    <tr>
+        <th>
+            Count
+        </th>
+        <th>
+            Date
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Count)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateString)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

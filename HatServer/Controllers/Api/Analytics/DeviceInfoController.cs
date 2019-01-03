@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
 using MoreLinq;
-using Utilities;
 using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api.Analytics
@@ -16,17 +16,14 @@ namespace HatServer.Controllers.Api.Analytics
     public class DeviceInfoController : Controller
     {
         private readonly IDeviceInfoRepository _deviceInfoRepository;
-        private readonly IGameRepository _gameRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<DeviceInfoController> _logger;
 
-        public DeviceInfoController(IDeviceInfoRepository deviceInfoRepository, IMapper mapper,
-            ILogger<DeviceInfoController> logger, IGameRepository gameRepository)
+        public DeviceInfoController(IDeviceInfoRepository deviceInfoRepository, IMapper mapper, ILogger<DeviceInfoController> logger)
         {
             _deviceInfoRepository = deviceInfoRepository;
             _mapper = mapper;
             _logger = logger;
-            _gameRepository = gameRepository;
         }
 
         [HttpPost]
@@ -47,8 +44,9 @@ namespace HatServer.Controllers.Api.Analytics
         [HttpGet("unique")]
         public IActionResult GetDistinctDevicesInfos()
         {
-            return Ok(_deviceInfoRepository.GetAll().ToList().OrderBy(d => d.TimeStamp)
-                .DistinctBy(d => d.DeviceGuid).OrderByDescending(d => d.TimeStamp).ToList());
+            return Ok(_deviceInfoRepository.GetAll()
+                .Where(i => !i.DeviceModel.Equals("x86_64", StringComparison.InvariantCultureIgnoreCase)).ToList()
+                .OrderBy(d => d.TimeStamp).DistinctBy(d => d.DeviceGuid).OrderByDescending(d => d.TimeStamp).ToList());
         }
     }
 }
