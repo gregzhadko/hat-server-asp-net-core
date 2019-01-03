@@ -28,17 +28,23 @@ namespace HatServer.DAL
         {
             return Entities
                 .Include(g => g.Words)
-                .Include(g => g.Teams).ThenInclude(t => t.Players);
+                .Include(g => g.Teams).ThenInclude(t => t.Players)
+                .AsNoTracking();
         }
 
         public IEnumerable<FullGame> GetFullGames()
         {
-            var originalRounds = Context.Set<Round>().Include(r => r.Words).ToList();
+            var originalRounds = Context.Set<Round>()
+                .Include(r => r.Words)
+                .AsNoTracking()
+                .ToList();
+            
             var groupedRounds = originalRounds.GroupBy(r => r.GameId).ToList();
 
             var games = Entities
                 .Include(g => g.Words)
                 .Include(g => g.Teams).ThenInclude(t => t.Players)
+                .AsNoTracking()
                 .ToList();
             
             var result = new List<FullGame>();
@@ -62,6 +68,7 @@ namespace HatServer.DAL
             var game = await Entities
                 .Include(g => g.Words)
                 .Include(g => g.Teams).ThenInclude(t => t.Players)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(g => g.Id == id);
 
             if (game == null)
