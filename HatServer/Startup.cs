@@ -24,6 +24,7 @@ using Microsoft.IdentityModel.Tokens;
 using Model.Entities;
 using Newtonsoft.Json.Serialization;
 using OldServer;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace HatServer
 {
@@ -47,6 +48,8 @@ namespace HatServer
 
             services.AddDbContext<GameDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringName)));
+
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info{Title = "Hat API", Version = "v1"}));
 
             services.AddScoped<FillerDbSeeder>();
 
@@ -148,6 +151,9 @@ namespace HatServer
                 //app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Hat API"));
+            
             app.UseStaticFiles();
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 

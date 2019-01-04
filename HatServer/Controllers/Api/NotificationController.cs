@@ -17,6 +17,7 @@ namespace HatServer.Controllers.Api
             _repository = repository;
         }
 
+        [HttpGet]
         public async Task<IActionResult> NotificationAboutDailyDownloads()
         {
             var downloadedPacks = await _repository.GetDownloadsForLastHoursAsync(24);

@@ -15,7 +15,7 @@ namespace HatServer.Controllers.Api.Analytics
         }
         
         // GET
-        [Route("Common")]
+        [HttpGet("Common")]
         public IActionResult Index()
         {
             var result = _analyticsBusinessLogic.GetCommonAnalytics();

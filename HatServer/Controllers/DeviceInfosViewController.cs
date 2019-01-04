@@ -20,7 +20,7 @@ namespace HatServer.Controllers
           _deviceInfoRepository = deviceInfoRepository;
         }
 
-        [Route("Unique")]
+        [HttpGet("Unique")]
         public IActionResult Index()
         {
           var data = _deviceInfoRepository.GetAll()
@@ -29,7 +29,7 @@ namespace HatServer.Controllers
           return View(data);
         }
 
-        [Route("DailyUnique")]
+        [HttpGet("DailyUnique")]
         public IActionResult GetInfoForDates()
         {
           var data = _deviceInfoRepository.GetAll()

@@ -56,31 +56,31 @@ namespace HatServer.Controllers.Api
         }
 
         //[HttpPost]
-        public async Task<object> Register([FromBody] RegisterRequest model)
-        {
-            //return new object();
-
-            if (!ModelState.IsValid)
-            {
-                return HandleAndReturnBadRequest(ModelState, _logger);
-            }
-
-            var user = new ServerUser
-            {
-                UserName = model.Name,
-                Email = model.Name
-            };
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (result.Succeeded)
-            {
-                await _signInManager.SignInAsync(user, false);
-                var token = GenerateJwtToken(model.Name, user);
-                return Ok(new {token});
-            }
-
-            return HandleAndReturnBadRequest("INVALID_LOGIN_ATTEMPT", _logger);
-        }
+//        public async Task<object> Register([FromBody] RegisterRequest model)
+//        {
+//            //return new object();
+//
+//            if (!ModelState.IsValid)
+//            {
+//                return HandleAndReturnBadRequest(ModelState, _logger);
+//            }
+//
+//            var user = new ServerUser
+//            {
+//                UserName = model.Name,
+//                Email = model.Name
+//            };
+//            var result = await _userManager.CreateAsync(user, model.Password);
+//
+//            if (result.Succeeded)
+//            {
+//                await _signInManager.SignInAsync(user, false);
+//                var token = GenerateJwtToken(model.Name, user);
+//                return Ok(new {token});
+//            }
+//
+//            return HandleAndReturnBadRequest("INVALID_LOGIN_ATTEMPT", _logger);
+//        }
 
         private object GenerateJwtToken(string email, [NotNull] IdentityUser user)
         {

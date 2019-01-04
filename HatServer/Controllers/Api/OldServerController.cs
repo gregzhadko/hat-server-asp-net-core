@@ -16,7 +16,7 @@ namespace HatServer.Controllers.Api
             _oldServerService = oldServerService;
         }
 
-        [Route("{*url}")]
+        [HttpGet("{*url}")]
         public async Task<IActionResult> Index()
         {
             const string subUri = "/api/oldserver/";
