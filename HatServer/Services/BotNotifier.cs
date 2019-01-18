@@ -58,8 +58,7 @@ namespace HatServer.Services
         public async Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(List<DownloadedPacksInfo> downloadedPacks)
         {
             var groupedPacks = downloadedPacks.GroupBy(p => p.GamePackId).ToList();
-            var longestPackName = groupedPacks.Select(g => g.First().GamePack.Name).Max(t => t.Length);
-            
+
             try
             {
                 var baseUrl = _configuration["botMessageUrl"];
@@ -70,14 +69,6 @@ namespace HatServer.Services
                     var packName = pack.GamePack.Name;
                     var formattedPackName = pack.GamePack.Paid ? $"*{packName}*" : $"{packName}";
                     message.Append(formattedPackName);
-//                    var length = packName.Length;
-//                    while (length < longestPackName + 5)
-//                    {
-//                        message.Append(Space);
-//                        length++;
-//                    }
-//                    message.Append($"{groupedPack.Count()}{NewLine}");
-
                     message.Append($"{Comma}{Space}{Space}{groupedPack.Count()}{NewLine}");
                 }
 

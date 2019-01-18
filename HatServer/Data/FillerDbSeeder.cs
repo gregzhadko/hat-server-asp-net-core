@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using JetBrains.Annotations;
 using OldServer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Model.Entities;
-using Newtonsoft.Json;
 
 namespace HatServer.Data
 {
@@ -78,16 +74,6 @@ namespace HatServer.Data
             
             context.SaveChanges();
             context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.Packs OFF");
-        }
-
-        private static void SaveToFile(List<Pack> packs)
-        {
-            var packString = JsonConvert.SerializeObject(packs, new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                Formatting = Formatting.Indented
-            });
-            File.AppendAllText($"Backup\\{DateTime.Now:yyyy-MM-dd-hh-mm}.json", packString);
         }
     }
 }

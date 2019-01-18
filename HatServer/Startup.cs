@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Model.Entities;
 using Newtonsoft.Json.Serialization;
@@ -74,6 +73,27 @@ namespace HatServer
             services.AddHttpClient<IMongoServiceClient, MongoServiceClient>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            ConfigureAuthentication(services);
+
+            services.AddMvc()
+                .AddJsonOptions(
+                    options =>
+                    {
+                        options.SerializerSettings.Converters.Add(
+                            new Newtonsoft.Json.Converters.StringEnumConverter(new CamelCaseNamingStrategy()));
+                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    })
+                .AddFluentValidation();
+
+            AddValidatorsToService(services);
+
+            // Add Database Initializer
+            //services.AddScoped<IDbSeeder, FillerDbInitializer>();
+        }
+
+        private void ConfigureAuthentication(IServiceCollection services)
+        {
             services
                 .AddAuthentication(options =>
                 {
@@ -93,22 +113,6 @@ namespace HatServer
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
-
-            services.AddMvc()
-                .AddJsonOptions(
-                    options =>
-                    {
-                        options.SerializerSettings.Converters.Add(
-                            new Newtonsoft.Json.Converters.StringEnumConverter(new CamelCaseNamingStrategy()));
-                        options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    })
-                .AddFluentValidation();
-
-            AddValidatorsToService(services);
-
-            // Add Database Initializer
-            //services.AddScoped<IDbSeeder, FillerDbInitializer>();
         }
 
         private static void AddRepositoriesToServices(IServiceCollection services)
@@ -166,6 +170,7 @@ namespace HatServer
                 template: "{controller=Home}/{action=Index}/{id?}"));
         }
 
+        // ReSharper disable once UnusedMember.Local
         private void ApplyMigrationAndSeeding([NotNull] IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())

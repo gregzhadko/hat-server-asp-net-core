@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
 using Model;
-using Model.Entities;
 
 namespace HatServer.Services
 {
@@ -33,7 +31,7 @@ namespace HatServer.Services
         public CommonAnalytics GetCommonAnalytics()
         {
             var fullGames = _gameRepository.GetFullGames()
-                //.Where(g => g.Game.InGameId.Equals("FAEE87BF-599E-4BB5-8687-426F91EFE315_1544700985", StringComparison.CurrentCultureIgnoreCase))
+                //.Where(g => g.Game.InGameId.Equals("5C140301-7381-4E65-B46F-817A5359DBD4_1535379624", StringComparison.CurrentCultureIgnoreCase))
                 .ToList();
             
             return AnalyzeGames(fullGames);
