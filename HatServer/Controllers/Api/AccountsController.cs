@@ -17,7 +17,10 @@ using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api
 {
-    [Route("api/[controller]/[action]")]
+    /// <summary>
+    /// Contains the logic which works with accounts
+    /// </summary>
+    [Route("Api/[controller]/[action]")]
     public sealed class AccountsController : Controller
     {
         private readonly SignInManager<ServerUser> _signInManager;
@@ -25,6 +28,13 @@ namespace HatServer.Controllers.Api
         private readonly IConfiguration _configuration;
         private readonly ILogger<AccountsController> _logger;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
+        /// <param name="configuration"></param>
+        /// <param name="logger"></param>
         public AccountsController(UserManager<ServerUser> userManager, SignInManager<ServerUser> signInManager,
             IConfiguration configuration, ILogger<AccountsController> logger)
         {
@@ -34,7 +44,13 @@ namespace HatServer.Controllers.Api
             _logger = logger;
         }
 
-        // POST api/<controller>
+        /// <summary>
+        /// Handles login request and generates token which can be used in the future requests for user's authorization 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <response code="200">Authorized</response>
+        /// <response code="400">Request body is incorrect</response>
+        /// <response code="401">Unauthorized</response>
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest model)
         {
@@ -45,42 +61,16 @@ namespace HatServer.Controllers.Api
 
             var result = await _signInManager.PasswordSignInAsync(model.Name, model.Password, false, false);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                var appUser = _userManager.Users.Single(r => r.UserName == model.Name);
-                var token = GenerateJwtToken(model.Name, appUser);
-                return Ok(new {token});
+                return Unauthorized();
             }
+            
+            var appUser = _userManager.Users.Single(r => r.UserName == model.Name);
+            var token = GenerateJwtToken(model.Name, appUser);
+            return Ok(new {token});
 
-            return HandleAndReturnBadRequest("INVALID_LOGIN_ATTEMPT", _logger);
         }
-
-        //[HttpPost]
-//        public async Task<object> Register([FromBody] RegisterRequest model)
-//        {
-//            //return new object();
-//
-//            if (!ModelState.IsValid)
-//            {
-//                return HandleAndReturnBadRequest(ModelState, _logger);
-//            }
-//
-//            var user = new ServerUser
-//            {
-//                UserName = model.Name,
-//                Email = model.Name
-//            };
-//            var result = await _userManager.CreateAsync(user, model.Password);
-//
-//            if (result.Succeeded)
-//            {
-//                await _signInManager.SignInAsync(user, false);
-//                var token = GenerateJwtToken(model.Name, user);
-//                return Ok(new {token});
-//            }
-//
-//            return HandleAndReturnBadRequest("INVALID_LOGIN_ATTEMPT", _logger);
-//        }
 
         private object GenerateJwtToken(string email, [NotNull] IdentityUser user)
         {

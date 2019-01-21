@@ -12,6 +12,9 @@ using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api
 {
+    /// <summary>
+    /// Contains API methods to work with filler packs.
+    /// </summary>
     [Authorize]
     [Route("api/[controller]")]
     public sealed class PacksController : Controller
@@ -86,30 +89,5 @@ namespace HatServer.Controllers.Api
             await _packRepository.InsertAsync(item);
             return CreatedAtRoute("Get", new {id = item.Id}, item);
         }
-
-        //TODO: check it and refactor
-        // PUT api/<controller>/5
-//        [HttpPut("{id}")]
-//        public async Task<IActionResult> UpdateNameAndDescription(int id, [CanBeNull] [FromBody] string name,
-//            [CanBeNull] [FromBody] string description)
-//        {
-//            if (id == 0 || String.IsNullOrWhiteSpace(name) || String.IsNullOrWhiteSpace(description))
-//            {
-//                return BadRequest();
-//            }
-//
-//            var pack = await _packRepository.GetAsync(id);
-//            if (pack == null)
-//            {
-//                return HandleAndReturnBadRequest($"Pack with id {id} wasn't found"));
-//            }
-//
-//            pack.Name = name;
-//            pack.Description = description;
-//
-//            await _packRepository.UpdateAsync(pack);
-//
-//            return NoContent();
-//        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using AutoMapper;
 using FluentValidation;
@@ -48,7 +50,7 @@ namespace HatServer
             services.AddDbContext<GameDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(ConnectionStringName)));
 
-            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Info{Title = "Hat API", Version = "v1"}));
+            ConfigureSwagger(services);
 
             services.AddScoped<FillerDbSeeder>();
 
@@ -90,6 +92,19 @@ namespace HatServer
 
             // Add Database Initializer
             //services.AddScoped<IDbSeeder, FillerDbInitializer>();
+        }
+
+        private static void ConfigureSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                var hatServerComments = Path.Combine(baseDirectory, "HatServer.xml");
+                var modelComments = Path.Combine(baseDirectory, "Model.xml");
+                c.SwaggerDoc("v1", new Info {Title = "Hat API", Version = "v1"});
+                c.IncludeXmlComments(hatServerComments);
+                c.IncludeXmlComments(modelComments);
+            });
         }
 
         private void ConfigureAuthentication(IServiceCollection services)

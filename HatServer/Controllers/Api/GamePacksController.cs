@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
-using HatServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
@@ -12,7 +11,6 @@ using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api
 {
-    //[Authorize]
     [Route("api/[controller]")]
     public sealed class GamePacksController : Controller
     {
@@ -30,30 +28,29 @@ namespace HatServer.Controllers.Api
             _logger = logger;
         }
 
-        // GET api/<controller>
+        /// <summary>
+        /// Gets all packs with common information about them.
+        /// This method should be called from the playing device for all pack representation. 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAll()
         {
             var packs = _gamePackRepository.GetAll();
             var result = _mapper.Map<IList<GamePackEmptyResponse>>(packs);
             return Ok(result);
-
-//            var result = new List<GamePack>();
-//            var files = Directory.GetFiles(Constants.PacksFolder, "*.json");
-//            foreach (var pack in files.Select(s => System.IO.File.ReadAllText(s, Encoding.UTF8))
-//                .Select(JsonConvert.DeserializeObject<GamePack>))
-//            {
-//                pack.Count = pack.Phrases.Count;
-//                pack.Phrases = null;
-//                result.Add(pack);
-//            }
-//
-//            return Ok(result);
         }
 
-        // GET api/<controller>/5
+        /// <summary>
+        /// Gets the pack with the list of its phrases by id of the pack.
+        /// It should be used in case a user decided to download selected pack.
+        /// </summary>
+        /// <param name="id">Id of the pack to get</param>
+        /// <param name="deviceId">Device id of the user. It will be saved and used for analytics in future</param>
+        /// <response code="200">The pack info and list of its phrases</response>
+        /// <response code="400">Pack with the provided Id doesn't exist</response>
         [HttpGet("{id}", Name = "Get_Game_Pack")]
-        public async Task<IActionResult> Get(int id, [FromHeader] string deviceId, [FromServices]IBotNotifier botNotifier)
+        public async Task<IActionResult> Get(int id, [FromHeader] string deviceId)
         {
             var pack = await _gamePackRepository.GetAsync(id);
             if (pack == null)
@@ -63,7 +60,6 @@ namespace HatServer.Controllers.Api
 
             if (!String.IsNullOrWhiteSpace(deviceId))
             {
-
                 //It works, but it sends the notification immediately. It is turned off for now.
                 //await botNotifier.SendPackDownloadedNotificationAsync(pack);
 
@@ -73,19 +69,14 @@ namespace HatServer.Controllers.Api
 
             var response = _mapper.Map<GamePackResponse>(pack);
             return Ok(response);
-
-//            var file = Directory.GetFiles(Constants.PacksFolder, "*.json")
-//                .FirstOrDefault(f => f.EndsWith($"{id}.json", StringComparison.Ordinal));
-//            if (file == null)
-//            {
-//                return HandleAndReturnBadRequest($"Pack with id = {id} wasn't found"));
-//            }
-//
-//            var result = await System.IO.File.ReadAllTextAsync($"{file}");
-//            return Ok(result);
         }
 
-        // GET api/<controller>/5
+        /// <summary>
+        /// Gets the icon of the pack by its id.
+        /// </summary>
+        /// <param name="id">Id of the pack</param>
+        /// <response code="200">The icon of the pack</response>
+        /// <response code="400">Pack icon with the provided Id doesn't exist</response>
         [HttpGet("{id}/icon", Name = "Get_icon")]
         public async Task<IActionResult> GetIcon(int id)
         {
@@ -96,16 +87,6 @@ namespace HatServer.Controllers.Api
             }
 
             return File(icon.Icon, "application/file", "pack_icon_{id}.pdf");
-
-//            var file = Directory.GetFiles(Constants.PacksFolder, "*.pdf")
-//                .FirstOrDefault(f => f.EndsWith($"pack_icon_{id}.pdf", StringComparison.Ordinal));
-//            if (file == null)
-//            {
-//                return HandleAndReturnBadRequest($"Pack with id = {id} wasn't found"));
-//            }
-//
-//            var fileStream = new FileStream(file, FileMode.Open);
-//            return File(fileStream, "application/file", "pack_icon_{id}.pdf");
         }
     }
 }

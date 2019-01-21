@@ -9,6 +9,9 @@ using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api.Analytics
 {
+    /// <summary>
+    /// Contains API to work with games
+    /// </summary>
     [Route("api/analytics/game")]
     public sealed class GameController : Controller
     {
@@ -17,6 +20,13 @@ namespace HatServer.Controllers.Api.Analytics
         private readonly IMapper _mapper;
         private readonly ILogger<GameController> _logger;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="gameRepository"></param>
+        /// <param name="roundRepository"></param>
+        /// <param name="mapper"></param>
+        /// <param name="logger"></param>
         public GameController(IGameRepository gameRepository, IRoundRepository roundRepository, IMapper mapper, ILogger<GameController> logger)
         {
             _logger = logger;
@@ -25,6 +35,12 @@ namespace HatServer.Controllers.Api.Analytics
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Saves information about a game. This method should be called from the device.
+        /// </summary>
+        /// <param name="request">Game data request</param>
+        /// <response code="200">Game information was saved</response>
+        /// <response code="400">Request body is incorrect</response>
         [HttpPost]
         public async Task<IActionResult> PostGame([FromBody] PostGameRequest request)
         {

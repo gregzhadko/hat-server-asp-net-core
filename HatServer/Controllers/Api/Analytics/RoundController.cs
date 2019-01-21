@@ -9,6 +9,10 @@ using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api.Analytics
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Contains API to work with rounds
+    /// </summary>
     [Route("api/analytics/round")]
     public class RoundController : Controller
     {
@@ -17,6 +21,13 @@ namespace HatServer.Controllers.Api.Analytics
         private readonly IMapper _mapper;
         private readonly ILogger<GameController> _logger;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="roundRepository"></param>
+        /// <param name="gameRepository"></param>
+        /// <param name="mapper"></param>
+        /// <param name="logger"></param>
         public RoundController(IRoundRepository roundRepository, IGameRepository gameRepository,IMapper mapper, ILogger<GameController> logger)
         {
             _logger = logger;
@@ -25,6 +36,12 @@ namespace HatServer.Controllers.Api.Analytics
             _mapper = mapper;
         }
         
+        /// <summary>
+        /// Saves information about played round.
+        /// </summary>
+        /// <param name="request">Round data request</param>
+        /// <response code="200">Round information was saved</response>
+        /// <response code="400">Request body is incorrect</response>
         [HttpPost]
         public async Task<IActionResult> PostRound([FromBody] PostRoundRequest request)
         {

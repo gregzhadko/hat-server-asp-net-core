@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HatServer.Controllers.Api
 {
+    [ApiExplorerSettings(IgnoreApi=true)]
     [Route("api/[controller]")]
     public class NotificationController : Controller
     {

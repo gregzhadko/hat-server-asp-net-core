@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HatServer.Controllers.Api
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// The class is used as a proxy to the old server.
+    /// </summary>
     [Route("api/[controller]")]
     public class OldServerController : Controller
     {
@@ -16,6 +20,9 @@ namespace HatServer.Controllers.Api
             _oldServerService = oldServerService;
         }
 
+        /// <summary>
+        /// Sends requests to the old server using proxy mechanism.
+        /// </summary>
         [HttpGet("{*url}")]
         public async Task<IActionResult> Index()
         {
