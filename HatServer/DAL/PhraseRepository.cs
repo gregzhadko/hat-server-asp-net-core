@@ -127,9 +127,12 @@ namespace HatServer.DAL
 
         public Task<PhraseItem> GetByNameAsync(string phrase)
         {
-            return Entities.Include(p => p.ReviewStates).Include(p => p.Pack).FirstOrDefaultAsync(p =>
-                string.CompareOrdinal(p.Phrase, phrase) == 0 && p.TrackId > 0 && p.ClosedBy == null &&
-                p.ClosedDate == null);
+            return Entities
+                .Include(p => p.ReviewStates)
+                .Include(p => p.Pack)
+                .FirstOrDefaultAsync(p =>
+                    string.CompareOrdinal(p.Phrase, phrase) == 0 && p.TrackId > 0 && p.ClosedBy == null &&
+                    p.ClosedDate == null);
         }
     }
 }

@@ -12,8 +12,9 @@ using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Contains API methods to work with filler packs.
+    /// Contains API methods to work with packs for the filler .
     /// </summary>
     [Authorize]
     [Route("api/[controller]")]
@@ -23,6 +24,12 @@ namespace HatServer.Controllers.Api
         private readonly IUserRepository _userRepository;
         private readonly ILogger<PacksController> _logger;
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="packRepository"></param>
+        /// <param name="userRepository"></param>
+        /// <param name="logger"></param>
         public PacksController(IPackRepository packRepository, IUserRepository userRepository, ILogger<PacksController> logger)
         {
             _packRepository = packRepository;
@@ -30,9 +37,11 @@ namespace HatServer.Controllers.Api
             _logger = logger;
         }
 
-        // GET: api/<controller>
-        [ItemNotNull]
-        [NotNull]
+        /// <summary>
+        /// Gets all packs for the filler.
+        /// </summary>
+        /// <param name="loadPhrases">Optional: true - if you want to get all phrases of the packs (works slower), false - otherwise</param>
+        /// <returns></returns>
         [HttpGet("{loadPhrases?}")]
         public async Task<List<BasePackResponse>> GetAll(bool? loadPhrases = null)
         {
@@ -52,7 +61,11 @@ namespace HatServer.Controllers.Api
             return packs.Select(p => new BasePackResponse(p, users)).ToList();
         }
 
-        // GET api/<controller>/5
+        /// <summary>
+        /// Returns filler packs data by its id
+        /// </summary>
+        /// <param name="id">Id of tha pack to download</param>
+        /// <response code="400">There is no pack with this id in the database</response>
         [HttpGet("{id}", Name = "Get")]
         public async Task<IActionResult> Get(int id)
         {
@@ -71,9 +84,9 @@ namespace HatServer.Controllers.Api
             return Ok(new BasePackResponse(pack, users));
         }
 
-        // POST api/<controller>
+        //TODO: replace Pack with PackDTO or PackRequest. The way it works right now is incorrect.
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Pack item)
+        private async Task<IActionResult> Create([FromBody] Pack item)
         {
             if (!ModelState.IsValid)
             {

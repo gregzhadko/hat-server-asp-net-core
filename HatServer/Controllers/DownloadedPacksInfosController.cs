@@ -15,6 +15,10 @@ namespace HatServer.Controllers
             _repository = repository;
         }
 
+        /// <summary>
+        /// Returns the table which contains the information about downloaded packs.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Index()
         {
@@ -22,7 +26,8 @@ namespace HatServer.Controllers
             return View(infos);
         }
 
-        // GET: DownloadedPacksInfos/Details/5
+        
+        [ApiExplorerSettings(IgnoreApi=true)]
         [HttpGet("{id}")]
         public async Task<IActionResult> Details(int? id)
         {
