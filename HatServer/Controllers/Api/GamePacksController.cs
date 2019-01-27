@@ -34,9 +34,9 @@ namespace HatServer.Controllers.Api
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var packs = _gamePackRepository.GetAllAsync();
+            var packs = await _gamePackRepository.GetAllAsync();
             var result = _mapper.Map<IList<GamePackEmptyResponse>>(packs);
             return Ok(result);
         }
