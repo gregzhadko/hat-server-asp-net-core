@@ -12,6 +12,7 @@ using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api.Analytics
 {
+    /// <inheritdoc />
     /// <summary>
     /// Contains API to work with devices information
     /// </summary>
@@ -62,11 +63,9 @@ namespace HatServer.Controllers.Api.Analytics
         /// </summary>
         /// <returns>The list of devices</returns>
         [HttpGet("unique")]
-        public IActionResult GetDistinctDevicesInfos()
+        public async Task<IActionResult> GetDistinctDevicesInfos()
         {
-            return Ok(_deviceInfoRepository.GetAll()
-                .Where(i => !i.DeviceModel.Equals("x86_64", StringComparison.InvariantCultureIgnoreCase)).ToList()
-                .OrderBy(d => d.TimeStamp).DistinctBy(d => d.DeviceGuid).OrderByDescending(d => d.TimeStamp).ToList());
+            return Ok(_deviceInfoRepository.GetDistinctDevicesInfosExpectedTestsAsync());
         }
     }
 }

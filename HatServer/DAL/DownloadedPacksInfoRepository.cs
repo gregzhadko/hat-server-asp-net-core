@@ -16,27 +16,27 @@ namespace HatServer.DAL
         {
         }
 
-        public Task<List<DownloadedPacksInfo>> GetDailyDownloadsForPack(int packId)
+        public async Task<List<DownloadedPacksInfo>> GetDailyDownloadsForPackAsync(int packId)
         {
-            return Entities.Where(d => d.GamePackId == packId && d.DownloadedTime.Date == DateTime.Today).ToListAsync();
+            return await Entities.Where(d => d.GamePackId == packId && d.DownloadedTime.Date == DateTime.Today).ToListAsync();
         }
 
-        public Task<List<DownloadedPacksInfo>> GetDownloadsForLastHoursAsync(int hoursNumber)
+        public async Task<List<DownloadedPacksInfo>> GetDownloadsForLastHoursAsync(int hoursNumber)
         {
-            return Entities
+            return await Entities
                 .Where(d => d.DownloadedTime.Date > DateTime.Now.AddHours(-hoursNumber))
                 .Include(d => d.GamePack)
                 .ToListAsync();
         }
 
-        public override IEnumerable<DownloadedPacksInfo> GetAll()
+        public override async Task<List<DownloadedPacksInfo>> GetAllAsync()
         {
-            return Entities.Include(d => d.GamePack);
+            return await Entities.Include(d => d.GamePack).ToListAsync();
         }
 
-        public override Task<DownloadedPacksInfo> GetAsync(int id)
+        public override async Task<DownloadedPacksInfo> GetAsync(int id)
         {
-            return Entities.Include(d => d.GamePack).FirstOrDefaultAsync();
+            return await Entities.Include(d => d.GamePack).FirstOrDefaultAsync();
         }
     }
 }

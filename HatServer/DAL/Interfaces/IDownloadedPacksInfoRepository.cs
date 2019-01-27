@@ -6,7 +6,7 @@ namespace HatServer.DAL.Interfaces
 {
     public interface IDownloadedPacksInfoRepository : IRepository<DownloadedPacksInfo>
     {
-        Task<List<DownloadedPacksInfo>> GetDailyDownloadsForPack(int packId);
+        Task<List<DownloadedPacksInfo>> GetDailyDownloadsForPackAsync(int packId);
         Task<List<DownloadedPacksInfo>> GetDownloadsForLastHoursAsync(int hoursNumber);
     }
 }

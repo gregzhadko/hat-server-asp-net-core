@@ -7,8 +7,8 @@ namespace HatServer.DAL.Interfaces
 {
     public interface IGameRepository : IRepository<Game>
     {
-        Game GetGameByGuid(string roundGameGUID);
-        IEnumerable<FullGame> GetFullGames();
+        Task<Game> GetGameByGuidAsync(string roundGameGUID);
+        Task<List<FullGame>> GetFullGamesAsync();
         Task<FullGame> GetFullGameAsync(int id);
     }
 }

@@ -16,14 +16,14 @@ namespace HatServer.DAL
         {
         }
 
-        public override IEnumerable<PhraseItem> GetAll()
+        public override async Task<List<PhraseItem>> GetAllAsync()
         {
-            return Entities.Include(p => p.ReviewStates).ThenInclude(p => p.User);
+            return await Entities.Include(p => p.ReviewStates).ThenInclude(p => p.User).ToListAsync();
         }
 
-        public override Task<PhraseItem> GetAsync(int id)
+        public override async Task<PhraseItem> GetAsync(int id)
         {
-            return Entities.Include(p => p.ReviewStates).ThenInclude(p => p.User)
+            return await Entities.Include(p => p.ReviewStates).ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -31,7 +31,7 @@ namespace HatServer.DAL
         public async Task<PhraseItem> UpdatePhraseAsync([NotNull] PutPhraseItemRequest request, [NotNull] ServerUser user,
             [NotNull] PhraseItem existingPhrase)
         {
-            var cloned = existingPhrase.Clone(); //request.ToPhraseItem(user, existingPhrase).FormatPhrase();
+            var cloned = existingPhrase.Clone();
             cloned.Phrase = string.IsNullOrWhiteSpace(request.Phrase) ? cloned.Phrase : request.Phrase;
             cloned.Complexity = request.Complexity < 0 || request.Complexity > 0 ? cloned.Complexity : request.Complexity;
             cloned.Description = request.Description ?? cloned.Description;
@@ -119,15 +119,15 @@ namespace HatServer.DAL
         }
 
         [ItemCanBeNull]
-        public Task<PhraseItem> GetLatestByTrackIdAsync(int trackId)
+        public async Task<PhraseItem> GetLatestByTrackIdAsync(int trackId)
         {
-            return Entities.Include(p => p.ReviewStates).ThenInclude(s => s.User)
+            return await Entities.Include(p => p.ReviewStates).ThenInclude(s => s.User)
                 .FirstOrDefaultAsync(p => p.TrackId == trackId && p.ClosedBy == null && p.ClosedDate == null);
         }
 
-        public Task<PhraseItem> GetByNameAsync(string phrase)
+        public async Task<PhraseItem> GetByNameAsync(string phrase)
         {
-            return Entities
+            return await Entities
                 .Include(p => p.ReviewStates)
                 .Include(p => p.Pack)
                 .FirstOrDefaultAsync(p =>

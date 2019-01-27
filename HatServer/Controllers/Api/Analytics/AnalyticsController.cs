@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HatServer.Controllers.Api.Analytics
 {
+    /// <inheritdoc />
     /// <summary>
     /// Contains API to work with analytics of games
     /// </summary>
@@ -28,7 +29,7 @@ namespace HatServer.Controllers.Api.Analytics
         [HttpGet("Common")]
         public IActionResult Index()
         {
-            var result = _analyticsBusinessLogic.GetCommonAnalytics();
+            var result = _analyticsBusinessLogic.GetCommonAnalyticsAsync();
             return Ok(result);
         }
 
@@ -51,7 +52,7 @@ namespace HatServer.Controllers.Api.Analytics
         [HttpGet("Games")]
         public IActionResult GetGames()
         {
-            var result = _analyticsBusinessLogic.GetFullGames();
+            var result = _analyticsBusinessLogic.GetFullGamesAsync();
             return Ok(result);
         }
     }

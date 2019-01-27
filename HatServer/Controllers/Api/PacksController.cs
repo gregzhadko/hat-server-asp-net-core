@@ -45,18 +45,11 @@ namespace HatServer.Controllers.Api
         [HttpGet("{loadPhrases?}")]
         public async Task<List<BasePackResponse>> GetAll(bool? loadPhrases = null)
         {
-            var users = _userRepository.GetAll().ToList();
+            var users = await _userRepository.GetAllAsync();
 
-            IEnumerable<Pack> packs;
-
-            if (loadPhrases == true)
-            {
-                packs = await _packRepository.GetAllWithPhrases();
-            }
-            else
-            {
-                packs = _packRepository.GetAll();
-            }
+            var packs = loadPhrases == true
+                ? await _packRepository.GetAllWithPhrasesAsync()
+                : await _packRepository.GetAllAsync();
 
             return packs.Select(p => new BasePackResponse(p, users)).ToList();
         }
@@ -80,7 +73,7 @@ namespace HatServer.Controllers.Api
                 return HandleAndReturnBadRequest($"Pack with id {id} wasn't found", _logger);
             }
 
-            var users = _userRepository.GetAll().ToList();
+            var users = await _userRepository.GetAllAsync();
             return Ok(new BasePackResponse(pack, users));
         }
 

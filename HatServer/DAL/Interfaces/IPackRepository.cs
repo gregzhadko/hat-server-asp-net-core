@@ -8,6 +8,6 @@ namespace HatServer.DAL.Interfaces
     {
         Task<Pack> GetByNameAsync(string name);
         Task<Pack> GetFullInfoAsync(int id);
-        Task<List<Pack>> GetAllWithPhrases();
+        Task<List<Pack>> GetAllWithPhrasesAsync();
     }
 }

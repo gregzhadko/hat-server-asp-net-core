@@ -7,6 +7,7 @@ using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
 using static HatServer.Tools.BadRequestFactory;
@@ -47,9 +48,10 @@ namespace HatServer.Controllers.Api
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public List<BasePhraseItemResponse> Get()
+        public async Task<List<BasePhraseItemResponse>> Get()
         {
-            return _phraseRepository.GetAll().Select(p => new BasePhraseItemResponse(p)).ToList();
+            var phraseItems = await _phraseRepository.GetAllAsync();
+            return phraseItems.Select(p => new BasePhraseItemResponse(p)).ToList();
         }
 
         /// <summary>
@@ -166,7 +168,7 @@ namespace HatServer.Controllers.Api
             
             if (actual.Version >= request.Version)
             {
-                var users = _userRepository.GetAll();
+                var users = await _userRepository.GetAllAsync();
                 return Conflict(new ErrorResponse("The phrase has a newer version",
                     new BasePhraseItemResponse(actual, users)));
             }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HatServer.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace HatServer.Controllers
 {
@@ -20,9 +21,10 @@ namespace HatServer.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var infos = _repository.GetAll().OrderByDescending(i => i.DownloadedTime).ToList();
+            var all = await _repository.GetAllAsync();
+            var infos = all.OrderByDescending(i => i.DownloadedTime).ToList();
             return View(infos);
         }
 

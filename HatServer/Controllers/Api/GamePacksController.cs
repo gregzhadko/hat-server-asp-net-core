@@ -36,7 +36,7 @@ namespace HatServer.Controllers.Api
         [HttpGet]
         public IActionResult GetAll()
         {
-            var packs = _gamePackRepository.GetAll();
+            var packs = _gamePackRepository.GetAllAsync();
             var result = _mapper.Map<IList<GamePackEmptyResponse>>(packs);
             return Ok(result);
         }
@@ -80,7 +80,7 @@ namespace HatServer.Controllers.Api
         [HttpGet("{id}/icon", Name = "Get_icon")]
         public async Task<IActionResult> GetIcon(int id)
         {
-            var icon = await _gamePackRepository.GetPackIcon(id);
+            var icon = await _gamePackRepository.GetPackIconAsync(id);
             if (icon == null)
             {
                 return NotFound(new ErrorResponse($"Icon with id = {id} wasn't found"));

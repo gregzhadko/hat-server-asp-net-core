@@ -5,11 +5,9 @@ namespace HatServer.DAL.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+        Task<List<T>> GetAllAsync();
         Task<T> GetAsync(int id);
         Task InsertAsync(T entity);
-        Task DeleteAsync(T entity);
-        Task DeleteAsync(int id);
         Task SaveChangesAsync();
     }
 }

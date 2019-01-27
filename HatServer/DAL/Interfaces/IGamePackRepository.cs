@@ -5,6 +5,6 @@ namespace HatServer.DAL.Interfaces
 {
     public interface IGamePackRepository : IRepository<GamePack>
     {
-        Task<GamePackIcon> GetPackIcon(int packId);
+        Task<GamePackIcon> GetPackIconAsync(int packId);
     }
 }

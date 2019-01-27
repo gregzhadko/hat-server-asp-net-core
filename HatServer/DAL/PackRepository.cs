@@ -14,25 +14,24 @@ namespace HatServer.DAL
         {
         }
 
-        public Task<Pack> GetByNameAsync(string name)
+        public async Task<Pack> GetByNameAsync(string name)
         {
-            return Entities.FirstOrDefaultAsync(p => p.Name == name);
+            return await Entities.FirstOrDefaultAsync(p => p.Name == name);
         }
 
-        public override Task<Pack> GetAsync(int id)
+        public override async Task<Pack> GetAsync(int id)
         {
-            return Entities.Include(p => p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
+            return await Entities.Include(p => p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Task<Pack> GetFullInfoAsync(int id)
+        public async Task<Pack> GetFullInfoAsync(int id)
         {
-            return Entities.Include(p => p.Phrases).ThenInclude(p => p.ReviewStates).FirstOrDefaultAsync(p => p.Id == id);
+            return await Entities.Include(p => p.Phrases).ThenInclude(p => p.ReviewStates).FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Task<List<Pack>> GetAllWithPhrases()
+        public async Task<List<Pack>> GetAllWithPhrasesAsync()
         {
-            var packs = Entities.Include(p => p.Phrases).ThenInclude(p => p.ReviewStates).ToListAsync();
-            return packs;
+            return await Entities.Include(p => p.Phrases).ThenInclude(p => p.ReviewStates).ToListAsync();
         }
     }
 }

@@ -9,9 +9,9 @@ namespace HatServer.Services
 {
     public interface IAnalyticsBusinessLogic
     {
-        CommonAnalytics GetCommonAnalytics();
+        Task<CommonAnalytics> GetCommonAnalyticsAsync();
         Task<FullGame> GetFullGameByIdAsync(int id);
-        List<FullGame> GetFullGames();
+        Task<List<FullGame>> GetFullGamesAsync();
     }
 
     public class AnalyticsBusinessLogic : IAnalyticsBusinessLogic
@@ -28,18 +28,18 @@ namespace HatServer.Services
             _roundRepository = roundRepository;
         }
 
-        public CommonAnalytics GetCommonAnalytics()
+        public async Task<CommonAnalytics> GetCommonAnalyticsAsync()
         {
-            var fullGames = _gameRepository.GetFullGames()
+            var fullGames = await _gameRepository.GetFullGamesAsync();
                 //.Where(g => g.Game.InGameId.Equals("5C140301-7381-4E65-B46F-817A5359DBD4_1535379624", StringComparison.CurrentCultureIgnoreCase))
-                .ToList();
+                //.ToList();
             
             return AnalyzeGames(fullGames);
         }
 
-        public List<FullGame> GetFullGames()
+        public async Task<List<FullGame>> GetFullGamesAsync()
         {
-            var games = _gameRepository.GetFullGames().ToList();
+            var games = await _gameRepository.GetFullGamesAsync();
             AnalyzeGames(games);
             return games.Where(g => g.State == GameState.Real).ToList();
         }

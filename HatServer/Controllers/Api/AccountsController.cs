@@ -9,6 +9,7 @@ using HatServer.DTO.Request;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -66,7 +67,7 @@ namespace HatServer.Controllers.Api
                 return Unauthorized();
             }
             
-            var appUser = _userManager.Users.Single(r => r.UserName == model.Name);
+            var appUser = await _userManager.Users.SingleAsync(r => r.UserName == model.Name);
             var token = GenerateJwtToken(model.Name, appUser);
             return Ok(new {token});
 

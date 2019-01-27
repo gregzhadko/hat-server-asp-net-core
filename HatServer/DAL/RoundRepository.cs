@@ -15,14 +15,14 @@ namespace HatServer.DAL
         {
         }
 
-        public override IEnumerable<Round> GetAll()
+        public override async Task<List<Round>> GetAllAsync()
         {
-            return Entities.Include(r => r.Words);
+            return await Entities.Include(r => r.Words).ToListAsync();
         }
 
-        public Task<List<Round>> GetNotAttachedRoundsByGameGuidAsync(string gameInGameId)
+        public async Task<List<Round>> GetNotAttachedRoundsByGameGuidAsync(string gameInGameId)
         {
-            return Entities.Where(r => r.GameId == 0 && r.GameGUID == gameInGameId).ToListAsync();
+            return await Entities.Where(r => r.GameId == 0 && r.GameGUID == gameInGameId).ToListAsync();
         }
     }
 }

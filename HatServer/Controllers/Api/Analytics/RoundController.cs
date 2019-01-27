@@ -52,7 +52,7 @@ namespace HatServer.Controllers.Api.Analytics
 
             var round = _mapper.Map<Round>(request);
 
-            var game = _gameRepository.GetGameByGuid(round.GameGUID);
+            var game = await _gameRepository.GetGameByGuidAsync(round.GameGUID);
             if (game != null)
             {
                 round.GameId = game.Id;

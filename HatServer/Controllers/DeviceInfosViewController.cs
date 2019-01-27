@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using MoreLinq.Extensions;
@@ -25,11 +26,9 @@ namespace HatServer.Controllers
         /// </summary>
         /// <returns>HTML page</returns>
         [HttpGet("Unique")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var data = _deviceInfoRepository.GetAll()
-                .Where(i => !i.DeviceModel.Equals("x86_64", StringComparison.InvariantCultureIgnoreCase)).ToList()
-                .OrderBy(d => d.TimeStamp).DistinctBy(d => d.DeviceGuid).OrderByDescending(d => d.TimeStamp).ToList();
+            var data = await _deviceInfoRepository.GetDistinctDevicesInfosExpectedTestsAsync();
             return View(data);
         }
 
@@ -38,12 +37,10 @@ namespace HatServer.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("DailyUnique")]
-        public IActionResult GetInfoForDates()
+        public async Task<IActionResult> GetInfoForDates()
         {
-            var data = _deviceInfoRepository.GetAll()
-                .Where(i => !i.DeviceModel.Equals("x86_64", StringComparison.InvariantCultureIgnoreCase)).ToList()
-                .OrderBy(d => d.TimeStamp).DistinctBy(d => d.DeviceGuid)
-                .Select(d => d.DateTime.Date);
+            var infos = await _deviceInfoRepository.GetDistinctDevicesInfosExpectedTestsAsync();
+            var data = infos.Select(d => d.DateTime.Date);
 
             var grouped = data.GroupBy(d => d.Date);
             var dateDeviceInfos = grouped.OrderByDescending(g => g.Key)

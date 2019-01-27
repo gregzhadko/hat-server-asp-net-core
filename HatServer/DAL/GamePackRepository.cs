@@ -16,19 +16,19 @@ namespace HatServer.DAL
         }
 
         [NotNull]
-        public override IEnumerable<GamePack> GetAll()
+        public override async Task<List<GamePack>> GetAllAsync()
         {
-            return Entities.Include(p => p.Phrases).ToList();
+            return await Entities.Include(p => p.Phrases).ToListAsync();
         }
 
-        public override Task<GamePack> GetAsync(int id)
+        public override async Task<GamePack> GetAsync(int id)
         {
-            return Entities.Include(p => p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
+            return await Entities.Include(p => p.Phrases).FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Task<GamePackIcon> GetPackIcon(int packId)
+        public async Task<GamePackIcon> GetPackIconAsync(int packId)
         {
-            return Context.Set<GamePackIcon>().FirstOrDefaultAsync(g => g.GamePackId == packId);
+            return await Context.Set<GamePackIcon>().FirstOrDefaultAsync(g => g.GamePackId == packId);
         }
     }
 }

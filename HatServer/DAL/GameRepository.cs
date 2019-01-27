@@ -16,33 +16,34 @@ namespace HatServer.DAL
         {
         }
 
-        public Game GetGameByGuid(string roundGameGUID)
+        public async Task<Game> GetGameByGuidAsync(string roundGameGUID)
         {
-            return Entities.FirstOrDefault(g => g.InGameId == roundGameGUID);
+            return await Entities.FirstOrDefaultAsync(g => g.InGameId == roundGameGUID);
         }
 
-        public override IEnumerable<Game> GetAll()
+        public override async Task<List<Game>> GetAllAsync()
         {
-            return Entities
+            return await Entities
                 .Include(g => g.Words)
                 .Include(g => g.Teams).ThenInclude(t => t.Players)
-                .AsNoTracking();
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public IEnumerable<FullGame> GetFullGames()
+        public async Task<List<FullGame>> GetFullGamesAsync()
         {
-            var originalRounds = Context.Set<Round>()
+            var originalRounds = await Context.Set<Round>()
                 .Include(r => r.Words)
                 .AsNoTracking()
-                .ToList();
+                .ToListAsync();
             
             var groupedRounds = originalRounds.GroupBy(r => r.GameId).ToList();
 
-            var games = Entities
+            var games = await Entities
                 .Include(g => g.Words)
                 .Include(g => g.Teams).ThenInclude(t => t.Players)
                 .AsNoTracking()
-                .ToList();
+                .ToListAsync();
             
             var result = new List<FullGame>();
             foreach (var game in games)
@@ -73,7 +74,7 @@ namespace HatServer.DAL
                 return null;
             }
 
-            var rounds = Context.Set<Round>().Where(r => r.GameId == id).Include(r => r.Words).ToList();
+            var rounds = await Context.Set<Round>().Where(r => r.GameId == id).Include(r => r.Words).ToListAsync();
             return new FullGame {Game = game, Rounds = rounds};
         }
     }
