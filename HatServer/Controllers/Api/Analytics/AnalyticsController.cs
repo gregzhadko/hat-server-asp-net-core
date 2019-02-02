@@ -50,9 +50,9 @@ namespace HatServer.Controllers.Api.Analytics
         /// </summary>
         /// <returns>Response with the full information of all real games</returns>
         [HttpGet("Games")]
-        public IActionResult GetGames()
+        public async Task<IActionResult> GetGames()
         {
-            var result = _analyticsBusinessLogic.GetFullGamesAsync();
+            var result = await _analyticsBusinessLogic.GetFullGamesAsync();
             return Ok(result);
         }
     }
