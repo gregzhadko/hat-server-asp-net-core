@@ -30,6 +30,7 @@ namespace Model.Entities
             Description = @enum.GetEnumDescription();
         }
 
+        // ReSharper disable once UnusedMember.Local
         private RoundPhraseState() //For EF
         {
         }

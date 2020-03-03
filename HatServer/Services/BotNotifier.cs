@@ -15,7 +15,7 @@ namespace HatServer.Services
     public interface IBotNotifier
     {
         Task SendPackDownloadedNotificationAsync([NotNull] GamePack pack);
-        Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(List<DownloadedPacksInfo> downloadedPacks);
+        Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(IEnumerable<DownloadedPacksInfo> downloadedPacks);
     }
 
     [UsedImplicitly]
@@ -24,8 +24,7 @@ namespace HatServer.Services
         private const string NewLine = "%0A";
         private const string Comma = "%2c";
         private const string Space = "%20";
-        
-        
+
         private readonly HttpClient _client;
         private readonly ILogger<BotNotifier> _logger;
         private readonly IConfiguration _configuration;
@@ -49,13 +48,13 @@ namespace HatServer.Services
                 var response = await _client.GetAsync(uriString);
                 response.EnsureSuccessStatusCode();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                 _logger.LogError(ex, "Cannot sent notification to telegram");
+                _logger.LogError(ex, "Cannot sent notification to telegram");
             }
         }
 
-        public async Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(List<DownloadedPacksInfo> downloadedPacks)
+        public async Task<HttpResponseMessage> SendInfoAboutDownloadedPacksAsync(IEnumerable<DownloadedPacksInfo> downloadedPacks)
         {
             var groupedPacks = downloadedPacks.GroupBy(p => p.GamePackId).ToList();
 
@@ -76,7 +75,7 @@ namespace HatServer.Services
                 var response = await _client.GetAsync(uriString);
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot sent notification to telegram");
                 return new HttpResponseMessage(HttpStatusCode.BadGateway);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,11 +65,10 @@ namespace HatServer.Controllers.Api
             {
                 return Unauthorized();
             }
-            
+
             var appUser = await _userManager.Users.SingleAsync(r => r.UserName == model.Name);
             var token = GenerateJwtToken(model.Name, appUser);
-            return Ok(new {token});
-
+            return Ok(new { token });
         }
 
         private object GenerateJwtToken(string email, [NotNull] IdentityUser user)

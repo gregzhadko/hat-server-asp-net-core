@@ -16,24 +16,19 @@ namespace HatServer.Services
 
     public class AnalyticsBusinessLogic : IAnalyticsBusinessLogic
     {
-        private readonly IDeviceInfoRepository _deviceInfoRepository;
         private readonly IGameRepository _gameRepository;
-        private readonly IRoundRepository _roundRepository;
 
-        public AnalyticsBusinessLogic(IDeviceInfoRepository deviceInfoRepository, IGameRepository gameRepository,
-            IRoundRepository roundRepository)
+        public AnalyticsBusinessLogic(IGameRepository gameRepository)
         {
-            _deviceInfoRepository = deviceInfoRepository;
             _gameRepository = gameRepository;
-            _roundRepository = roundRepository;
         }
 
         public async Task<CommonAnalytics> GetCommonAnalyticsAsync()
         {
             var fullGames = await _gameRepository.GetFullGamesAsync();
-                //.Where(g => g.Game.InGameId.Equals("5C140301-7381-4E65-B46F-817A5359DBD4_1535379624", StringComparison.CurrentCultureIgnoreCase))
-                //.ToList();
-            
+            //.Where(g => g.Game.InGameId.Equals("5C140301-7381-4E65-B46F-817A5359DBD4_1535379624", StringComparison.CurrentCultureIgnoreCase))
+            //.ToList();
+
             return AnalyzeGames(fullGames);
         }
 
@@ -43,7 +38,7 @@ namespace HatServer.Services
             AnalyzeGames(games);
             return games.Where(g => g.State == GameState.Real).ToList();
         }
-        
+
         public async Task<FullGame> GetFullGameByIdAsync(int id)
         {
             var game = await _gameRepository.GetFullGameAsync(id);
@@ -51,13 +46,14 @@ namespace HatServer.Services
             {
                 return null;
             }
+
             AnalyzeGame(game);
             return game;
         }
 
         private static CommonAnalytics AnalyzeGames(IReadOnlyCollection<FullGame> fullGames)
         {
-            var analytics = new CommonAnalytics {TotalGames = fullGames.Count};
+            var analytics = new CommonAnalytics { TotalGames = fullGames.Count };
             foreach (var fullGame in fullGames)
             {
                 AnalyzeGame(fullGame);

@@ -79,6 +79,7 @@ namespace DictionaryService
             }
         }
 
+        // ReSharper disable once UnusedMember.Local
         private static async Task AddDescriptionAsync(Pack pack, [NotNull] PhraseItem phrase, string description)
         {
             try

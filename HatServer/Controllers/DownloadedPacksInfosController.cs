@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HatServer.DAL.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace HatServer.Controllers
 {

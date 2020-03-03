@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Response;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using HatServer.DAL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using MoreLinq.Extensions;
 
 namespace HatServer.Controllers
 {

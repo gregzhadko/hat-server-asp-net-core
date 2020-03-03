@@ -10,7 +10,6 @@ using Model.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Utilities;
-using Microsoft.AspNetCore.Identity;
 
 namespace OldServer
 {
@@ -24,8 +23,8 @@ namespace OldServer
         //private const bool IsOldServer = true;
         private const bool ReadFromFile = false;
         
-        private readonly HttpClient _client;
-        private readonly IConfiguration _configuration;
+        [UsedImplicitly] private readonly HttpClient _client;
+        [UsedImplicitly] private readonly IConfiguration _configuration;
         private string _backupPath = "Backup";
 
         public MongoServiceClient(HttpClient client, IConfiguration configuration)
@@ -117,6 +116,7 @@ namespace OldServer
         private async Task<List<Pack>> GetAllPacksInfoAsync()
         {
             var response = ReadFromFile
+                // ReSharper disable once UnreachableCode
                 ? File.ReadAllText($"{_backupPath}\\getpacks.json")
                 : await GetResponseAsync("getPacks", 8081).ConfigureAwait(false);
                 //: await _client.GetStringAsync($"{_configuration["BaseUrl"]}/api/OldServer");
@@ -182,6 +182,7 @@ namespace OldServer
         public async Task<Pack> GetPackAsync(int id, [CanBeNull] List<ServerUser> users = null, int trackId = 1)
         {
             var response = ReadFromFile
+                // ReSharper disable once UnreachableCode
                 ? File.ReadAllText($"{_backupPath}\\pack{id}.json")
                 : await GetResponseAsync($"getPack?id={id}", 8081).ConfigureAwait(false);
                 //: await _client.GetStringAsync($"{_configuration["BaseUrl"]}/api/OldServer/{id}");

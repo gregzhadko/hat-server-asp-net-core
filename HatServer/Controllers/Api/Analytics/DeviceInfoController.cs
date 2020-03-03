@@ -1,13 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using HatServer.DAL.Interfaces;
 using HatServer.DTO.Request;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
-using MoreLinq;
 using static HatServer.Tools.BadRequestFactory;
 
 namespace HatServer.Controllers.Api.Analytics

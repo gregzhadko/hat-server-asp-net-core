@@ -7,7 +7,6 @@ using HatServer.DTO.Response;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Model.Entities;
 using static HatServer.Tools.BadRequestFactory;
