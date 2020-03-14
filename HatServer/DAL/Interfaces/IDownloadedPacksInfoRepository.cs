@@ -8,5 +8,6 @@ namespace HatServer.DAL.Interfaces
     {
         Task<List<DownloadedPacksInfo>> GetDailyDownloadsForPackAsync(int packId);
         Task<List<DownloadedPacksInfo>> GetDownloadsForLastHoursAsync(int hoursNumber);
+        Task<List<DownloadedPacksInfo>> GetWithPagination(int pageNumber);
     }
 }

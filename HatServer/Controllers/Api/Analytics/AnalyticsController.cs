@@ -21,7 +21,7 @@ namespace HatServer.Controllers.Api.Analytics
         {
             _analyticsBusinessLogic = analyticsBusinessLogic;
         }
-        
+
         /// <summary>
         /// Provides the common analytics of played games
         /// </summary>

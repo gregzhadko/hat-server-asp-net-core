@@ -15,35 +15,31 @@ namespace HatServer.Controllers
             _repository = repository;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            return await GetDownloadedPacks(1);
+        }
+
         /// <summary>
         /// Returns the table which contains the information about downloaded packs.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        [HttpGet("{pageNumber:int}")]
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            var all = await _repository.GetAllAsync();
-            var infos = all.OrderByDescending(i => i.DownloadedTime).ToList();
-            return View(infos);
+            return await GetDownloadedPacks(pageNumber);
         }
 
-        
-        [ApiExplorerSettings(IgnoreApi=true)]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Details(int? id)
+        private async Task<IActionResult> GetDownloadedPacks(int? pageNumber)
         {
-            if (id == null)
+            if (pageNumber == null || pageNumber <= 0)
             {
-                return NotFound();
+                pageNumber = 1;
             }
 
-            var downloadedPacksInfo = await _repository.GetAsync(id.Value);
-            if (downloadedPacksInfo == null)
-            {
-                return NotFound();
-            }
-
-            return View(downloadedPacksInfo);
+            var downloadedPacks = await _repository.GetWithPagination(pageNumber.Value);
+            return View(downloadedPacks);
         }
     }
 }

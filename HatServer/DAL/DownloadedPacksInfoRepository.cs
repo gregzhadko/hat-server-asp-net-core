@@ -35,6 +35,22 @@ namespace HatServer.DAL
             return await Entities.Include(d => d.GamePack).ToListAsync();
         }
 
+        public async Task<List<DownloadedPacksInfo>> GetWithPagination(int pageNumber)
+        {
+            if (pageNumber <= 0)
+            {
+                throw new ArgumentOutOfRangeException("pageNumber should be positive");
+            }
+
+            const int rowsPerPage = 100;
+            return await Entities
+                .Include(d => d.GamePack)
+                .OrderByDescending(d => d.DownloadedTime)
+                .Skip((pageNumber - 1) * rowsPerPage)
+                .Take(rowsPerPage)
+                .ToListAsync();
+        }
+
         public override async Task<DownloadedPacksInfo> GetAsync(int id)
         {
             return await Entities.Include(d => d.GamePack).FirstOrDefaultAsync();
