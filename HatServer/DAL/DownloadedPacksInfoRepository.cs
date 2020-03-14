@@ -23,8 +23,9 @@ namespace HatServer.DAL
 
         public async Task<List<DownloadedPacksInfo>> GetDownloadsForLastHoursAsync(int hoursNumber)
         {
+            var startDate = DateTime.Now.AddHours(-hoursNumber);
             return await Entities
-                .Where(d => d.DownloadedTime.Date > DateTime.Now.AddHours(-hoursNumber))
+                .Where(d => d.DownloadedTime > startDate)
                 .Include(d => d.GamePack)
                 .ToListAsync();
         }

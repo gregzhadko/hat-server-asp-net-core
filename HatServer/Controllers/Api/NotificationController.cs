@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HatServer.Controllers.Api
 {
-    [ApiExplorerSettings(IgnoreApi=true)]
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
     public class NotificationController : Controller
     {
         private readonly IBotNotifier _botNotifier;
         private readonly IDownloadedPacksInfoRepository _repository;
-        
-        public NotificationController([FromServices]IBotNotifier botNotifier, IDownloadedPacksInfoRepository repository)
+
+        public NotificationController([FromServices] IBotNotifier botNotifier, IDownloadedPacksInfoRepository repository)
         {
             _botNotifier = botNotifier;
             _repository = repository;
